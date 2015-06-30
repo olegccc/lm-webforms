@@ -1,0 +1,7 @@
+md-dialog.input-form(aria-label="{{title}}")
+    md-dialog-content
+        md-subheader {{title}}
+    md-content
+        p {{message}}
+    .md-actions
+        md-button.md-primary(ng-click="close()") {{ 'Main.ButtonOk' | translate }}

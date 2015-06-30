@@ -1,0 +1,12 @@
+.modal-header
+    h3.modal-title {{title}}
+.modal-body
+    p {{message}}
+.modal-footer
+    .bg-danger.dialog-notification(ng-if="submitError.length > 0")
+        span.glyphicon.glyphicon-exclamation-sign
+        span(ng-bind="submitError")
+    md-button.md-raised(ng-click="submit()")
+        span {{ 'Main.ButtonYes' | translate }}
+        md-progress-circular(ng-show="isApplying" md-mode="indeterminate")
+    md-button.md-raised.md-warn(ng-click="cancel()") {{ 'Main.ButtonNo' | translate }}

@@ -1,0 +1,45 @@
+{
+  "name": "lm-webforms",
+  "main": "release/lm-webforms.js",
+  "version": "0.0.1",
+  "authors": [
+    "olegccc"
+  ],
+  "description": "Dynamic tree router for AngularJS",
+  "moduleType": [
+    "node"
+  ],
+  "keywords": [
+    "angularjs",
+    "input form"
+  ],
+  "license": "MPL-2.0",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "build",
+    "config",
+    "src",
+    "typings",
+    "Gruntfile.js",
+    ".baseDir.ts"
+  ],
+  "dependencies": {
+    "requirejs": "~2.1.18",
+    "angularjs": "~1.4.1",
+    "angular-material": "~0.10.0",
+    "codemirror": "~5.4.0",
+    "ckeditor": "~4.4.7",
+    "lodash": "~3.9.3",
+    "jquery": "~2.1.4",
+    "Autolinker.js": "~0.18.1",
+    "domready": "~1.0.8",
+    "angular-messages": "~1.4.1",
+    "requirejs-text": "~2.0.14"
+  },
+  "devDependencies": {
+    "angular-touch": "~1.4.1"
+  }
+}

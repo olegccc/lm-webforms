@@ -1,0 +1,39 @@
+{
+  "name": "lm-webforms",
+  "version": "0.0.1",
+  "description": "Web forms for AngularJS",
+  "main": "release/lm-webforms.js",
+  "homepage": "https://github.com/olegccc/lm-webforms",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/olegccc/lm-webforms.git"
+  },
+  "directories": [
+    "release"
+  ],
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "angularjs",
+    "tree",
+    "router"
+  ],
+  "author": "olegccc",
+  "license": "MPL-2.0",
+  "devDependencies": {
+    "grunt": "~0.4.1",
+    "grunt-contrib-clean": "^0.6.0",
+    "grunt-contrib-connect": "^0.10.1",
+    "grunt-contrib-copy": "^0.8.0",
+    "grunt-contrib-jade": "^0.14.1",
+    "grunt-contrib-requirejs": "^0.4.4",
+    "grunt-contrib-uglify": "^0.9.1",
+    "grunt-protractor-runner": "^2.0.0",
+    "grunt-ts": "^4.1.2",
+    "grunt-tsd": "^0.1.0",
+    "grunt-umd": "^2.3.3",
+    "jade": "^1.11.0",
+    "lodash": "^3.9.3"
+  }
+}

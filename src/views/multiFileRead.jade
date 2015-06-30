@@ -1,0 +1,7 @@
+ul.file-choose-list
+    li(ng-foreach="file in value.files")
+        span {{file.name}}
+        span.file-remove.glyphicon.glyphicon-remove(ng-click="removeFile(file)")
+
+input(type="file" style="display: none" multiple)
+md-button {{ 'Main.ChooseFile' | translate }}

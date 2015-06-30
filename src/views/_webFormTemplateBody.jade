@@ -1,0 +1,16 @@
+﻿md-content(layout-padding layout="column")
+
+    div(ng-repeat="field in fields | orderBy: 'position'")
+        input-field(field="field" object="object" form="form" ng-if="fieldVisible(field) && !field.isGroup")
+        div(ng-if="field.isGroup" layout="row" layout-sm="column")
+            input-field(ng-repeat="child in field.children" field="child" object="object" form="form" ng-if="fieldVisible(child)" flex="")
+
+    div(ng-if="submitWithCaptcha" captcha="recaptchaPublicKey")
+
+    .bg-danger.dialog-notification(ng-if="submitError.length > 0")
+        span.glyphicon.glyphicon-exclamation-sign
+        span(ng-bind="submitError")
+
+    .bg-success.dialog-notification(ng-if="submitSuccess.length > 0")
+        span.glyphicon.glyphicon-ok-circle
+        span(ng-bind="submitSuccess")

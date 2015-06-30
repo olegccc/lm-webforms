@@ -1,0 +1,15 @@
+label {{field.text | translate}}
+span
+    input(
+        type="text"
+        ng-model="object[field.property]"
+        ng-readonly="readonly(field)"
+        datepicker-popup=""
+        close-text="{{ 'Main.Close' | translate}}"
+        clear-text="{{ 'Main.Clear' | translate }}"
+        current-text="{{ 'Main.Today' || translate }}"
+        is-open="field.isOpen")
+
+    span.input-group-btn
+        md-button.md-default(ng-click="showDateTimeField($event, field)")
+            i.glyphicon.glyphicon-calendar

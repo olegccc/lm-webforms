@@ -1,0 +1,6 @@
+label {{field.text | translate}}
+div
+    div
+        input(ng-if="!readOnly(field)" type="file" fileread="object[field.property]")
+    div(style="margin-top: 1em;")
+        img(ng-if="object[field.property] != null" ng-src="/Image/Thumbnail/{{object[field.property]}}")

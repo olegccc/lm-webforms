@@ -1,0 +1,93 @@
+{
+  "ts": {
+    "options": {
+      "fast": "never",
+      "module": "amd",
+      "target": "es3",
+      "declaration": false,
+      "comments": false,
+      "failOnTypeErrors": true,
+      "sourceMap": false,
+      "removeComments": false
+    },
+    "build": {
+      "files":
+      [{
+        "src": [
+          "./src/**/*.ts",
+          "./typings/tsd.d.ts",
+          "!./src/views/*.ts"
+        ],
+        "dest": "./build/"
+      }]
+    },
+    "tests": {
+      "outDir": "./build",
+      "files": [
+        {
+          "src": [
+            "./test/app/**/*.ts",
+            "./typings/tsd.d.ts",
+            "./test/specs/**/*.ts"
+          ]
+        }
+      ]
+    }
+  },
+  "uglify": {
+    "default": {
+      "files": {
+        "./release/lm-webforms.min.js": "./release/lm-webforms.js"
+      }
+    }
+  },
+  "connect": {
+    "options": {
+      "port": 9090,
+      "base": "."
+    },
+    "start": {
+    },
+    "keepalive": {
+      "options": {
+        "keepalive": true
+      }
+    }
+  },
+  "protractor": {
+    "options": {
+      "configFile": "./config/protractor.config.js"
+    },
+    "default": {
+    }
+  },
+  "jade": {
+    "default": {
+      "options": {
+        "amd": false,
+        "namespace": false
+      },
+      "files": []
+    }
+  },
+  "requirejs": {
+    "default": {
+      "options": {
+        "out": "./release/lm-webforms.js",
+        "mainConfigFile": "./build/paths.js",
+        "name": "lm-webforms",
+        "paths": {
+        }
+      }
+    }
+  },
+  "copy": {
+    "bootstrap": {
+      "src": "./src/bootstrap/paths.js",
+      "dest": "./build/paths.js"
+    }
+  },
+  "clean": {
+    "build": ["./build"]
+  }
+}

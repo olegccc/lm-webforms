@@ -1,0 +1,36 @@
+{
+  "title": "New User",
+  "fields": {
+    "id": {
+      "title": "id",
+      "type": "number",
+      "visible": false,
+      "required": true
+    },
+    "name": {
+      "title": "Name",
+      "type": "string",
+      "visible": true,
+      "required": true
+    },
+    "password": {
+      "title": "Password",
+      "type": "password",
+      "repeat": true,
+      "visible": true,
+      "required": true
+    },
+    "email": {
+      "title": "E-Mail",
+      "type": "email",
+      "visible": true,
+      "required": true
+    },
+    "birthday": {
+      "title": "Birth Date",
+      "type": "date",
+      "visible": true,
+      "required": false
+    }
+  }
+}

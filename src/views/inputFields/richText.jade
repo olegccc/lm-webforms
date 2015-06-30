@@ -1,0 +1,19 @@
+label {{field.text | translate}}
+
+style.
+    ck-editor {
+        border: 0;
+    }
+    ck-editor.ng-invalid {
+        border: 2px solid;
+    }
+
+ck-editor.md-input(
+    ng-if="!readOnly(field)"
+    ng-model="object[field.property]"
+    options=""
+    readonly="false"
+    name="{{field.property}}"
+)
+
+div(ng-if="readOnly(field)" ng-bind-html="object[field.property]")

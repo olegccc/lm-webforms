@@ -1,0 +1,27 @@
+style.
+    .CodeMirror {
+        line-height: normal;
+        height: 200px;
+    }
+    .CodeMirrorInput {
+        border-width: 1px !important;
+        border-style: solid;
+        border-radius: 3px;
+    }
+    .md-input-focused .CodeMirrorInput {
+        border-width: 2px !important;
+    }
+    md-input-container:not(.md-input-focused):not(.md-input-has-value) .CodeMirrorLabel {
+        padding-left: 40px;
+    }
+
+label.CodeMirrorLabel {{field.text | translate}}
+link(href="[[#map]]lib/codemirror/lib/codemirror.css[[/map]]" rel="stylesheet" type="text/css")
+
+ui-codemirror(
+    ng-model="object[field.property]"
+    name="{{field.property}}"
+    ng-required="field.required"
+    readonly="readOnly(field)"
+    options="{}"
+)
