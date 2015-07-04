@@ -60,8 +60,8 @@ class FileReadDirectiveLink {
     }
 }
 
-import module = require('../module');
-import template = require('../views/fileRead');
+import module = require('modules/WebFormsModule');
+import template = require('views/fileRead');
 
 module.directive('fileRead', [() => {
     return <ng.IDirective>{

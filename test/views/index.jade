@@ -2,12 +2,20 @@ doctype html
 html(lang='en')
     head
         title Test Page
+        link(href="/bower_components/angular-material/angular-material.css", rel="stylesheet", type="text/css")
     body(ng-controller="test")
-        #returned-object(ng-bind="returnedObject")
-        input#button(type="button", ng-click="onShowDialog()" value="Show Dialog")
-        script(type="text/javascript", src="/build/test/app/paths.js")
-        script(type="text/javascript", src="/bower_components/requirejs/require.js")
-        script(type="text/javascript").
-            require(['build/test/app/TestApp', 'angular', 'angular.material', 'build/lm-webforms'], function(initializeApp) {
-                initializeApp();
-            });
+        md-content
+            #returned-object(ng-bind="returnedObject")
+            md-button.md-raised.md-primary(ng-click="onShowDialog()" id="button_main") Show Dialog
+
+            div(ng-repeat="type in testedTypes")
+                md-button.md-raised.md-primary(ng-click="testType(type)" ng-attr-id="{{ 'button_' + type }}") Test {{type}}
+
+            script(type="text/javascript", src="/build/test/app/paths.js")
+            script(type="text/javascript", src="/bower_components/requirejs/require.js")
+            script(type="text/javascript", src="/release/lm-webforms.modular.js")
+
+            script(type="text/javascript").
+                require(['build/test/app/TestApp', 'angular', 'angular.material', 'build/lm-webforms'], function(initializeApp) {
+                    initializeApp();
+                });

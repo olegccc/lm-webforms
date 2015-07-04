@@ -1,5 +1,3 @@
-///<amd-dependency path="build/lm-webforms" />
-
 import document = require('domready');
 import TestController = require('./TestController');
 

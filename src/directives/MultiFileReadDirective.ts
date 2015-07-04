@@ -88,8 +88,8 @@ class MultiFileReadDirectiveLink {
     }
 }
 
-import module = require('../module');
-import template = require('../views/multiFileRead');
+import module = require('modules/WebFormsModule');
+import template = require('views/multiFileRead');
 
 module.directive('multiFileRead', [() => {
     return <ng.IDirective>{

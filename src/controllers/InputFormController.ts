@@ -1,57 +1,20 @@
-///<amd-dependency path="Recaptcha" />
-///<amd-dependency path="angular" />
-
 /*
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+///<amd-dependency path="Recaptcha" />
+///<amd-dependency path="angular" />
 /// <reference path="../../typings/recaptcha/recaptcha.d.ts" />
 
 import _ = require('lodash');
 
-import InputFormControllerScope = require('./InputFormControllerScope');
-import InputFieldTypes = require('../datatypes/InputFieldTypes');
-import FormValidator = require('../common/FormValidator');
-import WebFormsConfiguration = require('../datatypes/WebFormsConfiguration');
-
-function getFieldTemplate(type: String):string {
-    switch (type) {
-        case InputFieldTypes.TEXT:
-            return 'text';
-        case InputFieldTypes.CODE_TEXT:
-            return 'codeText';
-        case InputFieldTypes.BOOLEAN:
-            return 'checkBox';
-        case InputFieldTypes.DATE:
-            return 'date';
-        case InputFieldTypes.EMAIL:
-            return 'email';
-        case InputFieldTypes.FILE:
-            return 'file';
-        case InputFieldTypes.FILE_LIST:
-            return 'fileList';
-        case InputFieldTypes.IMAGE:
-            return 'image';
-        case InputFieldTypes.LABEL:
-            return 'label';
-        case InputFieldTypes.MULTILINE_TEXT:
-            return 'multilineText';
-        case InputFieldTypes.MULTI_SELECT:
-            return 'multiSelect';
-        case InputFieldTypes.NUMBER:
-            return 'number';
-        case InputFieldTypes.PASSWORD:
-            return 'password';
-        case InputFieldTypes.RICH_TEXT:
-            return 'richText';
-        case InputFieldTypes.SELECT:
-            return 'select';
-        case InputFieldTypes.TYPEAHEAD:
-            return 'typeahead';
-    }
-}
+import InputFormControllerScope = require('controllers/InputFormControllerScope');
+import InputFieldTypes = require('datatypes/InputFieldTypes');
+import FormValidator = require('common/FormValidator');
+import WebFormsConfiguration = require('datatypes/WebFormsConfiguration');
+import Constants = require('datatypes/Constants')
 
 class InputFormController {
 
@@ -61,15 +24,13 @@ class InputFormController {
     private definition: WebFormDefinition;
     private defer: ng.IDeferred<any>;
     private sceService: ng.ISCEService;
-    private serverConfiguration: WebFormsConfiguration;
+    private configuration: WebFormsConfiguration;
     private resolver: (object: any) => ng.IPromise<void>;
-
-    public static PASSWORD_REPEAT_SUFFIX = "$Repeat";
 
     constructor(scope: InputFormControllerScope,
                 dialogService: angular.material.MDDialogService,
                 sceService: ng.ISCEService,
-                serverConfiguration: WebFormsConfiguration,
+                configuration: WebFormsConfiguration,
                 object: any,
                 definition: WebFormDefinition,
                 defer: ng.IDeferred<any>,
@@ -81,7 +42,7 @@ class InputFormController {
         this.definition = definition;
         this.defer = defer;
         this.sceService = sceService;
-        this.serverConfiguration = serverConfiguration;
+        this.configuration = configuration;
         this.resolver = resolver;
         this.scope.title = definition.title;
 
@@ -113,10 +74,6 @@ class InputFormController {
                 return true;
             }
             return field.visibleFunction(scope.object);
-        };
-
-        scope.getFieldTemplate = (field) => {
-            return './views/' + getFieldTemplate(field.type);
         };
 
         scope.readOnly = (field: InputFieldDefinition): string => {
@@ -229,7 +186,7 @@ class InputFormController {
             this.addSimpleField(field);
 
             var passwordRepeat = _.cloneDeep<InputFieldDefinition>(field);
-            passwordRepeat.property = field.property + InputFormController.PASSWORD_REPEAT_SUFFIX;
+            passwordRepeat.property = field.property + Constants.PASSWORD_REPEAT_SUFFIX;
             passwordRepeat.inlineWithPrevious = true;
             passwordRepeat.reference = field.property;
             passwordRepeat.type = InputFieldTypes.PASSWORD_REPEAT;
@@ -290,14 +247,24 @@ class InputFormController {
                 break;
         }
 
-        if (field.visibleCondition && field.visibleCondition.length > 0) {
-            field.visibleFunction = <(obj:any)=>boolean>(new Function("obj", "with(obj) { return " + field.visibleCondition + "; }"));
+        if (_.isBoolean(field.visible) || _.isString(field.visible)) {
+            if (_.isBoolean(field.visible)) {
+                var fieldVisible: boolean = <any>field.visible;
+                field.visibleFunction = (obj:any) => fieldVisible;
+            } else {
+                field.visibleFunction = <(obj:any)=>boolean>(new Function("obj", "with(obj) { return " + field.visible + "; }"));
+            }
         } else {
             field.visibleFunction = null;
         }
 
-        if (field.readOnlyCondition && field.readOnlyCondition.length > 0) {
-            field.readOnlyFunction = <(obj:any)=>boolean>(new Function("obj", "with(obj) { return " + field.readOnlyCondition + "; }"));
+        if (_.isBoolean(field.readOnly) || (_.isString(field.readOnly))) {
+            if (_.isBoolean(field.readOnly)) {
+                var fieldReadOnly: boolean = <any> field.readOnly;
+                field.readOnlyFunction = (obj:any) => fieldReadOnly;
+            } else {
+                field.readOnlyFunction = <(obj:any)=>boolean>(new Function("obj", "with(obj) { return " + field.readOnly + "; }"));
+            }
         } else {
             field.readOnlyFunction = null;
         }
@@ -317,14 +284,19 @@ class InputFormController {
     private onSubmit(form: ng.IFormController) {
 
         _.each(this.scope.fields, (field: InputFieldDefinition) => {
+
             if (!this.scope.fieldVisible(field) || this.scope.readOnly(field)) {
                 return;
             }
 
-            var value = this.scope.object[field.property];
             var formField = form[field.property];
+            if (_.isObject(formField)) {
+                formField.$setDirty();
+            }
 
-            FormValidator.validate(this.scope.object, value, field, this.scope.isNewObject, this.serverConfiguration, (message: string) => {
+            var value = this.scope.object[field.property];
+
+            FormValidator.validate(this.scope.object, value, field, this.scope.isNewObject, this.configuration, (message: string) => {
                 formField.$setValidity(message, false);
             });
         });
@@ -355,7 +327,7 @@ class InputFormController {
                 if (field.dynamicSource) {
                     delete changed[field.property];
                 } else if (field.type == InputFieldTypes.PASSWORD_REPEAT) {
-                    delete changed[field.property + InputFormController.PASSWORD_REPEAT_SUFFIX];
+                    delete changed[field.property + Constants.PASSWORD_REPEAT_SUFFIX];
                 }
             });
 
@@ -398,13 +370,13 @@ class InputFormController {
     }
 }
 
-import module = require('../module');
+import module = require('modules/WebFormsModule');
 
 module.controller('inputForm', [
     '$scope',
     '$mdDialog',
     '$sce',
-    'serverConfiguration',
+    'webFormsConfiguration',
     'object',
     'definition',
     'defer',

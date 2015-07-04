@@ -10,12 +10,34 @@ class WebFormsConfiguration {
         this.smilesBase = null;
         this.smiles = [];
         this.maximumFileSize = 0;
+        this.requiredErrorMessage = "This field is mandatory";
+        this.notEqualErrorMessage = "Fields are not equal";
+        this.maxLengthErrorMessage = "This field has to be less than {0} characters long";
+        this.minLengthErrorMessage = "This field has to be greater than {0} characters long";
+        this.emailErrorMessage = "Wrong e-mail address";
+        this.dateErrorMessage = "Wrong date";
+        this.timeErrorMessage = "Wrong time";
+        this.numberErrorMessage = "Wrong number";
+        this.patternErrorMessage = "The field doesn't match the pattern specified";
+        this.urlErrorMessage = "Wrong URL";
+        this.passwordErrorMessage = "Wrong password";
     }
 
     public codeMirrorModules: string[];
     public smiles: Smile[];
     public smilesBase: string;
     public maximumFileSize: number;
+    public requiredErrorMessage: string;
+    public notEqualErrorMessage: string;
+    public maxLengthErrorMessage: string;
+    public minLengthErrorMessage: string;
+    public emailErrorMessage: string;
+    public dateErrorMessage: string;
+    public timeErrorMessage: string;
+    public numberErrorMessage: string;
+    public passwordErrorMessage: string;
+    public patternErrorMessage: string;
+    public urlErrorMessage: string;
 }
 
 export = WebFormsConfiguration;

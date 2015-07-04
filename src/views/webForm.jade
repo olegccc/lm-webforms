@@ -1,12 +1,13 @@
 md-dialog(ng-form="form" aria-label="{{title}}" flex="80")
 
-    md-dialog-content
-        md-subheader {{title}}
+    md-toolbar
+        .md-toolbar-tools
+            h2 {{title}}
 
     include _webFormTemplateBody
 
     .md-actions
-        md-button.md-raised.md-primary(ng-click="submit(form)" ng-disabled="okDisabled(form)" aria-label="OK")
-            span {{ 'Main.ButtonOk' | translate }}
+        md-button.md-raised.md-primary(ng-click="submit(form)" aria-label="OK")
+            span {{ 'OK' | translate }}
             md-progress-circular(ng-show="isApplying" md-mode="indeterminate" md-diameter="10")
-        md-button.md-raised(ng-click="cancel()" ng-disabled="isApplying") {{ 'Main.ButtonCancel' | translate }}
+        md-button.md-raised(ng-click="cancel()" ng-disabled="isApplying") {{ 'Cancel' | translate }}

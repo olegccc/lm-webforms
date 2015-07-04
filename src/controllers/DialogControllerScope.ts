@@ -5,7 +5,7 @@
  */
 
 ///<amd-dependency path="angular" />
-import InputFormControllerScope = require('./InputFormControllerScope');
+import InputFormControllerScope = require('controllers/InputFormControllerScope');
 
 interface DialogControllerScope extends InputFormControllerScope {
     changesApplied: boolean;

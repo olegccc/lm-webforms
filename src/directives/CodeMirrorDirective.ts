@@ -4,8 +4,8 @@
 /// <reference path="../../typings/requirejs/require.d.ts" />
 ///<amd-dependency path="angular" />
 
-import template = require('../views/codemirror');
-import WebFormsConfiguration = require('../datatypes/WebFormsConfiguration');
+import template = require('views/codemirror');
+import WebFormsConfiguration = require('datatypes/WebFormsConfiguration');
 
 interface CodeMirrorDirectiveScope extends ng.IScope {
     options: any;
@@ -156,7 +156,7 @@ class CodeMirrorDirectivePostLink {
     }
 }
 
-import module = require('../module');
+import module = require('modules/WebFormsModule');
 
 module.directive('uiCodemirror', ['webFormsConfiguration', (configuration: WebFormsConfiguration) => {
         return <ng.IDirective>{

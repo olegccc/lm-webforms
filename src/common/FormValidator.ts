@@ -5,9 +5,9 @@
  */
 
 ///<amd-dependency path="angular" />
-import InputFormController = require('../controllers/InputFormController');
-import InputFieldTypes = require('../datatypes/InputFieldTypes');
-import WebFormsConfiguration = require('../datatypes/WebFormsConfiguration');
+import Constants = require('datatypes/Constants')
+import InputFieldTypes = require('datatypes/InputFieldTypes');
+import WebFormsConfiguration = require('datatypes/WebFormsConfiguration');
 
 class FormValidator {
 
@@ -62,7 +62,7 @@ class FormValidator {
                 }
                 break;
             case InputFieldTypes.PASSWORD_REPEAT:
-                var repeatPassword = object[field.property + InputFormController.PASSWORD_REPEAT_SUFFIX];
+                var repeatPassword = object[field.property + Constants.PASSWORD_REPEAT_SUFFIX];
                 if (!_.isString(repeatPassword) || repeatPassword != value) {
                     onFieldInvalid('password_match');
                 }

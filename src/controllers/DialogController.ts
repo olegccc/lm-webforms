@@ -5,9 +5,9 @@
  */
 
 ///<amd-dependency path="angular" />
-import InputFormController = require('./InputFormController');
-import DialogControllerScope = require('./DialogControllerScope');
-import WebFormsConfiguration = require('../datatypes/WebFormsConfiguration');
+import InputFormController = require('controllers/InputFormController');
+import DialogControllerScope = require('controllers/DialogControllerScope');
+import WebFormsConfiguration = require('datatypes/WebFormsConfiguration');
 
 class DialogController extends InputFormController {
 
@@ -17,10 +17,10 @@ class DialogController extends InputFormController {
     constructor(scope:DialogControllerScope,
                 dialogService:angular.material.MDDialogService,
                 sceService:ng.ISCEService,
-                serverConfiguration:WebFormsConfiguration,
+                configuration:WebFormsConfiguration,
                 qService:ng.IQService) {
 
-        super(scope, dialogService, sceService, serverConfiguration, scope.configuration.object, scope.definition, null,
+        super(scope, dialogService, sceService, configuration, scope.configuration.object, scope.definition, null,
                 changedObject => this.successFunction(changedObject));
 
         this.qService = qService;
@@ -69,13 +69,13 @@ class DialogController extends InputFormController {
     }
 }
 
-import module = require('../module');
+import module = require('modules/WebFormsModule');
 
 module.controller("dialog", [
     '$scope',
     '$mdDialog',
     '$sce',
-    'serverConfiguration',
+    'webFormsConfiguration',
     'commandProcessor',
     '$q',
     DialogController

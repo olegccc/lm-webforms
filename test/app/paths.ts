@@ -8,6 +8,7 @@ var require = {
         'angular.material': '/bower_components/angular-material/angular-material',
         'angular.messages': '/bower_components/angular-messages/angular-messages',
         'angular.touch': '/bower_components/angular-touch/angular-touch',
+        'angular.translate': 'bower_components/angular-translate/angular-translate',
         'autolinker': '/bower_components/Autolinker.js/dist/Autolinker',
         'ckeditor': '/bower_components/ckeditor/ckeditor',
         'domready': '/bower_components/domready/ready',
@@ -47,6 +48,9 @@ var require = {
             exports: '_'
         },
         'angular.animate': {
+            deps: ['angular']
+        },
+        'angular.translate': {
             deps: ['angular']
         },
         'angular.messages': {

@@ -6,9 +6,9 @@
 
 ///<amd-dependency path="angular" />
 
-import module = require('../module');
-import WebFormsService = require('./WebFormsService');
-import WebFormsConfiguration = require('../datatypes/WebFormsConfiguration');
+import module = require('modules/WebFormsModule');
+import WebFormsService = require('services/WebFormsService');
+import WebFormsConfiguration = require('datatypes/WebFormsConfiguration');
 
 var configuration = new WebFormsConfiguration();
 

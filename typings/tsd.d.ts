@@ -9,3 +9,4 @@
 /// <reference path="recaptcha/recaptcha.d.ts" />
 /// <reference path="domready/domready.d.ts" />
 /// <reference path="jasmine/jasmine.d.ts" />
+/// <reference path="angular-translate/angular-translate.d.ts" />

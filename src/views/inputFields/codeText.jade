@@ -15,8 +15,8 @@ style.
         padding-left: 40px;
     }
 
-label.CodeMirrorLabel {{field.text | translate}}
-link(href="[[#map]]lib/codemirror/lib/codemirror.css[[/map]]" rel="stylesheet" type="text/css")
+label.CodeMirrorLabel {{field.title | translate}}
+link(href="../../bower_components/codemirror/lib/codemirror.css" rel="stylesheet" type="text/css")
 
 ui-codemirror(
     ng-model="object[field.property]"

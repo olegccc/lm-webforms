@@ -8,7 +8,7 @@
       "comments": false,
       "failOnTypeErrors": true,
       "sourceMap": false,
-      "removeComments": false
+      "removeComments": true
     },
     "build": {
       "files":
@@ -37,7 +37,8 @@
   "uglify": {
     "default": {
       "files": {
-        "./release/lm-webforms.min.js": "./release/lm-webforms.js"
+        "./release/lm-webforms.modular.min.js": "./release/lm-webforms.modular.js",
+        "./release/lm-webforms.full.js": "./release/lm-webforms.full.js"
       }
     }
   },
@@ -71,12 +72,43 @@
     }
   },
   "requirejs": {
-    "default": {
+    "modular": {
       "options": {
-        "out": "./release/lm-webforms.js",
+        "baseUrl": "./build",
+        "out": "./release/lm-webforms.modular.js",
         "mainConfigFile": "./build/paths.js",
         "name": "lm-webforms",
+        "optimize": "none",
         "paths": {
+          "lodash": "empty:",
+          "autolinker": "empty:",
+          "angular": "empty:",
+          "jquery": "empty:",
+          "angular.animate": "empty:",
+          "angular.translate": "empty:",
+          "angular.material": "empty:",
+          "angular.aria": "empty:",
+          "angular.messages": "empty:",
+          "angular.touch": "empty:"
+        }
+      }
+    },
+    "full": {
+      "options": {
+        "baseUrl": "./build",
+        "out": "./release/lm-webforms.full.js",
+        "mainConfigFile": "./build/paths.js",
+        "name": "lm-webforms",
+        "optimize": "none",
+        "paths": {
+          "angular": "empty:",
+          "jquery": "empty:",
+          "angular.animate": "empty:",
+          "angular.translate": "empty:",
+          "angular.material": "empty:",
+          "angular.aria": "empty:",
+          "angular.messages": "empty:",
+          "angular.touch": "empty:"
         }
       }
     }

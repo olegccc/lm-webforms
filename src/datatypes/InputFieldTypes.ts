@@ -15,8 +15,8 @@ class InputFieldTypes {
     public static PASSWORD: string = "password";
     public static PASSWORD_REPEAT: string = "password_repeat";
     public static NUMBER: string = "number";
-    public static EMAIL: string = "EMAIL";
-    public static IMAGE: string = "IMAGE";
+    public static EMAIL: string = "email";
+    public static IMAGE: string = "image";
     public static DATE: string = "date";
     public static HIDDEN: string = "hidden";
     public static TEXT: string = "text";

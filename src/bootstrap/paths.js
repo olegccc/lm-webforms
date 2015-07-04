@@ -1,17 +1,15 @@
 var require = {
     paths: {
-        'jquery': '../bower_components/jquery/dist/jquery',
         'lodash': '../bower_components/lodash/lodash',
         'angular': '../bower_components/angular/angular',
         'angular.animate': '../bower_components/angular-animate/angular-animate',
         'angular.aria': '../bower_components/angular-aria/angular-aria',
         'angular.material': '../bower_components/angular-material/angular-material',
         'angular.messages': '../bower_components/angular-messages/angular-messages',
-        'angular.touch': '/bower_components/angular-touch/angular-touch',
+        'angular.touch': '../bower_components/angular-touch/angular-touch',
+        'angular.translate': '../bower_components/angular-translate/angular-translate',
         'autolinker': '../bower_components/Autolinker.js/dist/Autolinker',
         'ckeditor': '../bower_components/ckeditor/ckeditor',
-        'domready': '../bower_components/requirejs-domready/domReady',
-        'requirejs.text': '../bower_components/requirejs-text/text',
         'Recaptcha': 'http://www.google.com/recaptcha/api/js/recaptcha_ajax',
         'codemirror': '../bower_components/codemirror/lib/codemirror',
         'codemirror.htmlmixed': '../bower_components/codemirror/mode/htmlmixed/htmlmixed',
@@ -39,16 +37,16 @@ var require = {
     },
     shim: {
         'angular': {
-            exports: 'angular',
-            deps: ['jquery', 'requirejs.text']
-        },
-        'jquery': {
-            exports: '$'
+            //deps: ['jquery'],
+            exports: 'angular'
         },
         'lodash': {
             exports: '_'
         },
         'angular.animate': {
+            deps: ['angular']
+        },
+        'angular.translate': {
             deps: ['angular']
         },
         'angular.messages': {
@@ -64,11 +62,11 @@ var require = {
             deps: ['angular']
         },
         'ckeditor': {
-            deps: ['jquery'],
+            //deps: ['jquery'],
             exports: 'CKEDITOR'
         },
         'codemirror': {
-            deps: ['jquery']
+            //deps: ['jquery']
         }
     }
 };

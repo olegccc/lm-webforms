@@ -28,18 +28,19 @@
   ],
   "dependencies": {
     "requirejs": "~2.1.18",
+    "requirejs-text": "~2.0.14",
     "angularjs": "~1.4.1",
-    "angular-material": "~0.10.0",
     "codemirror": "~5.4.0",
     "ckeditor": "~4.4.7",
     "lodash": "~3.9.3",
     "jquery": "~2.1.4",
     "Autolinker.js": "~0.18.1",
     "domready": "~1.0.8",
+    "angular-translate": "~2.7.2",
     "angular-messages": "~1.4.1",
-    "requirejs-text": "~2.0.14"
+    "angular-material": "~0.10.0",
+    "angular-touch": "~1.4.1",
+    "angular": "~1.4.1"
   },
-  "devDependencies": {
-    "angular-touch": "~1.4.1"
-  }
+  "devDependencies": {}
 }

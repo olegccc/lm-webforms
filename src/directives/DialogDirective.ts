@@ -6,9 +6,9 @@
 
 ///<amd-dependency path="angular" />
 
-import template = require('../views/webDialog');
-import module = require('../module');
-import DialogController = require('../controllers/DialogController');
+import template = require('views/webDialog');
+import module = require('modules/WebFormsModule');
+import DialogController = require('controllers/DialogController');
 
 module.directive('lmDialog', [() => {
     return <ng.IDirective>{

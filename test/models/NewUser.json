@@ -4,33 +4,31 @@
     "id": {
       "title": "id",
       "type": "number",
-      "visible": false,
-      "required": true
+      "visible": false
     },
     "name": {
       "title": "Name",
-      "type": "string",
-      "visible": true,
+      "type": "text",
       "required": true
     },
     "password": {
       "title": "Password",
-      "type": "password",
+      "type": "password_repeat",
       "repeat": true,
-      "visible": true,
       "required": true
     },
     "email": {
       "title": "E-Mail",
       "type": "email",
-      "visible": true,
       "required": true
     },
     "birthday": {
       "title": "Birth Date",
-      "type": "date",
-      "visible": true,
-      "required": false
+      "type": "date"
+    },
+    "description": {
+      "title": "Description",
+      "type": "rich_text"
     }
   }
 }

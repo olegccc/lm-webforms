@@ -4,6 +4,7 @@ class NewUser {
     password: string;
     email: string;
     birthday: Date;
+    description: string;
 }
 
 export = NewUser;

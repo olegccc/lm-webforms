@@ -7,7 +7,7 @@
 ///<amd-dependency path="angular" />
 
 import Autolinker = require('autolinker');
-import WebFormsConfiguration = require('../datatypes/WebFormsConfiguration');
+import WebFormsConfiguration = require('datatypes/WebFormsConfiguration');
 
 class FriendlyFormattingService {
 
@@ -89,7 +89,7 @@ class FriendlyFormattingService {
     }
 }
 
-import module = require('../module');
+import module = require('modules/WebFormsModule');
 
 module.service('friendlyFormatting', [
     'webFormsConfiguration',

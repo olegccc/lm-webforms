@@ -1,4 +1,4 @@
-module.exports = function(grunt){
+module.exports = function (grunt) {
 
     var path = require('path');
     var _ = require('lodash');
@@ -15,14 +15,14 @@ module.exports = function(grunt){
 
     grunt.initConfig(grunt.file.readJSON('./config/grunt.config.json'));
 
-    grunt.registerTask('wrap-html', function() {
+    grunt.registerTask('wrap-html', function () {
         var files = grunt.file.expandMapping(['./build/views/**/*.html'], '', {
-            rename: function(base, path) {
+            rename: function (base, path) {
                 return path.replace(/\.html$/, '.js');
             }
         });
 
-        _.each(files, function(file) {
+        _.each(files, function (file) {
             //console.log(file.src + ' -> ' + file.dest);
             var input = grunt.file.read(file.src);
             var output = "define(function() {\n  return '";
@@ -40,30 +40,55 @@ module.exports = function(grunt){
         });
     });
 
-    grunt.registerTask('prepare-middleware', function() {
+    grunt.registerTask('prepare-middleware', function () {
         var jade = require('jade');
-        var jadeOptions = {
-        };
+        var jadeOptions = {};
         var template = jade.compile(grunt.file.read('./test/views/index.jade'), jadeOptions);
 
-        var handler = function(connect, options, middlewares) {
+        var handler = function (connect, options, middlewares) {
 
             var pathChecker = /^\/test\/?$/;
 
-            middlewares.unshift(function(req, res, next) {
+            middlewares.unshift(function (req, res, next) {
 
                 if (req.url === '/favicon.ico') {
                     res.end();
                     return;
                 }
 
+                var match = req.url.match(/\/test\/generated_model\/(.+).json/);
+
+                if (match && match.length > 1) {
+                    var modelName = match[1];
+                    var modelTemplate = JSON.stringify({
+                            "title": "Test " + modelName,
+                            "fields": {
+                                "required": {
+                                    "title": "Field1",
+                                    "type": modelName,
+                                    "visible": true,
+                                    "required": true
+                                },
+                                "not_required": {
+                                    "title": "Field2",
+                                    "type": modelName,
+                                    "visible": true,
+                                    "required": false
+                                }
+                            }
+                        });
+                    grunt.log.debug('Model request: ' + modelName);
+                    res.end(modelTemplate);
+                    return;
+                }
+
                 grunt.log.debug('Url: ' + req.url);
 
-                var match = pathChecker.exec(req.url);
+                match = pathChecker.exec(req.url);
                 if (match && match.length > 0) {
                     var path = match[1];
                     var query = match.length > 1 ? match[2] : "";
-                    var html = template({ path: path, query: query });
+                    var html = template({path: path, query: query});
                     res.end(html);
                 } else {
                     return next();
@@ -76,10 +101,10 @@ module.exports = function(grunt){
         grunt.config('connect.options.middleware', handler);
     });
 
-    grunt.registerTask('run-jade', function() {
+    grunt.registerTask('run-jade', function () {
 
         var files = grunt.file.expandMapping(['./src/views/**/*.jade', '!./src/views/**/_*.jade'], './build/views/', {
-            rename: function(base, path) {
+            rename: function (base, path) {
                 return base + path.replace(/\.jade$/, '.html').replace('./src/views/', '');
             }
         });
@@ -88,18 +113,28 @@ module.exports = function(grunt){
         grunt.task.run(['jade']);
     });
 
-    grunt.registerTask('addtsd', function(module) {
+    grunt.registerTask('addtsd', function (module) {
         var done = this.async();
         grunt.util.spawn({
             cmd: 'tsd',
             args: ['install', module, '--save', '--config', './config/tsd.config.json']
-        }, function(error, result) {
+        }, function (error, result) {
             grunt.log.debug(result.stdout);
             done();
         });
     });
 
     grunt.registerTask('verify', ['prepare-middleware', 'connect:start', 'protractor']);
-    grunt.registerTask('build', ['clean:build', 'copy:bootstrap', 'ts:build', 'run-jade', 'wrap-html', 'requirejs', 'uglify', "ts:tests"]);
+
+    grunt.registerTask('build', [
+        'clean:build',
+        'copy:bootstrap',
+        'ts:build',
+        'run-jade',
+        'wrap-html',
+        'requirejs',
+        'uglify',
+        "ts:tests"]);
+
     grunt.registerTask('view', ['prepare-middleware', 'connect:keepalive']);
 };

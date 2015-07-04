@@ -1,0 +1,17 @@
+{
+  "title": "Select Test",
+  "fields": {
+    "required": {
+      "title": "Field1",
+      "type": "select",
+      "visible": true,
+      "required": false
+    },
+    "not_required": {
+      "title": "Field2",
+      "type": "select",
+      "visible": true,
+      "required": true
+    }
+  }
+}

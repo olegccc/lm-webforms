@@ -28,7 +28,7 @@ class InputFormMessageController {
     }
 }
 
-import module = require('../module');
+import module = require('modules/WebFormsModule');
 
 module.controller('inputFormMessage', [
     '$scope',

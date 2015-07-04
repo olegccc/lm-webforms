@@ -1,18 +1,24 @@
-label {{field.text | translate}}
+label {{field.title | translate}}
 
 style.
-    ck-editor {
-        border: 0;
+    md-input-container ck-editor.md-input {
+        border-width: 0;
     }
-    ck-editor.ng-invalid {
-        border: 2px solid;
+    md-input-container ck-editor.md-input.ng-invalid.ng-dirty {
+        border-width: 2px;
+        border-style: solid;
+    }
+    md-input-container.md-input-focused ck-editor.md-input {
+        border-width: 2px;
+        border-style: solid;
     }
 
 ck-editor.md-input(
     ng-if="!readOnly(field)"
     ng-model="object[field.property]"
-    options=""
+    options="{}"
     readonly="false"
+    ng-required="field.required"
     name="{{field.property}}"
 )
 

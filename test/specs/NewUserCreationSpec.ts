@@ -1,28 +1,41 @@
 /// <reference path="../../typings/selenium-webdriver/selenium-webdriver.d.ts" />
 /// <reference path="../../typings/angular-protractor/angular-protractor.d.ts" />
 
-describe('Given we open new user dialog', () => {
+beforeAll(function(done) {
+    browser.get('http://localhost:9090/test').then(function() {
+        console.log('4');
+        done();
+    });
+});
 
-    var button = element(by.id('button'));
-    button.click();
+describe('When we enter new user fields and submit the dialog', () => {
 
-    describe('When we enter new user fields and submit the dialog', () => {
+    it('Then we should get our object with all specified fields filled in', (done: () => void) => {
 
-        var userName = 'username';
+        var button = element(by.id('button_main'));
+        button.click();
+
+        var userName:string = 'username';
         var userPassword = 'pwd';
-        var userEmail = 'user@email.com';
+        var userEmail:string = 'user@email.com';
+        var userBirthday: string = '01012001';
 
-        var form = element(by.name('md-content'));
-        var name = form.element(by.css('[name=name]'));
-        name.sendKeys(userName);
-        var password = form.element(by.css('[name=password]'));
-        password.sendKeys(userPassword);
-        var email = form.element(by.css('[name=email]'));
-        email.sendKeys(userEmail);
-        var okButton = form.element(by.css('md-button.md-primary'));
-        okButton.click();
+        browser.wait(() => {
+            return browser.isElementPresent(by.css('md-content [name=name]'));
+        }, 10000).then(() => {
+            var name = element(by.css('md-content [name=name]'));
+            name.sendKeys(userName);
+            var password = element(by.css('md-content [name=password]'));
+            var passwordRepeat = element(by.css('md-content [name="password$Repeat"]'));
+            password.sendKeys(userPassword);
+            passwordRepeat.sendKeys(userPassword);
+            var email = element(by.css('md-content [name=email]'));
+            email.sendKeys(userEmail);
+            var birthday = element(by.css('md-content [name=birthday]'));
+            birthday.sendKeys(userBirthday);
+            var okButton = element(by.css('.md-actions button.md-primary'));
+            okButton.click();
 
-        it('Then we should get our object with all specified fields filled in', (done: () => void) => {
             element(by.id('returned-object')).getText().then((text: string) => {
                 var newUser = JSON.parse(text);
                 expect(newUser.name).toBe(userName);
@@ -31,5 +44,6 @@ describe('Given we open new user dialog', () => {
                 done();
             });
         });
+
     });
 });

@@ -8,7 +8,7 @@
 ///<amd-dependency path="angular" />
 
 import _ = require('lodash');
-import WebFormsConfiguration = require('../datatypes/WebFormsConfiguration');
+import WebFormsConfiguration = require('datatypes/WebFormsConfiguration');
 
 interface CkEditorEditor {
     getData(noEvents?: Object): string;
@@ -81,6 +81,8 @@ class CkEditorDirectiveLink {
 
         this.editor.on('change', () => this.applyChanges());
         this.editor.on('key', () => this.applyChanges());
+        this.editor.on('focus', () => this.inputContainer.setFocused(true) );
+        this.editor.on('blur', () => this.inputContainer.setFocused(false) );
 
         model.$render = () => this.render();
     }
@@ -145,7 +147,7 @@ class CkEditorDirectiveLink {
     }
 }
 
-import module = require('../module');
+import module = require('modules/WebFormsModule');
 
 module.directive('ckEditor', ['webFormsConfiguration', 'friendlyFormatting', (configuration: WebFormsConfiguration, friendlyFormatting: FriendlyFormattingService) => {
     return <ng.IDirective>{

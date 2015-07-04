@@ -17,7 +17,6 @@ interface InputFormControllerScope extends ng.IScope {
     useCodemirror: boolean;
     isNewObject: boolean;
     object: any;
-    getFieldTemplate: (field: InputFieldDefinition) => string;
     fieldValueSelected: (field: InputFieldDefinition, select: SelectValueDefinition) => boolean;
     getValue: (field: InputFieldDefinition) => any;
     readOnly: (field: InputFieldDefinition) => string;

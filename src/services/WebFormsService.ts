@@ -1,10 +1,10 @@
 ///<amd-dependency path="angular" />
 /// <reference path="../../typings/requirejs/require.d.ts" />
 
-import template = require('../views/webForm');
-import questionTemplate = require('../views/webFormQuestion');
-import messageTemplate = require('../views/webFormMessage');
-import InputFieldTypes = require('../datatypes/InputFieldTypes');
+import template = require('views/webForm');
+import questionTemplate = require('views/webFormQuestion');
+import messageTemplate = require('views/webFormMessage');
+import InputFieldTypes = require('datatypes/InputFieldTypes');
 
 class WebFormsService {
 
@@ -66,7 +66,7 @@ class WebFormsService {
 
     private getTemplateAndExecute<T>(typeId: string, object: any, isNew: boolean, resolver: (object: T) => ng.IPromise<void> = null): ng.IPromise<T> {
         var defer = this.qService.defer<T>();
-        this.httpService.get(typeId + '.json', { cache: this.cache })
+        this.httpService.get<WebFormDefinition>(typeId + '.json', { cache: this.cache })
             .then(data => {
                 this.executeWithDefinitionLoaded<T>(object, data.data, isNew, defer, resolver);
             }, (message) => defer.reject(message));
@@ -74,11 +74,11 @@ class WebFormsService {
     }
 
     private static fillRichTextModules(requires: string[]) {
-        requires.push("scripts/directives/CkEditorDirective");
+        requires.push("../directives/CkEditorDirective");
     }
 
     private static fillCodeTextModules(requires: string[]) {
-        requires.push("scripts/directives/CodeMirrorDirective");
+        requires.push("../directives/CodeMirrorDirective");
     }
 
     private executeWithDefinitionLoaded<T>(object: T, definition: WebFormDefinition, isNew: boolean, defer: ng.IDeferred<T>, resolver: (object: T) => ng.IPromise<void>) {

@@ -8,9 +8,8 @@ class InputFieldDefinition {
     type: string;
     property: string;
     isOpen: boolean;
-    readOnlyCondition: string;
+    readOnly: string;
     readOnlyFunction: (obj: any) => boolean;
-    readOnly: boolean;
     helpText: string;
     required: boolean;
     dynamicSource: DynamicInputFieldDefinition;
@@ -20,7 +19,9 @@ class InputFieldDefinition {
     isGroup: boolean;
     children: InputFieldDefinition[];
     position: number;
-    visibleCondition: string;
+    visible: string;
     visibleFunction: (obj: any) => boolean;
     selectValues: SelectValueDefinition[];
+    maxLength: number;
+    minLength: number;
 }
