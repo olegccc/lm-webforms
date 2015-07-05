@@ -21,6 +21,8 @@ class WebFormsConfiguration {
         this.patternErrorMessage = "The field doesn't match the pattern specified";
         this.urlErrorMessage = "Wrong URL";
         this.passwordErrorMessage = "Wrong password";
+        this.chooseFileMessage = "Choose File";
+        this.clearFileMessage = "Clear";
     }
 
     public codeMirrorModules: string[];
@@ -38,6 +40,8 @@ class WebFormsConfiguration {
     public passwordErrorMessage: string;
     public patternErrorMessage: string;
     public urlErrorMessage: string;
+    public chooseFileMessage: string;
+    public clearFileMessage: string;
 }
 
 export = WebFormsConfiguration;

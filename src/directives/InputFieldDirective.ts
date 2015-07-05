@@ -82,7 +82,7 @@ class InputFieldDirectiveLink {
             return;
         }
 
-        content =  "<md-input-container>" + content + "<input-field-error></input-field-error></md-input-container>";
+        content =  "<md-input-container class='inputfield-" + this.scope.field.type + "'>" + content + "<input-field-error></input-field-error></md-input-container>";
 
         var element = angular.element(content).appendTo(this.element);
 

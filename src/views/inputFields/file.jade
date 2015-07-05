@@ -1,2 +1,21 @@
 label {{field.title | translate}}
-file-read(value="object[field.property]" style="height: auto")
+
+style.
+    md-input-container file-read.md-input {
+        border-width: 0;
+    }
+    md-input-container file-read.md-input.ng-invalid.ng-dirty {
+        border-width: 2px;
+        border-style: solid;
+    }
+    md-input-container.md-input-focused file-read.md-input {
+        border-width: 2px;
+        border-style: solid;
+    }
+
+file-read.md-input(
+    ng-model="object[field.property]"
+    style="height: auto"
+    ng-required="field.required"
+    name="{{field.property}}"
+)

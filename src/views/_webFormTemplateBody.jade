@@ -1,5 +1,12 @@
 ﻿md-content(layout-padding layout="column")
 
+    style.
+        md-input-container.inputfield-file label {
+            flex: none;
+            -webkit-flex: none;
+            transform: none !important;
+        }
+
     div(ng-repeat="field in fields | orderBy: 'position'")
         input-field(field="field" object="object" form="form" ng-if="fieldVisible(field) && !field.isGroup")
         div(ng-if="field.isGroup" layout="row" layout-sm="column")

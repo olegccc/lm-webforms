@@ -6,41 +6,65 @@
 
 ///<amd-dependency path="angular" />
 
+import WebFormsConfiguration = require('datatypes/WebFormsConfiguration');
+
 interface FileReadDirectiveScope extends ng.IScope {
-    value: FileReadResponse;
     clear: () => void;
     chooseFile: () => void;
     comment: string;
+    configuration: WebFormsConfiguration;
+    valueSet: boolean;
 }
 
 class FileReadDirectiveLink {
 
     private scope: FileReadDirectiveScope;
+    private model: ng.INgModelController;
+    private container: IInputContainer;
 
-    constructor(scope: FileReadDirectiveScope, element: JQuery) {
+    constructor(scope: FileReadDirectiveScope, element: JQuery, configuration: WebFormsConfiguration, model: ng.INgModelController, container: IInputContainer) {
 
         this.scope = scope;
+        this.scope.comment = "";
+        this.scope.configuration = configuration;
+        this.model = model;
+        this.container = container;
+        this.scope.valueSet = _.isObject(this.model.$modelValue);
 
-        var fileElement = element.find('file');
+        var fileElement = element.find('input[type=file]');
 
-        scope.chooseFile = () => fileElement.click();
+        scope.chooseFile = () => {
+            fileElement.click();
+        };
 
         scope.clear = () => {
             fileElement.val('');
             fileElement.html('');
-            scope.value = null;
+            this.model.$setViewValue(null);
+            this.scope.comment = "";
+            this.container.setHasValue(false);
+            this.scope.valueSet = false;
         };
 
         fileElement.bind("change", (changeEvent) => this.onFileSelected(changeEvent) );
     }
 
     private onFileSelected(changeEvent) {
-        this.scope.comment = changeEvent.target.value[0].name;
+        if (changeEvent.target.files.length === 0) {
+            return;
+        }
+
+        var file: File = changeEvent.target.files[0];
+
+        this.scope.comment = file.name;
+
         var reader = new FileReader();
+
         reader.onload = (loadEvent) => {
             this.scope.$apply(() => this.onReadFinished(loadEvent, changeEvent));
         };
-        reader.readAsDataURL(changeEvent.target.value[0]);
+
+        reader.readAsDataURL(file);
     }
 
     private onReadFinished(loadEvent, changeEvent) {
@@ -51,26 +75,33 @@ class FileReadDirectiveLink {
             value = value.substring(pos + 7);
         }
 
-        this.scope.value = {
+        var file: File = changeEvent.target.files[0];
+
+        this.container.setHasValue(true);
+        this.model.$setViewValue({
             file: value,
-            type: changeEvent.target.value[0].type,
-            name: changeEvent.target.value[0].name,
+            type: file.type,
+            name: file.name,
             id: null
-        };
+        });
+        this.model.$setDirty();
+        this.model.$setTouched();
+        this.scope.valueSet = true;
     }
 }
 
 import module = require('modules/WebFormsModule');
 import template = require('views/fileRead');
 
-module.directive('fileRead', [() => {
+module.directive('fileRead', ['webFormsConfiguration', (webFormsConfiguration: WebFormsConfiguration) => {
     return <ng.IDirective>{
         template: template,
         restrict: 'E',
         replace: false,
-        scope: {
-            value: '='
-        },
-        link: FileReadDirectiveLink
+        require: ['?ngModel', '^?mdInputContainer'],
+        scope: true,
+        link: (scope: FileReadDirectiveScope, element: JQuery, attrs, controllers) => {
+            new FileReadDirectiveLink(scope, element, webFormsConfiguration, controllers[0], controllers[1]);
+        }
     };
 }]);

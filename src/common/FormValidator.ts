@@ -14,24 +14,24 @@ class FormValidator {
     public static validate(object:any, value:any, field:InputFieldDefinition, isNewObject: boolean, configuration: WebFormsConfiguration, onFieldInvalid:(string) => void):void {
         switch (field.type) {
             case InputFieldTypes.FILE:
-                if (field.required && isNewObject && (value == null || value.file == null || value.file.length == 0)) {
+                if (field.required && isNewObject && (value === null || value.file === null || value.file.length === 0)) {
                     onFieldInvalid('required');
                 }
 
-                if (value.file.length > configuration.maximumFileSize) {
+                if (configuration.maximumFileSize > 0 && value !== null && value.file.length > configuration.maximumFileSize) {
                     onFieldInvalid('maxlength');
                 }
                 return;
 
             case InputFieldTypes.FILE_LIST:
-                if (field.required && isNewObject && (value == null || value.length == 0)) {
+                if (field.required && isNewObject && (value === null || value.length === 0)) {
                     onFieldInvalid('required');
                 }
 
-                if (value != null) {
+                if (value !== null) {
                     for (var j = 0; j < value.length; j++) {
                         var file = value[j];
-                        if (file.file != null && file.file.length > configuration.maximumFileSize) {
+                        if (file.file !== null && file.file.length > configuration.maximumFileSize) {
                             onFieldInvalid('maxlength');
                             break;
                         }
@@ -43,7 +43,7 @@ class FormValidator {
                 return;
         }
 
-        if (typeof (value) == 'undefined' || value == null || value.toString().trim().length == 0) {
+        if (typeof (value) === 'undefined' || value === null || value.toString().trim().length === 0) {
             if (field.required) {
                 onFieldInvalid('required');
             }
@@ -63,7 +63,7 @@ class FormValidator {
                 break;
             case InputFieldTypes.PASSWORD_REPEAT:
                 var repeatPassword = object[field.property + Constants.PASSWORD_REPEAT_SUFFIX];
-                if (!_.isString(repeatPassword) || repeatPassword != value) {
+                if (!_.isString(repeatPassword) || repeatPassword !== value) {
                     onFieldInvalid('password_match');
                 }
         }

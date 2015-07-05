@@ -63,17 +63,23 @@ module.exports = function (grunt) {
                     var modelTemplate = JSON.stringify({
                             "title": "Test " + modelName,
                             "fields": {
+                                "text_before": {
+                                    "title": "Before",
+                                    "type": "text"
+                                },
                                 "required": {
                                     "title": "Field1",
                                     "type": modelName,
-                                    "visible": true,
                                     "required": true
                                 },
                                 "not_required": {
                                     "title": "Field2",
                                     "type": modelName,
-                                    "visible": true,
                                     "required": false
+                                },
+                                "text_after": {
+                                    "title": "After",
+                                    "type": "text"
                                 }
                             }
                         });
