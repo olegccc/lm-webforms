@@ -36,7 +36,6 @@
   "uglify": {
     "default": {
       "files": {
-        "./release/lm-webforms.amd.min.js": "./release/lm-webforms.amd.js",
         "./release/lm-webforms.min.js": "./release/lm-webforms.js"
       }
     }
@@ -71,33 +70,12 @@
     }
   },
   "requirejs": {
-    "amd": {
-      "options": {
-        "baseUrl": "./build",
-        "out": "./release/lm-webforms.amd.js",
-        "mainConfigFile": "./build/paths.js",
-        "name": "lm-webforms",
-        "optimize": "none",
-        "paths": {
-          "lodash": "empty:",
-          "autolinker": "empty:",
-          "angular": "empty:",
-          "jquery": "empty:",
-          "angular.animate": "empty:",
-          "angular.translate": "empty:",
-          "angular.material": "empty:",
-          "angular.aria": "empty:",
-          "angular.messages": "empty:",
-          "angular.touch": "empty:"
-        }
-      }
-    },
-    "almond": {
+    "default": {
       "options": {
         "baseUrl": "./build",
         "out": "./release/lm-webforms.js",
         "mainConfigFile": "./build/paths.js",
-        "name": "../bower_components/almond/almond",
+        "name": "lm-webforms",
         "optimize": "none",
         "paths": {
           "lodash": "empty:",
@@ -122,17 +100,6 @@
   },
   "clean": {
     "build": ["./build"],
-    "post-build": ["./src/**/*.js"]
-  },
-  "umd": {
-    "all": {
-      "options": {
-        "src": "./release/lm-webforms.modular.js",
-        "dest": "./release/lm-webforms.js",
-        "deps": {
-          "default": ["angular"]
-        }
-      }
-    }
+    "post-build": ["./src/**/*.js", "!./src/bootstrap/*.js"]
   }
 }

@@ -5,14 +5,12 @@ module.exports = function (grunt) {
 
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-ts');
-    grunt.loadNpmTasks('grunt-umd');
     grunt.loadNpmTasks('grunt-contrib-jade');
     grunt.loadNpmTasks('grunt-contrib-copy');
     grunt.loadNpmTasks('grunt-contrib-clean');
     grunt.loadNpmTasks('grunt-protractor-runner');
     grunt.loadNpmTasks('grunt-contrib-connect');
     grunt.loadNpmTasks('grunt-contrib-requirejs');
-    grunt.loadNpmTasks('grunt-umd');
 
     grunt.initConfig(grunt.file.readJSON('./config/grunt.config.json'));
 
@@ -24,7 +22,6 @@ module.exports = function (grunt) {
         });
 
         _.each(files, function (file) {
-            //console.log(file.src + ' -> ' + file.dest);
             var input = grunt.file.read(file.src);
             var output = "define(function() {\n  return '";
             var firstLine = true;
@@ -133,7 +130,7 @@ module.exports = function (grunt) {
 
     grunt.registerTask('verify', ['prepare-middleware', 'connect:start', 'protractor']);
 
-    grunt.registerTask('ts-build', ['clean:build', 'ts:build']);
+    grunt.registerTask('ts-build', ['clean:build', 'ts:build', 'clean:post-build']);
 
     grunt.registerTask('build', [
         'ts-build',
