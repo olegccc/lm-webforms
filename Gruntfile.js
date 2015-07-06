@@ -12,6 +12,7 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-protractor-runner');
     grunt.loadNpmTasks('grunt-contrib-connect');
     grunt.loadNpmTasks('grunt-contrib-requirejs');
+    grunt.loadNpmTasks('grunt-umd');
 
     grunt.initConfig(grunt.file.readJSON('./config/grunt.config.json'));
 
@@ -132,10 +133,11 @@ module.exports = function (grunt) {
 
     grunt.registerTask('verify', ['prepare-middleware', 'connect:start', 'protractor']);
 
+    grunt.registerTask('ts-build', ['clean:build', 'ts:build']);
+
     grunt.registerTask('build', [
-        'clean:build',
+        'ts-build',
         'copy:bootstrap',
-        'ts:build',
         'run-jade',
         'wrap-html',
         'requirejs',

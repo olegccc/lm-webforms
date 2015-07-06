@@ -5,7 +5,6 @@
       "module": "amd",
       "target": "es3",
       "declaration": false,
-      "comments": false,
       "failOnTypeErrors": true,
       "sourceMap": false,
       "removeComments": true
@@ -18,18 +17,18 @@
           "./typings/tsd.d.ts",
           "!./src/views/*.ts"
         ],
-        "dest": "./build/"
+        "dest": "./build"
       }]
     },
     "tests": {
-      "outDir": "./build",
       "files": [
         {
           "src": [
             "./test/app/**/*.ts",
             "./typings/tsd.d.ts",
             "./test/specs/**/*.ts"
-          ]
+          ],
+          "dest": "./build"
         }
       ]
     }
@@ -37,8 +36,8 @@
   "uglify": {
     "default": {
       "files": {
-        "./release/lm-webforms.modular.min.js": "./release/lm-webforms.modular.js",
-        "./release/lm-webforms.full.js": "./release/lm-webforms.full.js"
+        "./release/lm-webforms.amd.min.js": "./release/lm-webforms.amd.js",
+        "./release/lm-webforms.min.js": "./release/lm-webforms.js"
       }
     }
   },
@@ -72,10 +71,10 @@
     }
   },
   "requirejs": {
-    "modular": {
+    "amd": {
       "options": {
         "baseUrl": "./build",
-        "out": "./release/lm-webforms.modular.js",
+        "out": "./release/lm-webforms.amd.js",
         "mainConfigFile": "./build/paths.js",
         "name": "lm-webforms",
         "optimize": "none",
@@ -93,14 +92,16 @@
         }
       }
     },
-    "full": {
+    "almond": {
       "options": {
         "baseUrl": "./build",
-        "out": "./release/lm-webforms.full.js",
+        "out": "./release/lm-webforms.js",
         "mainConfigFile": "./build/paths.js",
-        "name": "lm-webforms",
+        "name": "../bower_components/almond/almond",
         "optimize": "none",
         "paths": {
+          "lodash": "empty:",
+          "autolinker": "empty:",
           "angular": "empty:",
           "jquery": "empty:",
           "angular.animate": "empty:",
@@ -120,6 +121,18 @@
     }
   },
   "clean": {
-    "build": ["./build"]
+    "build": ["./build"],
+    "post-build": ["./src/**/*.js"]
+  },
+  "umd": {
+    "all": {
+      "options": {
+        "src": "./release/lm-webforms.modular.js",
+        "dest": "./release/lm-webforms.js",
+        "deps": {
+          "default": ["angular"]
+        }
+      }
+    }
   }
 }
