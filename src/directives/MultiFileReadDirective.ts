@@ -1,20 +1,30 @@
-///<amd-dependency path="../datatypes/FileReadResponse" />
-///<amd-dependency path="angular" />
-
 /*
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+///<amd-dependency path="datatypes/FileReadResponse" />
+///<amd-dependency path="angular" />
+///<amd-dependency path="text!views/multiFileRead.html" />
+
+import WebFormsConfiguration = require('datatypes/WebFormsConfiguration');
+
 class MultiFileReadResponse {
+    constructor() {
+        this.files = [];
+    }
+
     files: FileReadResponse[];
 }
 
 interface MultiFileReadDirectiveScope extends ng.IScope {
-    value: MultiFileReadResponse;
     removeFile: (file: FileReadResponse) => void;
     chooseFile: () => void;
+    configuration: WebFormsConfiguration;
+    valueSet: boolean;
+    comment: string;
+    files: FileReadResponse[];
 }
 
 class MultiFileReadDirectiveLink {
@@ -23,40 +33,64 @@ class MultiFileReadDirectiveLink {
     private fileId: number = 1;
     private fileReadBefore: number;
     private fileElement: JQuery;
+    private model: ng.INgModelController;
+    private container: IInputContainer;
+    private value: MultiFileReadResponse;
 
-    constructor(scope: MultiFileReadDirectiveScope, element: JQuery) {
+    constructor(scope: MultiFileReadDirectiveScope, element: JQuery, configuration: WebFormsConfiguration, model: ng.INgModelController, container: IInputContainer) {
 
+        this.model = model;
+        this.container = container;
         this.scope = scope;
-        if (scope.value == null) {
-            scope.value = new MultiFileReadResponse();
+        this.scope.configuration = configuration;
+        this.value = this.model.$modelValue;
+        this.scope.valueSet = _.isObject(this.value);
+        this.scope.comment = "";
+
+        if (!this.scope.valueSet) {
+            this.value = new MultiFileReadResponse();
             this.fileReadBefore = 0;
+            this.model.$setViewValue(null);
         } else {
-            this.fileReadBefore = scope.value.files.length;
+            this.fileReadBefore = this.value.files.length;
         }
-        scope.value.files = [];
 
-        this.fileElement = element.find('file');
+        this.scope.files = this.value.files;
 
-        scope.chooseFile = () => this.fileElement.click();
+        this.fileElement = element.find('input[type=file]');
 
-        this.fileElement.bind('change', (changeEvent) => this.onFilesSelected(changeEvent));
+        scope.chooseFile = () => {
+            this.fileElement.click();
+        };
 
         scope.removeFile = (file: FileReadResponse) => {
-            for (var i = 0; i < scope.value.files.length; i++) {
-                if (scope.value.files[i].id == file.id) {
-                    scope.value.files.splice(i, 1);
-                    break;
-                }
+            this.removeFile(file);
+        };
+
+        this.fileElement.bind('change', (changeEvent) => this.onFilesSelected(changeEvent));
+    }
+
+    private removeFile(file: FileReadResponse) {
+        for (var i = 0; i < this.value.files.length; i++) {
+            if (this.value.files[i].id == file.id) {
+                this.value.files.splice(i, 1);
+                break;
             }
+        }
+
+        if (this.value.files.length === 0) {
+            this.model.$setViewValue(null);
+            this.scope.comment = "";
+            this.container.setHasValue(false);
+            this.scope.valueSet = false;
         }
     }
 
     private onFilesSelected(changeEvent) {
         var sourceFiles = changeEvent.target.files;
-        for (var i = 0; i < sourceFiles.length; i++) {
-            var sourceFile = sourceFiles[i];
-            this.readFile(sourceFile, changeEvent, sourceFiles);
-        }
+        _.each(sourceFiles, (file: File) => {
+            this.readFile(file, sourceFiles);
+        });
     }
 
     private onReadFinished(loadEvent, sourceFile, sourceFiles) {
@@ -65,6 +99,7 @@ class MultiFileReadDirectiveLink {
         if (pos > 0) {
             value = value.substring(pos + 7);
         }
+
         var file: FileReadResponse = <FileReadResponse> {
             file: value,
             type: sourceFile.type,
@@ -72,33 +107,42 @@ class MultiFileReadDirectiveLink {
             id: this.fileId++
         };
 
-        this.scope.value.files.push(file);
+        this.value.files.push(file);
 
-        if (this.scope.value.files.length - this.fileReadBefore == sourceFiles.length) {
+        if (this.value.files.length - this.fileReadBefore == sourceFiles.length) {
             this.fileElement.val('');
         }
+
+        if (this.value.files.length === 1) {
+            this.model.$setViewValue(this.value);
+            this.scope.valueSet = true;
+        }
+
+        this.model.$setDirty();
+        this.model.$setTouched();
     }
 
-    private readFile(sourceFile, changeEvent, sourceFiles) {
+    private readFile(sourceFile, sourceFiles) {
         var reader = new FileReader();
-        reader.onload = () => {
-            this.scope.$apply(() => this.onReadFinished(changeEvent, sourceFile, sourceFiles));
+        reader.onload = (loadEvent) => {
+            this.scope.$apply(() => this.onReadFinished(loadEvent, sourceFile, sourceFiles));
         };
         reader.readAsDataURL(sourceFile);
     }
 }
 
 import module = require('modules/WebFormsModule');
-import template = require('views/multiFileRead');
+var template = require('text!views/multiFileRead.html');
 
-module.directive('multiFileRead', [() => {
+module.directive('multiFileRead', ['webFormsConfiguration', (webFormsConfiguration: WebFormsConfiguration) => {
     return <ng.IDirective>{
         template: template,
         restrict: 'E',
         replace: false,
-        scope: {
-            value: '='
-        },
-        link: MultiFileReadDirectiveLink
+        require: ['?ngModel', '^?mdInputContainer'],
+        scope: true,
+        link: (scope: MultiFileReadDirectiveScope, element: JQuery, attrs, controllers) => {
+            new MultiFileReadDirectiveLink(scope, element, webFormsConfiguration, controllers[0], controllers[1]);
+        }
     };
 }]);

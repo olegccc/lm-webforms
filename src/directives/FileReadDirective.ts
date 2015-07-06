@@ -5,6 +5,7 @@
  */
 
 ///<amd-dependency path="angular" />
+///<amd-dependency path="text!views/fileRead.html" />
 
 import WebFormsConfiguration = require('datatypes/WebFormsConfiguration');
 
@@ -91,7 +92,7 @@ class FileReadDirectiveLink {
 }
 
 import module = require('modules/WebFormsModule');
-import template = require('views/fileRead');
+var template = require('text!views/fileRead.html');
 
 module.directive('fileRead', ['webFormsConfiguration', (webFormsConfiguration: WebFormsConfiguration) => {
     return <ng.IDirective>{

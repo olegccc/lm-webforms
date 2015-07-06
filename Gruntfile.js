@@ -136,7 +136,6 @@ module.exports = function (grunt) {
         'ts-build',
         'copy:bootstrap',
         'run-jade',
-        'wrap-html',
         'requirejs',
         'uglify',
         "ts:tests"]);

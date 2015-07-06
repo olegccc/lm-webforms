@@ -678,12 +678,14 @@ define('directives/CkEditorDirective',["require", "exports", 'lodash', 'modules/
         }]);
 });
 
-define('views/codemirror',[],function() {
-  return '<div class="md-input CodeMirrorInput"></div>';
-});
+
+define('text!views/codemirror.html',[],function () { return '<div class="md-input CodeMirrorInput"></div>';});
+
 // Based on https://github.com/angular-ui/ui-codemirror
 // The goal of refactoring is to take advantage of using AMD and TypeScript and integrate it with angular.material
-define('directives/CodeMirrorDirective',["require", "exports", 'views/codemirror', 'modules/WebFormsModule', "angular"], function (require, exports, template, module) {
+define('directives/CodeMirrorDirective',["require", "exports", 'modules/WebFormsModule', "angular", "text!views/codemirror.html"], function (require, exports, module) {
+    /// <reference path="../../typings/requirejs/require.d.ts" />
+    var template = require('text!views/codemirror.html');
     var CodeMirrorDirectivePostLink = (function () {
         function CodeMirrorDirectivePostLink(scope, element, iAttrs, model, Codemirror, container) {
             var _this = this;
@@ -815,20 +817,16 @@ define('directives/CodeMirrorDirective',["require", "exports", 'views/codemirror
         }]);
 });
 
-define('views/webDialog',[],function() {
-  return '<div ng-form="form"><div ng-if="!changesApplied"><md-content layout-padding="layout-padding" layout="column"><style>md-input-container.inputfield-file label {' + 
-  '    flex: none;' + 
-  '    -webkit-flex: none;' + 
-  '    transform: none !important;' + 
-  '}' + 
-  '</style><div ng-repeat="field in fields | orderBy: \'position\'"><input-field field="field" object="object" form="form" ng-if="fieldVisible(field) &amp;&amp; !field.isGroup"></input-field><div ng-if="field.isGroup" layout="row" layout-sm="column"><input-field ng-repeat="child in field.children" field="child" object="object" form="form" ng-if="fieldVisible(child)" flex=""></input-field></div></div><div ng-if="submitWithCaptcha" captcha="recaptchaPublicKey"></div><div ng-if="submitError.length &gt; 0" class="bg-danger dialog-notification"><span class="glyphicon glyphicon-exclamation-sign"></span><span ng-bind="submitError"></span></div><div ng-if="submitSuccess.length &gt; 0" class="bg-success dialog-notification"><span class="glyphicon glyphicon-ok-circle"></span><span ng-bind="submitSuccess"></span></div></md-content><md-content layout-padding="layout-padding"><md-button ng-click="submit(form)" ng-disabled="okDisabled(form)" class="md-raised md-primary"><span ng-bind="applyCaption | translate"></span><md-progress-circular ng-show="isApplying" md-mode="indeterminate" md-diameter="10"></md-progress-circular></md-button></md-content></div><div ng-if="changesApplied"><div ng-bind="submitSuccess" class="bg-success dialog-notification"></div><md-content layout-padding="layout-padding"><md-button ng-click="openForm(form)" ng-bind="\'Open Form\' | translate" aria-label="Open" class="md-raised"></md-button></md-content></div></div>';
-});
+
+define('text!views/webDialog.html',[],function () { return '<div ng-form="form"><div ng-if="!changesApplied"><md-content layout-padding="layout-padding" layout="column"><style>md-input-container.inputfield-file label {\n    flex: none;\n    -webkit-flex: none;\n    transform: none !important;\n}\n</style><div ng-repeat="field in fields | orderBy: \'position\'"><input-field field="field" object="object" form="form" ng-if="fieldVisible(field) &amp;&amp; !field.isGroup"></input-field><div ng-if="field.isGroup" layout="row" layout-sm="column"><input-field ng-repeat="child in field.children" field="child" object="object" form="form" ng-if="fieldVisible(child)" flex=""></input-field></div></div><div ng-if="submitWithCaptcha" captcha="recaptchaPublicKey"></div><div ng-if="submitError.length &gt; 0" class="bg-danger dialog-notification"><span class="glyphicon glyphicon-exclamation-sign"></span><span ng-bind="submitError"></span></div><div ng-if="submitSuccess.length &gt; 0" class="bg-success dialog-notification"><span class="glyphicon glyphicon-ok-circle"></span><span ng-bind="submitSuccess"></span></div></md-content><md-content layout-padding="layout-padding"><md-button ng-click="submit(form)" ng-disabled="okDisabled(form)" class="md-raised md-primary"><span ng-bind="applyCaption | translate"></span><md-progress-circular ng-show="isApplying" md-mode="indeterminate" md-diameter="10"></md-progress-circular></md-button></md-content></div><div ng-if="changesApplied"><div ng-bind="submitSuccess" class="bg-success dialog-notification"></div><md-content layout-padding="layout-padding"><md-button ng-click="openForm(form)" ng-bind="\'Open Form\' | translate" aria-label="Open" class="md-raised"></md-button></md-content></div></div>';});
+
 /*
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
-define('directives/DialogDirective',["require", "exports", 'views/webDialog', 'modules/WebFormsModule', 'controllers/DialogController', "angular"], function (require, exports, template, module, DialogController) {
+define('directives/DialogDirective',["require", "exports", 'modules/WebFormsModule', 'controllers/DialogController', "angular", "text!views/webDialog.html"], function (require, exports, module, DialogController) {
+    var template = require('text!views/webDialog.html');
     module.directive('lmDialog', [function () {
             return {
                 template: template,
@@ -842,15 +840,15 @@ define('directives/DialogDirective',["require", "exports", 'views/webDialog', 'm
         }]);
 });
 
-define('views/fileRead',[],function() {
-  return '<input type="file" style="display: none"/><md-button ng-click="chooseFile()">{{ configuration.chooseFileMessage | translate }}</md-button><md-button ng-click="clear()" ng-show="valueSet">{{ configuration.clearFileMessage | translate }}</md-button><span>{{comment}}</span>';
-});
+
+define('text!views/fileRead.html',[],function () { return '<input type="file" style="display: none"/><md-button ng-click="chooseFile()">{{ configuration.chooseFileMessage | translate }}</md-button><md-button ng-click="clear()" ng-show="valueSet">{{ configuration.clearFileMessage | translate }}</md-button><span>{{comment}}</span>';});
+
 /*
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
-define('directives/FileReadDirective',["require", "exports", 'modules/WebFormsModule', 'views/fileRead', "angular"], function (require, exports, module, template) {
+define('directives/FileReadDirective',["require", "exports", 'modules/WebFormsModule', "angular", "text!views/fileRead.html"], function (require, exports, module) {
     var FileReadDirectiveLink = (function () {
         function FileReadDirectiveLink(scope, element, configuration, model, container) {
             var _this = this;
@@ -907,6 +905,7 @@ define('directives/FileReadDirective',["require", "exports", 'modules/WebFormsMo
         };
         return FileReadDirectiveLink;
     })();
+    var template = require('text!views/fileRead.html');
     module.directive('fileRead', ['webFormsConfiguration', function (webFormsConfiguration) {
             return {
                 template: template,
@@ -971,7 +970,7 @@ define('directives/InputFieldDirective',["require", "exports", 'datatypes/InputF
             scope.$watch('field', function () { return _this.render(); });
         }
         InputFieldDirectiveLink.prototype.getTemplateUrl = function () {
-            return '../views/inputFields/' + getFieldTemplate(this.scope.field.type.toLowerCase());
+            return 'text!views/inputFields/' + getFieldTemplate(this.scope.field.type.toLowerCase()) + '.html';
         };
         InputFieldDirectiveLink.prototype.render = function () {
             var _this = this;
@@ -1025,10 +1024,12 @@ define('utilities/StringFormatter',["require", "exports", 'lodash'], function (r
     return StringFormatter;
 });
 
-define('views/inputFieldError',[],function() {
-  return '<div ng-messages="form[field.property].$error" ng-show="form[field.property].$dirty"><div ng-message="required">{{ configuration.requiredErrorMessage | translate }}</div><div ng-message="maxlength">{{ maxLengthMessage }}</div><div ng-message="minlength">{{ minLengthMessage }}</div><div ng-message="email">{{ configuration.emailErrorMessage | translate }}</div><div ng-message="url">{{ configuration.urlErrorMessage | translate }}</div><div ng-message="pattern">{{ configuration.patternErrorMessage | translate }}</div><div ng-message="date">{{ configuration.dateErrorMessage | translate }}</div><div ng-message="time">{{ configuration.timeErrorMessage | translate }}</div><div ng-message="number">{{ configuration.numberErrorMessage | translate }}</div><div ng-message="password_match">{{ configuration.passwordErrorMessage | translate }}</div><div ng-message="equals">{{ configuration.notEqualErrorMessage | translate }}</div></div>';
-});
-define('directives/InputFieldErrorDirective',["require", "exports", 'utilities/StringFormatter', 'modules/WebFormsModule', 'views/inputFieldError'], function (require, exports, StringFormatter, module, template) {
+
+define('text!views/inputFieldError.html',[],function () { return '<div ng-messages="form[field.property].$error" ng-show="form[field.property].$dirty"><div ng-message="required">{{ configuration.requiredErrorMessage | translate }}</div><div ng-message="maxlength">{{ maxLengthMessage }}</div><div ng-message="minlength">{{ minLengthMessage }}</div><div ng-message="email">{{ configuration.emailErrorMessage | translate }}</div><div ng-message="url">{{ configuration.urlErrorMessage | translate }}</div><div ng-message="pattern">{{ configuration.patternErrorMessage | translate }}</div><div ng-message="date">{{ configuration.dateErrorMessage | translate }}</div><div ng-message="time">{{ configuration.timeErrorMessage | translate }}</div><div ng-message="number">{{ configuration.numberErrorMessage | translate }}</div><div ng-message="password_match">{{ configuration.passwordErrorMessage | translate }}</div><div ng-message="equals">{{ configuration.notEqualErrorMessage | translate }}</div></div>';});
+
+///<amd-dependency path="angular" />
+///<amd-dependency path="text!views/inputFieldError.html" />
+define('directives/InputFieldErrorDirective',["require", "exports", 'utilities/StringFormatter', 'modules/WebFormsModule', "angular", "text!views/inputFieldError.html"], function (require, exports, StringFormatter, module) {
     var InputFieldErrorDirectiveController = (function () {
         function InputFieldErrorDirectiveController(scope, translateService, configuration) {
             scope.configuration = configuration;
@@ -1043,6 +1044,7 @@ define('directives/InputFieldErrorDirective',["require", "exports", 'utilities/S
         }
         return InputFieldErrorDirectiveController;
     })();
+    var template = require('text!views/inputFieldError.html');
     module.directive('inputFieldError', [function () {
             return {
                 template: template,
@@ -1053,9 +1055,6 @@ define('directives/InputFieldErrorDirective',["require", "exports", 'utilities/S
         }]);
 });
 
-define('views/multiFileRead',[],function() {
-  return '<ul class="file-choose-list"><li ng-foreach="file in value.files"><span>{{file.name}}</span><span ng-click="removeFile(file)" class="file-remove glyphicon glyphicon-remove"></span></li></ul><input type="file" style="display: none" multiple="multiple"/><md-button>{{ \'Main.ChooseFile\' | translate }}</md-button>';
-});
 /*
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -1064,45 +1063,70 @@ define('views/multiFileRead',[],function() {
 ;
 define("datatypes/FileReadResponse", function(){});
 
-///<amd-dependency path="../datatypes/FileReadResponse" />
-///<amd-dependency path="angular" />
-define('directives/MultiFileReadDirective',["require", "exports", 'modules/WebFormsModule', 'views/multiFileRead', "../datatypes/FileReadResponse", "angular"], function (require, exports, module, template) {
+
+define('text!views/multiFileRead.html',[],function () { return '<style>.file-choose-list, .file-choose-list li {\n    margin: 0;\n    padding: 0;\n    list-style-type: none;\n}\n\n.file-choose-list li {\n    display: inline-block;\n}\n\n.file-choose-list li:not(:first-child) {\n    margin-left: 0.5em;\n}\n\n.file-choose-list li:first-child {\n    margin-top: 0.5em;\n}\n\n.file-choose-list li:last-child {\n    margin-bottom: 1em;\n}\n\n.file-choose-list li md-icon {\n    margin-left: 5px;\n    cursor: pointer;\n}\n\n</style><ul class="file-choose-list"><li ng-repeat="file in files"><span>{{file.name}}</span><md-icon ng-click="removeFile(file)" class="file-remove">clear</md-icon></li></ul><input type="file" style="display: none" multiple="multiple"/><md-button ng-click="chooseFile()">{{ \'Main.ChooseFile\' | translate }}</md-button>';});
+
+/*
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
+define('directives/MultiFileReadDirective',["require", "exports", 'modules/WebFormsModule', "datatypes/FileReadResponse", "angular", "text!views/multiFileRead.html"], function (require, exports, module) {
     var MultiFileReadResponse = (function () {
         function MultiFileReadResponse() {
+            this.files = [];
         }
         return MultiFileReadResponse;
     })();
     var MultiFileReadDirectiveLink = (function () {
-        function MultiFileReadDirectiveLink(scope, element) {
+        function MultiFileReadDirectiveLink(scope, element, configuration, model, container) {
             var _this = this;
             this.fileId = 1;
+            this.model = model;
+            this.container = container;
             this.scope = scope;
-            if (scope.value == null) {
-                scope.value = new MultiFileReadResponse();
+            this.scope.configuration = configuration;
+            this.value = this.model.$modelValue;
+            this.scope.valueSet = _.isObject(this.value);
+            this.scope.comment = "";
+            if (!this.scope.valueSet) {
+                this.value = new MultiFileReadResponse();
                 this.fileReadBefore = 0;
+                this.model.$setViewValue(null);
             }
             else {
-                this.fileReadBefore = scope.value.files.length;
+                this.fileReadBefore = this.value.files.length;
             }
-            scope.value.files = [];
-            this.fileElement = element.find('file');
-            scope.chooseFile = function () { return _this.fileElement.click(); };
-            this.fileElement.bind('change', function (changeEvent) { return _this.onFilesSelected(changeEvent); });
-            scope.removeFile = function (file) {
-                for (var i = 0; i < scope.value.files.length; i++) {
-                    if (scope.value.files[i].id == file.id) {
-                        scope.value.files.splice(i, 1);
-                        break;
-                    }
-                }
+            this.scope.files = this.value.files;
+            this.fileElement = element.find('input[type=file]');
+            scope.chooseFile = function () {
+                _this.fileElement.click();
             };
+            scope.removeFile = function (file) {
+                _this.removeFile(file);
+            };
+            this.fileElement.bind('change', function (changeEvent) { return _this.onFilesSelected(changeEvent); });
         }
-        MultiFileReadDirectiveLink.prototype.onFilesSelected = function (changeEvent) {
-            var sourceFiles = changeEvent.target.files;
-            for (var i = 0; i < sourceFiles.length; i++) {
-                var sourceFile = sourceFiles[i];
-                this.readFile(sourceFile, changeEvent, sourceFiles);
+        MultiFileReadDirectiveLink.prototype.removeFile = function (file) {
+            for (var i = 0; i < this.value.files.length; i++) {
+                if (this.value.files[i].id == file.id) {
+                    this.value.files.splice(i, 1);
+                    break;
+                }
             }
+            if (this.value.files.length === 0) {
+                this.model.$setViewValue(null);
+                this.scope.comment = "";
+                this.container.setHasValue(false);
+                this.scope.valueSet = false;
+            }
+        };
+        MultiFileReadDirectiveLink.prototype.onFilesSelected = function (changeEvent) {
+            var _this = this;
+            var sourceFiles = changeEvent.target.files;
+            _.each(sourceFiles, function (file) {
+                _this.readFile(file, sourceFiles);
+            });
         };
         MultiFileReadDirectiveLink.prototype.onReadFinished = function (loadEvent, sourceFile, sourceFiles) {
             var value = loadEvent.target.result;
@@ -1116,30 +1140,38 @@ define('directives/MultiFileReadDirective',["require", "exports", 'modules/WebFo
                 name: sourceFile.name,
                 id: this.fileId++
             };
-            this.scope.value.files.push(file);
-            if (this.scope.value.files.length - this.fileReadBefore == sourceFiles.length) {
+            this.value.files.push(file);
+            if (this.value.files.length - this.fileReadBefore == sourceFiles.length) {
                 this.fileElement.val('');
             }
+            if (this.value.files.length === 1) {
+                this.model.$setViewValue(this.value);
+                this.scope.valueSet = true;
+            }
+            this.model.$setDirty();
+            this.model.$setTouched();
         };
-        MultiFileReadDirectiveLink.prototype.readFile = function (sourceFile, changeEvent, sourceFiles) {
+        MultiFileReadDirectiveLink.prototype.readFile = function (sourceFile, sourceFiles) {
             var _this = this;
             var reader = new FileReader();
-            reader.onload = function () {
-                _this.scope.$apply(function () { return _this.onReadFinished(changeEvent, sourceFile, sourceFiles); });
+            reader.onload = function (loadEvent) {
+                _this.scope.$apply(function () { return _this.onReadFinished(loadEvent, sourceFile, sourceFiles); });
             };
             reader.readAsDataURL(sourceFile);
         };
         return MultiFileReadDirectiveLink;
     })();
-    module.directive('multiFileRead', [function () {
+    var template = require('text!views/multiFileRead.html');
+    module.directive('multiFileRead', ['webFormsConfiguration', function (webFormsConfiguration) {
             return {
                 template: template,
                 restrict: 'E',
                 replace: false,
-                scope: {
-                    value: '='
-                },
-                link: MultiFileReadDirectiveLink
+                require: ['?ngModel', '^?mdInputContainer'],
+                scope: true,
+                link: function (scope, element, attrs, controllers) {
+                    new MultiFileReadDirectiveLink(scope, element, webFormsConfiguration, controllers[0], controllers[1]);
+                }
             };
         }]);
 });
@@ -1254,23 +1286,20 @@ define('services/FriendlyFormattingService',["require", "exports", 'autolinker',
     return FriendlyFormattingService;
 });
 
-define('views/webForm',[],function() {
-  return '<md-dialog ng-form="form" aria-label="{{title}}" flex="80"><md-toolbar><div class="md-toolbar-tools"><h2>{{title}}</h2></div></md-toolbar><md-content layout-padding="layout-padding" layout="column"><style>md-input-container.inputfield-file label {' + 
-  '    flex: none;' + 
-  '    -webkit-flex: none;' + 
-  '    transform: none !important;' + 
-  '}' + 
-  '</style><div ng-repeat="field in fields | orderBy: \'position\'"><input-field field="field" object="object" form="form" ng-if="fieldVisible(field) &amp;&amp; !field.isGroup"></input-field><div ng-if="field.isGroup" layout="row" layout-sm="column"><input-field ng-repeat="child in field.children" field="child" object="object" form="form" ng-if="fieldVisible(child)" flex=""></input-field></div></div><div ng-if="submitWithCaptcha" captcha="recaptchaPublicKey"></div><div ng-if="submitError.length &gt; 0" class="bg-danger dialog-notification"><span class="glyphicon glyphicon-exclamation-sign"></span><span ng-bind="submitError"></span></div><div ng-if="submitSuccess.length &gt; 0" class="bg-success dialog-notification"><span class="glyphicon glyphicon-ok-circle"></span><span ng-bind="submitSuccess"></span></div></md-content><div class="md-actions"><md-button ng-click="submit(form)" aria-label="OK" class="md-raised md-primary"><span>{{ \'OK\' | translate }}</span><md-progress-circular ng-show="isApplying" md-mode="indeterminate" md-diameter="10"></md-progress-circular></md-button><md-button ng-click="cancel()" ng-disabled="isApplying" class="md-raised">{{ \'Cancel\' | translate }}</md-button></div></md-dialog>';
-});
-define('views/webFormQuestion',[],function() {
-  return '<div class="modal-header"><h3 class="modal-title">{{title}}</h3></div><div class="modal-body"><p>{{message}}</p></div><div class="modal-footer"><div ng-if="submitError.length &gt; 0" class="bg-danger dialog-notification"><span class="glyphicon glyphicon-exclamation-sign"></span><span ng-bind="submitError"></span></div><md-button ng-click="submit()" class="md-raised"><span>{{ \'Main.ButtonYes\' | translate }}</span><md-progress-circular ng-show="isApplying" md-mode="indeterminate"></md-progress-circular></md-button><md-button ng-click="cancel()" class="md-raised md-warn">{{ \'Main.ButtonNo\' | translate }}</md-button></div>';
-});
-define('views/webFormMessage',[],function() {
-  return '<md-dialog aria-label="{{title}}" class="input-form"><md-dialog-content><md-subheader>{{title}}</md-subheader></md-dialog-content><md-content><p>{{message}}</p></md-content><div class="md-actions"><md-button ng-click="close()" class="md-primary">{{ \'Main.ButtonOk\' | translate }}</md-button></div></md-dialog>';
-});
-///<amd-dependency path="angular" />
+
+define('text!views/webForm.html',[],function () { return '<md-dialog ng-form="form" aria-label="{{title}}" flex="80"><md-toolbar><div class="md-toolbar-tools"><h2>{{title}}</h2></div></md-toolbar><md-content layout-padding="layout-padding" layout="column"><style>md-input-container.inputfield-file label {\n    flex: none;\n    -webkit-flex: none;\n    transform: none !important;\n}\n</style><div ng-repeat="field in fields | orderBy: \'position\'"><input-field field="field" object="object" form="form" ng-if="fieldVisible(field) &amp;&amp; !field.isGroup"></input-field><div ng-if="field.isGroup" layout="row" layout-sm="column"><input-field ng-repeat="child in field.children" field="child" object="object" form="form" ng-if="fieldVisible(child)" flex=""></input-field></div></div><div ng-if="submitWithCaptcha" captcha="recaptchaPublicKey"></div><div ng-if="submitError.length &gt; 0" class="bg-danger dialog-notification"><span class="glyphicon glyphicon-exclamation-sign"></span><span ng-bind="submitError"></span></div><div ng-if="submitSuccess.length &gt; 0" class="bg-success dialog-notification"><span class="glyphicon glyphicon-ok-circle"></span><span ng-bind="submitSuccess"></span></div></md-content><div class="md-actions"><md-button ng-click="submit(form)" aria-label="OK" class="md-raised md-primary"><span>{{ \'OK\' | translate }}</span><md-progress-circular ng-show="isApplying" md-mode="indeterminate" md-diameter="10"></md-progress-circular></md-button><md-button ng-click="cancel()" ng-disabled="isApplying" class="md-raised">{{ \'Cancel\' | translate }}</md-button></div></md-dialog>';});
+
+
+define('text!views/webFormQuestion.html',[],function () { return '<div class="modal-header"><h3 class="modal-title">{{title}}</h3></div><div class="modal-body"><p>{{message}}</p></div><div class="modal-footer"><div ng-if="submitError.length &gt; 0" class="bg-danger dialog-notification"><span class="glyphicon glyphicon-exclamation-sign"></span><span ng-bind="submitError"></span></div><md-button ng-click="submit()" class="md-raised"><span>{{ \'Main.ButtonYes\' | translate }}</span><md-progress-circular ng-show="isApplying" md-mode="indeterminate"></md-progress-circular></md-button><md-button ng-click="cancel()" class="md-raised md-warn">{{ \'Main.ButtonNo\' | translate }}</md-button></div>';});
+
+
+define('text!views/webFormMessage.html',[],function () { return '<md-dialog aria-label="{{title}}" class="input-form"><md-dialog-content><md-subheader>{{title}}</md-subheader></md-dialog-content><md-content><p>{{message}}</p></md-content><div class="md-actions"><md-button ng-click="close()" class="md-primary">{{ \'Main.ButtonOk\' | translate }}</md-button></div></md-dialog>';});
+
 /// <reference path="../../typings/requirejs/require.d.ts" />
-define('services/WebFormsService',["require", "exports", 'views/webForm', 'views/webFormQuestion', 'views/webFormMessage', 'datatypes/InputFieldTypes', "angular"], function (require, exports, template, questionTemplate, messageTemplate, InputFieldTypes) {
+define('services/WebFormsService',["require", "exports", 'datatypes/InputFieldTypes', "angular", "text!views/webForm.html", "text!views/webFormQuestion.html", "text!views/webFormMessage.html"], function (require, exports, InputFieldTypes) {
+    var template = require('text!views/webForm.html');
+    var questionTemplate = require('text!views/webFormQuestion.html');
+    var messageTemplate = require('text!views/webFormMessage.html');
     var WebFormsService = (function () {
         function WebFormsService(httpService, qService, cacheFactory, dialogService) {
             this.httpService = httpService;
@@ -1329,10 +1358,10 @@ define('services/WebFormsService',["require", "exports", 'views/webForm', 'views
             return defer.promise;
         };
         WebFormsService.fillRichTextModules = function (requires) {
-            requires.push("../directives/CkEditorDirective");
+            requires.push("directives/CkEditorDirective");
         };
         WebFormsService.fillCodeTextModules = function (requires) {
-            requires.push("../directives/CodeMirrorDirective");
+            requires.push("directives/CodeMirrorDirective");
         };
         WebFormsService.prototype.executeWithDefinitionLoaded = function (object, definition, isNew, defer, resolver) {
             var _this = this;
@@ -1446,94 +1475,57 @@ define('services/WebFormsServiceProvider',["require", "exports", 'modules/WebFor
     module.provider('webForms', [WebFormsServiceProvider]);
 });
 
-define('views/inputFields/checkBox',[],function() {
-  return '<md-checkbox name="{{field.property}}" ng-model="object[field.property]" ng-disabled="readOnly(field)">{{field.title | translate}}</md-checkbox>';
-});
-define('views/inputFields/codeText',[],function() {
-  return '<style>.CodeMirror {' + 
-  '    line-height: normal;' + 
-  '    height: 200px;' + 
-  '}' + 
-  '.CodeMirrorInput {' + 
-  '    border-width: 1px !important;' + 
-  '    border-style: solid;' + 
-  '    border-radius: 3px;' + 
-  '}' + 
-  '.md-input-focused .CodeMirrorInput {' + 
-  '    border-width: 2px !important;' + 
-  '}' + 
-  'md-input-container:not(.md-input-focused):not(.md-input-has-value) .CodeMirrorLabel {' + 
-  '    padding-left: 40px;' + 
-  '}' + 
-  '</style><label class="CodeMirrorLabel">{{field.title | translate}}</label><link href="../../bower_components/codemirror/lib/codemirror.css" rel="stylesheet" type="text/css"/><ui-codemirror ng-model="object[field.property]" name="{{field.property}}" ng-required="field.required" readonly="readOnly(field)" options="{}"></ui-codemirror>';
-});
-define('views/inputFields/date',[],function() {
-  return '<label>{{field.title | translate}}</label><input type="date" name="{{field.property}}" ng-model="object[field.property]" ng-readonly="readonly(field)" ng-required="field.required"/>';
-});
-define('views/inputFields/email',[],function() {
-  return '<label>{{field.title | translate}}</label><input type="email" name="{{field.property}}" ng-model="object[field.property]" ng-readonly="readOnly(field)" ng-required="field.required" ng-minlength="field.minLength" ng-maxlength="field.maxLength"/>';
-});
-define('views/inputFields/file',[],function() {
-  return '<label>{{field.title | translate}}</label><style>md-input-container file-read.md-input {' + 
-  '    border-width: 0;' + 
-  '}' + 
-  'md-input-container file-read.md-input.ng-invalid.ng-dirty {' + 
-  '    border-width: 2px;' + 
-  '    border-style: solid;' + 
-  '}' + 
-  'md-input-container.md-input-focused file-read.md-input {' + 
-  '    border-width: 2px;' + 
-  '    border-style: solid;' + 
-  '}' + 
-  '</style><file-read ng-model="object[field.property]" style="height: auto" ng-required="field.required" name="{{field.property}}" class="md-input"></file-read>';
-});
-define('views/inputFields/fileList',[],function() {
-  return '<label>{{field.title | translate}}</label><div multi-file-read="object[field.property]"></div>';
-});
-define('views/inputFields/image',[],function() {
-  return '<label>{{field.title | translate}}</label><div><div><input ng-if="!readOnly(field)" type="file" fileread="object[field.property]"/></div><div style="margin-top: 1em;"><img ng-if="object[field.property] != null" ng-src="/Image/Thumbnail/{{object[field.property]}}"/></div></div>';
-});
-define('views/inputFields/label',[],function() {
-  return '<label>{{field.title | translate}}</label><span ng-bind="object[field.property]"></span>';
-});
-define('views/inputFields/multilineText',[],function() {
-  return '<label>{{field.title | translate}}</label><textarea ng-model="object[field.property]" ng-readonly="readOnly(field)"></textarea>';
-});
-define('views/inputFields/multiSelect',[],function() {
-  return '<label>{{field.title | translate}}</label><select ng-model="object[field.property]" multiple="multiple" ng-options="item.value as item.text for item in field.selectValues"></select>';
-});
-define('views/inputFields/number',[],function() {
-  return '<label>{{field.title | translate}}</label><input type="number" ng-model="object[field.property]" ng-readonly="readOnly(field)" ng-required="required"/>';
-});
-define('views/inputFields/password',[],function() {
-  return '<label>{{field.title | translate}}</label><input type="password" name="{{field.property}}" ng-model="object[field.property]" ng-readonly="readOnly(field)" ng-required="field.required" ng-minlength="field.minLength" ng-maxlength="field.maxLength"/>';
-});
-define('views/inputFields/passwordRepeat',[],function() {
-  return '<label>{{field.title | translate}}</label><input type="password" name="{{field.property}}" ng-model="object[field.property]" ng-readonly="readOnly(field)" ng-required="field.required" ng-minlength="field.minLength" ng-maxlength="field.maxLength" validate-equals="" reference="{{object[field.reference]}}"/>';
-});
-define('views/inputFields/richText',[],function() {
-  return '<label>{{field.title | translate}}</label><style>md-input-container ck-editor.md-input {' + 
-  '    border-width: 0;' + 
-  '}' + 
-  'md-input-container ck-editor.md-input.ng-invalid.ng-dirty {' + 
-  '    border-width: 2px;' + 
-  '    border-style: solid;' + 
-  '}' + 
-  'md-input-container.md-input-focused ck-editor.md-input {' + 
-  '    border-width: 2px;' + 
-  '    border-style: solid;' + 
-  '}' + 
-  '</style><ck-editor ng-if="!readOnly(field)" ng-model="object[field.property]" options="{}" readonly="false" ng-required="field.required" name="{{field.property}}" class="md-input"></ck-editor><div ng-if="readOnly(field)" ng-bind-html="object[field.property]"></div>';
-});
-define('views/inputFields/select',[],function() {
-  return '<label>{{field.title | translate}}</label><select ng-model="object[field.property]" class="form-control"><option ng-repeat="select in field.selectValues" value="{{select.value}}" ng-bind="select.text" ng-selected="fieldValueSelected(model, field, select)"></option></select>';
-});
-define('views/inputFields/text',[],function() {
-  return '<label>{{field.title | translate}}</label><input type="text" name="{{field.property}}" ng-model="object[field.property]" ng-readonly="readOnly(field)" ng-required="field.required" ng-minlength="field.minLength" ng-maxlength="field.maxLength"/>';
-});
-define('views/inputFields/typeahead',[],function() {
-  return '<label>{{field.title | translate}}</label><input type="text" ng-model="object[field.property]" ng-readonly="readOnly(field)" typeahead="name for name in getTypeahead(field, $viewValue)"/>';
-});
+
+define('text!views/inputFields/checkBox.html',[],function () { return '<md-checkbox name="{{field.property}}" ng-model="object[field.property]" ng-disabled="readOnly(field)">{{field.title | translate}}</md-checkbox>';});
+
+
+define('text!views/inputFields/codeText.html',[],function () { return '<style>.CodeMirror {\n    line-height: normal;\n    height: 200px;\n}\n.CodeMirrorInput {\n    border-width: 1px !important;\n    border-style: solid;\n    border-radius: 3px;\n}\n.md-input-focused .CodeMirrorInput {\n    border-width: 2px !important;\n}\nmd-input-container:not(.md-input-focused):not(.md-input-has-value) .CodeMirrorLabel {\n    padding-left: 40px;\n}\n</style><label class="CodeMirrorLabel">{{field.title | translate}}</label><link href="../../bower_components/codemirror/lib/codemirror.css" rel="stylesheet" type="text/css"/><ui-codemirror ng-model="object[field.property]" name="{{field.property}}" ng-required="field.required" readonly="readOnly(field)" options="{}"></ui-codemirror>';});
+
+
+define('text!views/inputFields/date.html',[],function () { return '<label>{{field.title | translate}}</label><input type="date" name="{{field.property}}" ng-model="object[field.property]" ng-readonly="readonly(field)" ng-required="field.required"/>';});
+
+
+define('text!views/inputFields/email.html',[],function () { return '<label>{{field.title | translate}}</label><input type="email" name="{{field.property}}" ng-model="object[field.property]" ng-readonly="readOnly(field)" ng-required="field.required" ng-minlength="field.minLength" ng-maxlength="field.maxLength"/>';});
+
+
+define('text!views/inputFields/file.html',[],function () { return '<label>{{field.title | translate}}</label><style>md-input-container file-read.md-input {\n    border-width: 0;\n}\nmd-input-container file-read.md-input.ng-invalid.ng-dirty {\n    border-width: 2px;\n    border-style: solid;\n}\nmd-input-container.md-input-focused file-read.md-input {\n    border-width: 2px;\n    border-style: solid;\n}\n</style><file-read ng-model="object[field.property]" style="height: auto" ng-required="field.required" name="{{field.property}}" class="md-input"></file-read>';});
+
+
+define('text!views/inputFields/fileList.html',[],function () { return '<label>{{field.title | translate}}</label><style>md-input-container multi-file-read.md-input {\n    border-width: 0;\n}\nmd-input-container multi-file-read.md-input.ng-invalid.ng-dirty {\n    border-width: 2px;\n    border-style: solid;\n}\nmd-input-container.md-input-focused multi-file-read.md-input {\n    border-width: 2px;\n    border-style: solid;\n}\n</style><multi-file-read ng-model="object[field.property]" ng-required="field.required" name="{{field.property}}" class="md-input"></multi-file-read>';});
+
+
+define('text!views/inputFields/image.html',[],function () { return '<label>{{field.title | translate}}</label><div><div><input ng-if="!readOnly(field)" type="file" fileread="object[field.property]"/></div><div style="margin-top: 1em;"><img ng-if="object[field.property] != null" ng-src="/Image/Thumbnail/{{object[field.property]}}"/></div></div>';});
+
+
+define('text!views/inputFields/label.html',[],function () { return '<label>{{field.title | translate}}</label><span ng-bind="object[field.property]"></span>';});
+
+
+define('text!views/inputFields/multilineText.html',[],function () { return '<label>{{field.title | translate}}</label><textarea ng-model="object[field.property]" ng-readonly="readOnly(field)"></textarea>';});
+
+
+define('text!views/inputFields/multiSelect.html',[],function () { return '<label>{{field.title | translate}}</label><select ng-model="object[field.property]" multiple="multiple" ng-options="item.value as item.text for item in field.selectValues"></select>';});
+
+
+define('text!views/inputFields/number.html',[],function () { return '<label>{{field.title | translate}}</label><input type="number" ng-model="object[field.property]" ng-readonly="readOnly(field)" ng-required="required"/>';});
+
+
+define('text!views/inputFields/password.html',[],function () { return '<label>{{field.title | translate}}</label><input type="password" name="{{field.property}}" ng-model="object[field.property]" ng-readonly="readOnly(field)" ng-required="field.required" ng-minlength="field.minLength" ng-maxlength="field.maxLength"/>';});
+
+
+define('text!views/inputFields/passwordRepeat.html',[],function () { return '<label>{{field.title | translate}}</label><input type="password" name="{{field.property}}" ng-model="object[field.property]" ng-readonly="readOnly(field)" ng-required="field.required" ng-minlength="field.minLength" ng-maxlength="field.maxLength" validate-equals="" reference="{{object[field.reference]}}"/>';});
+
+
+define('text!views/inputFields/richText.html',[],function () { return '<label>{{field.title | translate}}</label><style>md-input-container ck-editor.md-input {\n    border-width: 0;\n}\nmd-input-container ck-editor.md-input.ng-invalid.ng-dirty {\n    border-width: 2px;\n    border-style: solid;\n}\nmd-input-container.md-input-focused ck-editor.md-input {\n    border-width: 2px;\n    border-style: solid;\n}\n</style><ck-editor ng-if="!readOnly(field)" ng-model="object[field.property]" options="{}" readonly="false" ng-required="field.required" name="{{field.property}}" class="md-input"></ck-editor><div ng-if="readOnly(field)" ng-bind-html="object[field.property]"></div>';});
+
+
+define('text!views/inputFields/select.html',[],function () { return '<label>{{field.title | translate}}</label><select ng-model="object[field.property]" class="form-control"><option ng-repeat="select in field.selectValues" value="{{select.value}}" ng-bind="select.text" ng-selected="fieldValueSelected(model, field, select)"></option></select>';});
+
+
+define('text!views/inputFields/text.html',[],function () { return '<label>{{field.title | translate}}</label><input type="text" name="{{field.property}}" ng-model="object[field.property]" ng-readonly="readOnly(field)" ng-required="field.required" ng-minlength="field.minLength" ng-maxlength="field.maxLength"/>';});
+
+
+define('text!views/inputFields/typeahead.html',[],function () { return '<label>{{field.title | translate}}</label><input type="text" ng-model="object[field.property]" ng-readonly="readOnly(field)" typeahead="name for name in getTypeahead(field, $viewValue)"/>';});
+
 ///<amd-dependency path="angular" />
 ///<amd-dependency path="controllers/DialogController" />
 ///<amd-dependency path="controllers/InputFormController" />
@@ -1549,23 +1541,23 @@ define('views/inputFields/typeahead',[],function() {
 ///<amd-dependency path="directives/ValidateEqualsDirective" />
 ///<amd-dependency path="services/FriendlyFormattingService" />
 ///<amd-dependency path="services/WebFormsServiceProvider" />
-///<amd-dependency path="views/inputFields/checkBox" />
-///<amd-dependency path="views/inputFields/codeText" />
-///<amd-dependency path="views/inputFields/date" />
-///<amd-dependency path="views/inputFields/email" />
-///<amd-dependency path="views/inputFields/file" />
-///<amd-dependency path="views/inputFields/fileList" />
-///<amd-dependency path="views/inputFields/image" />
-///<amd-dependency path="views/inputFields/label" />
-///<amd-dependency path="views/inputFields/multilineText" />
-///<amd-dependency path="views/inputFields/multiSelect" />
-///<amd-dependency path="views/inputFields/number" />
-///<amd-dependency path="views/inputFields/password" />
-///<amd-dependency path="views/inputFields/passwordRepeat" />
-///<amd-dependency path="views/inputFields/richText" />
-///<amd-dependency path="views/inputFields/select" />
-///<amd-dependency path="views/inputFields/text" />
-///<amd-dependency path="views/inputFields/typeahead" />
-define('lm-webforms',["require", "exports", "angular", "controllers/DialogController", "controllers/InputFormController", "controllers/InputFormMessageController", "controllers/InputFormQuestionController", "directives/CkEditorDirective", "directives/CodeMirrorDirective", "directives/DialogDirective", "directives/FileReadDirective", "directives/InputFieldDirective", "directives/InputFieldErrorDirective", "directives/MultiFileReadDirective", "directives/ValidateEqualsDirective", "services/FriendlyFormattingService", "services/WebFormsServiceProvider", "views/inputFields/checkBox", "views/inputFields/codeText", "views/inputFields/date", "views/inputFields/email", "views/inputFields/file", "views/inputFields/fileList", "views/inputFields/image", "views/inputFields/label", "views/inputFields/multilineText", "views/inputFields/multiSelect", "views/inputFields/number", "views/inputFields/password", "views/inputFields/passwordRepeat", "views/inputFields/richText", "views/inputFields/select", "views/inputFields/text", "views/inputFields/typeahead"], function (require, exports) {
+///<amd-dependency path="text!views/inputFields/checkBox.html" />
+///<amd-dependency path="text!views/inputFields/codeText.html" />
+///<amd-dependency path="text!views/inputFields/date.html" />
+///<amd-dependency path="text!views/inputFields/email.html" />
+///<amd-dependency path="text!views/inputFields/file.html" />
+///<amd-dependency path="text!views/inputFields/fileList.html" />
+///<amd-dependency path="text!views/inputFields/image.html" />
+///<amd-dependency path="text!views/inputFields/label.html" />
+///<amd-dependency path="text!views/inputFields/multilineText.html" />
+///<amd-dependency path="text!views/inputFields/multiSelect.html" />
+///<amd-dependency path="text!views/inputFields/number.html" />
+///<amd-dependency path="text!views/inputFields/password.html" />
+///<amd-dependency path="text!views/inputFields/passwordRepeat.html" />
+///<amd-dependency path="text!views/inputFields/richText.html" />
+///<amd-dependency path="text!views/inputFields/select.html" />
+///<amd-dependency path="text!views/inputFields/text.html" />
+///<amd-dependency path="text!views/inputFields/typeahead.html" />
+define('lm-webforms',["require", "exports", "angular", "controllers/DialogController", "controllers/InputFormController", "controllers/InputFormMessageController", "controllers/InputFormQuestionController", "directives/CkEditorDirective", "directives/CodeMirrorDirective", "directives/DialogDirective", "directives/FileReadDirective", "directives/InputFieldDirective", "directives/InputFieldErrorDirective", "directives/MultiFileReadDirective", "directives/ValidateEqualsDirective", "services/FriendlyFormattingService", "services/WebFormsServiceProvider", "text!views/inputFields/checkBox.html", "text!views/inputFields/codeText.html", "text!views/inputFields/date.html", "text!views/inputFields/email.html", "text!views/inputFields/file.html", "text!views/inputFields/fileList.html", "text!views/inputFields/image.html", "text!views/inputFields/label.html", "text!views/inputFields/multilineText.html", "text!views/inputFields/multiSelect.html", "text!views/inputFields/number.html", "text!views/inputFields/password.html", "text!views/inputFields/passwordRepeat.html", "text!views/inputFields/richText.html", "text!views/inputFields/select.html", "text!views/inputFields/text.html", "text!views/inputFields/typeahead.html"], function (require, exports) {
 });
 

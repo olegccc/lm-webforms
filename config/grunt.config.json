@@ -94,8 +94,17 @@
   },
   "copy": {
     "bootstrap": {
-      "src": "./src/bootstrap/paths.js",
-      "dest": "./build/paths.js"
+      "files": [{
+        "cwd": "./src/bootstrap",
+        "src": "*.js",
+        "dest": "./build/",
+        "expand": true
+      }, {
+        "cwd": "./src/icons",
+        "src": "**",
+        "dest": "./build/icons/",
+        "expand": true
+      }]
     }
   },
   "clean": {

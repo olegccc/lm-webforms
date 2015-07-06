@@ -12,7 +12,6 @@ var require: any = {
         'autolinker': '/bower_components/Autolinker.js/dist/Autolinker',
         'ckeditor': '/bower_components/ckeditor/ckeditor',
         'domready': '/bower_components/domready/ready',
-        'requirejs.text': '/bower_components/requirejs-text/text',
         'Recaptcha': 'http://www.google.com/recaptcha/api/js/recaptcha_ajax',
         'codemirror': '/bower_components/codemirror/lib/codemirror',
         'codemirror.htmlmixed': '/bower_components/codemirror/mode/htmlmixed/htmlmixed',
@@ -22,7 +21,8 @@ var require: any = {
         'codemirror.javascript': '/bower_components/codemirror/mode/javascript/javascript',
         'codemirror.css': '/bower_components/codemirror/mode/css/css',
         'codemirror.multiplex': '/bower_components/codemirror/addon/mode/multiplex',
-        'codemirror.xmlhint': '/bower_components/codemirror/addon/hint/xml-hint'
+        'codemirror.xmlhint': '/bower_components/codemirror/addon/hint/xml-hint',
+        'text': '/bower_components/requirejs-text/text'
     },
     map: {
         '*': {
@@ -39,7 +39,7 @@ var require: any = {
     shim: {
         'angular':{
             exports: 'angular',
-            deps: ['jquery', 'requirejs.text']
+            deps: ['jquery', 'text']
         },
         'jquery': {
             exports: '$'

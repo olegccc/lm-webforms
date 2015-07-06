@@ -5,8 +5,9 @@
  */
 
 ///<amd-dependency path="angular" />
+///<amd-dependency path="text!views/webDialog.html" />
 
-import template = require('views/webDialog');
+var template = require('text!views/webDialog.html');
 import module = require('modules/WebFormsModule');
 import DialogController = require('controllers/DialogController');
 

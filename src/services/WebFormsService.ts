@@ -1,9 +1,13 @@
-///<amd-dependency path="angular" />
 /// <reference path="../../typings/requirejs/require.d.ts" />
 
-import template = require('views/webForm');
-import questionTemplate = require('views/webFormQuestion');
-import messageTemplate = require('views/webFormMessage');
+///<amd-dependency path="angular" />
+///<amd-dependency path="text!views/webForm.html" />
+///<amd-dependency path="text!views/webFormQuestion.html" />
+///<amd-dependency path="text!views/webFormMessage.html" />
+
+var template = require('text!views/webForm.html');
+var questionTemplate = require('text!views/webFormQuestion.html');
+var messageTemplate = require('text!views/webFormMessage.html');
 import InputFieldTypes = require('datatypes/InputFieldTypes');
 
 class WebFormsService {
@@ -74,11 +78,11 @@ class WebFormsService {
     }
 
     private static fillRichTextModules(requires: string[]) {
-        requires.push("../directives/CkEditorDirective");
+        requires.push("directives/CkEditorDirective");
     }
 
     private static fillCodeTextModules(requires: string[]) {
-        requires.push("../directives/CodeMirrorDirective");
+        requires.push("directives/CodeMirrorDirective");
     }
 
     private executeWithDefinitionLoaded<T>(object: T, definition: WebFormDefinition, isNew: boolean, defer: ng.IDeferred<T>, resolver: (object: T) => ng.IPromise<void>) {

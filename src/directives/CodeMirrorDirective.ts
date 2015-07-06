@@ -3,8 +3,9 @@
 
 /// <reference path="../../typings/requirejs/require.d.ts" />
 ///<amd-dependency path="angular" />
+///<amd-dependency path="text!views/codemirror.html" />
 
-import template = require('views/codemirror');
+var template = require('text!views/codemirror.html');
 import WebFormsConfiguration = require('datatypes/WebFormsConfiguration');
 
 interface CodeMirrorDirectiveScope extends ng.IScope {

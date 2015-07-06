@@ -1,2 +1,20 @@
 label {{field.title | translate}}
-div(multi-file-read="object[field.property]")
+
+style.
+    md-input-container multi-file-read.md-input {
+        border-width: 0;
+    }
+    md-input-container multi-file-read.md-input.ng-invalid.ng-dirty {
+        border-width: 2px;
+        border-style: solid;
+    }
+    md-input-container.md-input-focused multi-file-read.md-input {
+        border-width: 2px;
+        border-style: solid;
+    }
+
+multi-file-read.md-input(
+    ng-model="object[field.property]"
+    ng-required="field.required"
+    name="{{field.property}}"
+)

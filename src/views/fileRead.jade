@@ -2,6 +2,7 @@ input(
     type="file"
     style="display: none"
 )
+
 md-button(ng-click="chooseFile()") {{ configuration.chooseFileMessage | translate }}
 md-button(ng-click="clear()" ng-show="valueSet") {{ configuration.clearFileMessage | translate }}
 span {{comment}}

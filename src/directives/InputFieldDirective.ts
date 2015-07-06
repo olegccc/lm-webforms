@@ -66,7 +66,7 @@ class InputFieldDirectiveLink {
     }
 
     private getTemplateUrl() {
-        return '../views/inputFields/' + getFieldTemplate(this.scope.field.type.toLowerCase());
+        return 'text!views/inputFields/' + getFieldTemplate(this.scope.field.type.toLowerCase()) + '.html';
     }
 
     private render() {

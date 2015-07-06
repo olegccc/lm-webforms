@@ -1,3 +1,6 @@
+///<amd-dependency path="angular" />
+///<amd-dependency path="text!views/inputFieldError.html" />
+
 import StringFormatter = require('utilities/StringFormatter');
 import _ = require('lodash');
 import WebFormsConfiguration = require('datatypes/WebFormsConfiguration');
@@ -25,7 +28,7 @@ class InputFieldErrorDirectiveController {
 }
 
 import module = require('modules/WebFormsModule');
-import template = require('views/inputFieldError');
+var template = require('text!views/inputFieldError.html');
 
 module.directive('inputFieldError', [() => {
         return <ng.IDirective> {

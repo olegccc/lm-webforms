@@ -1,7 +1,37 @@
+style.
+    .file-choose-list, .file-choose-list li {
+        margin: 0;
+        padding: 0;
+        list-style-type: none;
+    }
+
+    .file-choose-list li {
+        display: inline-block;
+    }
+
+    .file-choose-list li:not(:first-child) {
+        margin-left: 0.5em;
+    }
+
+    .file-choose-list li:first-child {
+        margin-top: 0.5em;
+    }
+
+    .file-choose-list li:last-child {
+        margin-bottom: 1em;
+    }
+
+    .file-choose-list li md-icon {
+        margin-left: 5px;
+        cursor: pointer;
+    }
+
+
 ul.file-choose-list
-    li(ng-foreach="file in value.files")
+    li(ng-repeat="file in files")
         span {{file.name}}
-        span.file-remove.glyphicon.glyphicon-remove(ng-click="removeFile(file)")
+        md-icon.file-remove(ng-click="removeFile(file)") clear
 
 input(type="file" style="display: none" multiple)
-md-button {{ 'Main.ChooseFile' | translate }}
+
+md-button(ng-click="chooseFile()") {{ 'Main.ChooseFile' | translate }}

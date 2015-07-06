@@ -19,7 +19,8 @@ var require = {
         'codemirror.javascript': '../bower_components/codemirror/mode/javascript/javascript',
         'codemirror.css': '../bower_components/codemirror/mode/css/css',
         'codemirror.multiplex': '../bower_components/codemirror/addon/mode/multiplex',
-        'codemirror.xmlhint': '../bower_components/codemirror/addon/hint/xml-hint'
+        'codemirror.xmlhint': '../bower_components/codemirror/addon/hint/xml-hint',
+        'text': '../bower_components/requirejs-text/text'
     },
     include: ["lm-webforms"],
     exclude: ["angular"],
@@ -37,7 +38,7 @@ var require = {
     },
     shim: {
         'angular': {
-            //deps: ['jquery'],
+            deps: ['text'],
             exports: 'angular'
         },
         'lodash': {
