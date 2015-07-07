@@ -29,9 +29,14 @@ style.
 
 ul.file-choose-list
     li(ng-repeat="file in files")
+        md-icon attach_file
         span {{file.name}}
         md-icon.file-remove(ng-click="removeFile(file)") clear
+    li
+        md-button(ng-click="chooseFile()")
+            md-icon(ng-if="files.length > 0") add_circle
+            md-icon(ng-if="files.length === 0") attach_file
+
 
 input(type="file" style="display: none" multiple)
 
-md-button(ng-click="chooseFile()") {{ 'Main.ChooseFile' | translate }}

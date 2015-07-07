@@ -3,6 +3,9 @@ md-dialog(ng-form="form" aria-label="{{title}}" flex="80")
     md-toolbar
         .md-toolbar-tools
             h2 {{title}}
+            span(flex)
+            md-button.md-icon-button(ng-click="cancel()")
+                md-icon clear
 
     include _webFormTemplateBody
 
