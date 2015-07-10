@@ -18,6 +18,8 @@ interface FileReadDirectiveScope extends ng.IScope {
     comment: string;
     configuration: WebFormsConfiguration;
     valueSet: boolean;
+    showImage: boolean;
+    imageLoaded: boolean;
 }
 
 /**
@@ -28,32 +30,43 @@ class FileReadDirectiveLink {
     private scope: FileReadDirectiveScope;
     private model: ng.INgModelController;
     private container: IInputContainer;
+    private fileElement: JQuery;
+    private element: JQuery;
+    private imageElement: JQuery;
 
     constructor(scope: FileReadDirectiveScope, element: JQuery, configuration: WebFormsConfiguration, model: ng.INgModelController, container: IInputContainer) {
 
         this.scope = scope;
+        this.scope.showImage = this.scope.showImage || false;
+        this.element = element;
+        this.imageElement = null;
         this.scope.comment = "";
         this.scope.configuration = configuration;
         this.model = model;
         this.container = container;
         this.scope.valueSet = _.isObject(this.model.$modelValue);
+        this.scope.imageLoaded = false;
 
-        var fileElement = element.find('input');
+        this.fileElement = element.find('input');
 
         scope.chooseFile = () => {
-            fileElement[0].click();
+            this.fileElement[0].click();
         };
 
         scope.clear = () => {
-            fileElement.val('');
-            fileElement.html('');
+            this.fileElement.val('');
+            this.fileElement.html('');
             this.model.$setViewValue(null);
             this.scope.comment = "";
             this.container.setHasValue(false);
             this.scope.valueSet = false;
+            if (this.imageElement) {
+                this.imageElement.html('');
+                this.scope.imageLoaded = false;
+            }
         };
 
-        fileElement.bind("change", (changeEvent) => this.onFileSelected(changeEvent) );
+        this.fileElement.bind("change", (changeEvent) => this.onFileSelected(changeEvent) );
     }
 
     private onFileSelected(changeEvent) {
@@ -76,6 +89,26 @@ class FileReadDirectiveLink {
 
     private onReadFinished(loadEvent, changeEvent) {
         var value: string = loadEvent.target.result;
+
+        if (this.scope.showImage) {
+            var match = value.match(/^data:([a-zA-Z+_]+)\/([^;]+);/);
+            var type = match[1];
+            if (type !== 'image') {
+                this.scope.clear();
+                return;
+            }
+            if (this.imageElement == null) {
+                this.imageElement = this.element.find('canvas');
+            }
+            var image = new Image();
+            image.onload = () => {
+                var canvas: HTMLCanvasElement = <HTMLCanvasElement> this.imageElement[0];
+                var context: CanvasRenderingContext2D = <CanvasRenderingContext2D> canvas.getContext('2d');
+                context.drawImage(image, 0, 0, canvas.width, canvas.height);
+                this.scope.imageLoaded = true;
+            };
+            image.src = value;
+        }
 
         var pos = value.indexOf("base64,");
         if (pos > 0) {
@@ -103,7 +136,9 @@ webFormsModule.directive('fileRead', ['webFormsConfiguration', (webFormsConfigur
         restrict: 'E',
         replace: false,
         require: ['?ngModel', '^?mdInputContainer'],
-        scope: true,
+        scope: {
+            showImage: '='
+        },
         link: (scope: FileReadDirectiveScope, element: JQuery, attrs, controllers) => {
             new FileReadDirectiveLink(scope, element, webFormsConfiguration, controllers[0], controllers[1]);
         }

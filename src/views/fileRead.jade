@@ -8,3 +8,5 @@ md-button(ng-click="chooseFile()")
 md-button(ng-click="clear()" ng-show="valueSet")
     md-icon clear
 span {{comment}}
+.file-image(ng-if="showImage")
+    canvas(style="width:150px;height:150px" ng-show="imageLoaded")
