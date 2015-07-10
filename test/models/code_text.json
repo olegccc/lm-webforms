@@ -1,0 +1,17 @@
+{
+  "title": "Test code_text",
+  "fields": {
+    "text_before": {
+      "title": "Before",
+      "type": "text"
+    },
+    "field1": {
+      "title": "Field1",
+      "type": "code_text"
+    },
+    "text_after": {
+      "title": "After",
+      "type": "text"
+    }
+  }
+}

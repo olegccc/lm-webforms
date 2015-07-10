@@ -4,14 +4,23 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-///<amd-dependency path="angular" />
+/**
+ * @file InputFormMessageController.ts
+ * @author Oleg Gordeev
+ */
 
+/**
+ * @interface InputFormMessageControllerScope
+ */
 interface InputFormMessageControllerScope extends ng.IScope {
     message: string;
     title: string;
     close: () => void;
 }
 
+/**
+ * @class InputFormMessageController
+ */
 class InputFormMessageController {
     constructor(scope: InputFormMessageControllerScope,
                 dialogService: angular.material.MDDialogService,
@@ -28,9 +37,7 @@ class InputFormMessageController {
     }
 }
 
-import module = require('modules/WebFormsModule');
-
-module.controller('inputFormMessage', [
+webFormsModule.controller('inputFormMessage', [
     '$scope',
     '$mdDialog',
     'message',

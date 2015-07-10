@@ -4,8 +4,15 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-///<amd-dependency path="angular" />
+/**
+ * @file InputFormQuestionController.ts
+ * @author Oleg Gordeev
+ */
 
+/**
+ * @interface InputFormQuestionControllerScope
+ * @see InputFormQuestionController
+ */
 interface InputFormQuestionControllerScope extends ng.IScope {
     message: string;
     title: string;
@@ -14,6 +21,9 @@ interface InputFormQuestionControllerScope extends ng.IScope {
     isApplying: boolean;
 }
 
+/**
+ * @class InputFormQuestionController
+ */
 class InputFormQuestionController {
     constructor(scope: InputFormQuestionControllerScope,
                 dialogService: angular.material.MDDialogService,
@@ -47,9 +57,7 @@ class InputFormQuestionController {
     }
 }
 
-import module = require('modules/WebFormsModule');
-
-module.controller('inputFormQuestion', [
+webFormsModule.controller('inputFormQuestion', [
     '$scope',
     '$mdDialog',
     'message',

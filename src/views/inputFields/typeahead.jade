@@ -1,7 +1,20 @@
-label {{field.title | translate}}
-input(
-    type="text"
-    ng-model="object[field.property]"
-    ng-readonly="readOnly(field)"
-    typeahead="name for name in getTypeahead(field, $viewValue)"
+md-autocomplete(
+    md-input-name="{{field.property}}"
+    md-no-cache="true"
+    md-floating-label="{{field.title | translate}}"
+    md-selected-item="object[field.property]"
+    md-search-text="searchText"
+    md-items="item in getTypeahead(searchText)"
+    md-item-text="object[field.property]"
+    md-search-text-change="onSearchTextChange(searchText)"
+    md-selected-item-change="onSelectedItemChange()"
+    ng-readonly="readOnly() || fieldDisabled"
+    ng-disabled="fieldDisabled"
+    ng-required="field.required"
+    ng-minlength="field.minLength"
+    ng-maxlength="field.maxLength"
 )
+    md-item-template
+        span(md-highlight-text="searchText") {{item}}
+    md-not-found {{configuration.notFoundMessage}}
+    input-field-error

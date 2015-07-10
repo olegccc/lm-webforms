@@ -4,6 +4,15 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+/**
+ * @file FileReadResponse.ts
+ * @author Oleg Gordeev
+ */
+
+/**
+ * Describes data received by file inputs
+ * @interface FileReadResponse
+ */
 interface FileReadResponse {
     file: any;
     type: string;

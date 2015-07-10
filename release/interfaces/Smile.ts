@@ -4,8 +4,15 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-interface IInputContainer {
-    setInvalid: (boolean) => void;
-    setHasValue: (boolean) => void;
-    setFocused: (boolean) => void;
+/**
+ * @file Smile.ts
+ * @author Oleg Gordeev
+ */
+
+/**
+ * @class Smile
+ */
+class Smile {
+    code: string;
+    id: string;
 }

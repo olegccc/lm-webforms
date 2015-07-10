@@ -4,18 +4,23 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-/// <reference path="../../typings/requirejs/require.d.ts" />
-///<amd-dependency path="angular" />
+/**
+ * @file CkEditorDirective.ts
+ * @author Oleg Gordeev
+ */
 
-import _ = require('lodash');
-import WebFormsConfiguration = require('datatypes/WebFormsConfiguration');
-
+/**
+ * @interface CkEditorEditor
+ */
 interface CkEditorEditor {
     getData(noEvents?: Object): string;
     setData(data: string, options?: { internal?: boolean; callback?: Function; noSnapshot?: boolean; }): void;
     on(eventName: string, listenerFunction: (eventInfo: CkEditorEventInfo) => void, scopeObj?: Object, listenerData?: Object, priority?: number): Object;
 }
 
+/**
+ * @interface CkEditorEventInfo
+ */
 interface CkEditorEventInfo {
     data: any;
     editor: CkEditorEditor;
@@ -27,6 +32,9 @@ interface CkEditorEventInfo {
     stop(): void;
 }
 
+/**
+ * @interface CkEditor
+ */
 interface CkEditor {
     replace(element: string, config?: any): CkEditorEditor;
     replace(element: HTMLTextAreaElement, config?: any): CkEditorEditor;
@@ -34,19 +42,26 @@ interface CkEditor {
     appendTo(element: HTMLTextAreaElement, config?: any): CkEditorEditor;
 }
 
+/**
+ * @interface CkEditorDirectiveScope
+ */
 interface CkEditorDirectiveScope extends ng.IScope {
     options: any;
     readonly: boolean;
 }
 
+/**
+ * @class CkEditorOptions
+ */
 class CkEditorOptions {
     smiley_descriptions: string[];
     smiley_images: string[];
     smiley_path: string;
 }
 
-import FriendlyFormattingService = require('../services/FriendlyFormattingService');
-
+/**
+ * @class CkEditorDirectiveLink
+ */
 class CkEditorDirectiveLink {
 
     private smileIdToCode: {[id: string]: string} = {};
@@ -138,7 +153,7 @@ class CkEditorDirectiveLink {
         this.options.smiley_descriptions = [];
         this.options.smiley_images = [];
 
-        _.forEach(this.configuration.smiles, (smile: Smile) => {
+        _.each(this.configuration.smiles, (smile: Smile) => {
             this.smileCodeToId[smile.code] = smile.id;
             this.smileIdToCode[smile.id] = smile.code;
             this.options.smiley_descriptions.push(smile.code);
@@ -147,9 +162,7 @@ class CkEditorDirectiveLink {
     }
 }
 
-import module = require('modules/WebFormsModule');
-
-module.directive('ckEditor', ['webFormsConfiguration', 'friendlyFormatting', (configuration: WebFormsConfiguration, friendlyFormatting: FriendlyFormattingService) => {
+webFormsModule.directive('ckEditor', ['webFormsConfiguration', 'friendlyFormatting', (configuration: WebFormsConfiguration, friendlyFormatting: FriendlyFormattingService) => {
     return <ng.IDirective>{
         require: ['?ngModel', '^?mdInputContainer'],
         restrict: 'AE',

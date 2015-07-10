@@ -3,7 +3,6 @@
 
 beforeAll(function(done) {
     browser.get('http://localhost:9090/test').then(function() {
-        console.log('4');
         done();
     });
 });

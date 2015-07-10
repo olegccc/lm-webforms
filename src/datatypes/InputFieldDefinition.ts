@@ -4,6 +4,14 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+/**
+ * @file InputFieldDefinition.ts
+ * @author Oleg Gordeev
+ */
+
+/**
+ * @class InputFieldDefinition
+ */
 class InputFieldDefinition {
     type: string;
     property: string;
@@ -12,6 +20,7 @@ class InputFieldDefinition {
     readOnlyFunction: (obj: any) => boolean;
     helpText: string;
     required: boolean;
+    repeat: boolean;
     dynamicSource: DynamicInputFieldDefinition;
     defaultValue: string;
     inlineWithPrevious: boolean;
@@ -21,7 +30,11 @@ class InputFieldDefinition {
     position: number;
     visible: string;
     visibleFunction: (obj: any) => boolean;
-    selectValues: SelectValueDefinition[];
     maxLength: number;
     minLength: number;
+    source: string;
+    getItems: () => any;
+    items: { [key:string]: string };
+    itemsArray: Array<SelectValueDefinition>;
+    placeholder: string;
 }

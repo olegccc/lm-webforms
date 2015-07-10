@@ -4,13 +4,13 @@ md-dialog(ng-form="form" aria-label="{{title}}" flex="80")
         .md-toolbar-tools
             h2 {{title}}
             span(flex)
-            md-button.md-icon-button(ng-click="cancel()")
+            md-button.md-icon-button(ng-click="cancel()" ng-disabled="isApplying")
                 md-icon clear
 
     include _webFormTemplateBody
 
     .md-actions
-        md-button.md-raised.md-primary(ng-click="submit(form)" aria-label="OK")
+        md-progress-circular.md-accent(ng-show="isApplying" md-mode="indeterminate" md-diameter="20")
+        md-button.md-raised.md-primary(ng-click="submit(form)" aria-label="OK" ng-disabled="isApplying")
             span {{ 'OK' | translate }}
-            md-progress-circular(ng-show="isApplying" md-mode="indeterminate" md-diameter="10")
         md-button.md-raised(ng-click="cancel()" ng-disabled="isApplying") {{ 'Cancel' | translate }}

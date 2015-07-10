@@ -18,10 +18,10 @@ style.
 label.CodeMirrorLabel {{field.title | translate}}
 link(href="../../bower_components/codemirror/lib/codemirror.css" rel="stylesheet" type="text/css")
 
-ui-codemirror(
+ui-codemirror.md-input(
     ng-model="object[field.property]"
     name="{{field.property}}"
     ng-required="field.required"
-    readonly="readOnly(field)"
+    field-readonly="readOnly(field) || fieldDisabled"
     options="{}"
 )

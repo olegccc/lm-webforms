@@ -4,18 +4,14 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-///<amd-dependency path="Recaptcha" />
-///<amd-dependency path="angular" />
-/// <reference path="../../typings/recaptcha/recaptcha.d.ts" />
+/**
+ * @file InputFormController.ts
+ * @author Oleg Gordeev
+ */
 
-import _ = require('lodash');
-
-import InputFormControllerScope = require('controllers/InputFormControllerScope');
-import InputFieldTypes = require('datatypes/InputFieldTypes');
-import FormValidator = require('common/FormValidator');
-import WebFormsConfiguration = require('datatypes/WebFormsConfiguration');
-import Constants = require('datatypes/Constants')
-
+/**
+ * @class InputFormController
+ */
 class InputFormController {
 
     private scope: InputFormControllerScope;
@@ -23,13 +19,11 @@ class InputFormController {
     private object: any;
     private definition: WebFormDefinition;
     private defer: ng.IDeferred<any>;
-    private sceService: ng.ISCEService;
     private configuration: WebFormsConfiguration;
     private resolver: (object: any) => ng.IPromise<void>;
 
     constructor(scope: InputFormControllerScope,
                 dialogService: angular.material.MDDialogService,
-                sceService: ng.ISCEService,
                 configuration: WebFormsConfiguration,
                 object: any,
                 definition: WebFormDefinition,
@@ -39,35 +33,25 @@ class InputFormController {
         this.scope = scope;
         this.dialogService = dialogService;
         this.object = object;
-        this.definition = definition;
+        this.definition = angular.copy(definition);
         this.defer = defer;
-        this.sceService = sceService;
         this.configuration = configuration;
         this.resolver = resolver;
         this.scope.title = definition.title;
 
-        scope.useCodemirror = _.some(definition.fields, (field: InputFieldDefinition): boolean => field.type == InputFieldTypes.CODE_TEXT);
+        scope.useCodemirror = _.some(definition.fields, (field: InputFieldDefinition): boolean => field.type === InputFieldTypes.CODE_TEXT);
         scope.submitError = '';
         scope.isApplying = false;
         scope.submitWithCaptcha = definition.useCaptcha;
 
-        scope.okDisabled = (form) => this.okDisabled(form);
+        scope.okDisabled = (form) => {
+            return this.okDisabled(form);
+        };
 
         scope.codeMirrorDefaultOptions = InputFormController.getCodeMirrorDefaultOptions();
 
         scope.isNewObject = object === null;
-        scope.object = object != null ? _.cloneDeep(object) : {};
-
-        scope.fieldValueSelected = (field, select) => this.onFieldValueSelected(field, select);
-
-        scope.getValue = (field: InputFieldDefinition) => {
-            if (field.type === InputFieldTypes.RICH_TEXT && scope.readOnly(field).length > 0) {
-                return sceService.trustAsHtml(object[field.property]);
-            }
-            return object[field.property];
-        };
-
-        scope.getHelpText = (field) => InputFormController.onGetHelpText(field);
+        scope.object = object != null ? _.copy(object) : {};
 
         scope.fieldVisible = (field) => {
             if (!field.visibleFunction) {
@@ -76,35 +60,14 @@ class InputFormController {
             return field.visibleFunction(scope.object);
         };
 
-        scope.readOnly = (field: InputFieldDefinition): string => {
-            if (!field.readOnlyFunction) {
-                return field.readOnly ? "readonly" : "";
-            }
-            return field.readOnlyFunction(scope.object) ? "readonly" : "";
-        };
-
         scope.submit = form => this.onSubmit(form);
         scope.cancel = () => this.onCancel();
-
-        scope.showDateTimeField = (event, field: InputFieldDefinition) => {
-            event.preventDefault();
-            event.stopPropagation();
-            field.isOpen = true;
-        };
 
         this.initializeFields();
     }
 
     protected okDisabled(form: ng.IFormController): boolean {
         return this.scope.isApplying || (!_.isUndefined(form) && form.$invalid);
-    }
-
-    private static onGetHelpText(field: InputFieldDefinition): string {
-        var ret = field.helpText;
-        if (ret == null) {
-            ret = "";
-        }
-        return ret;
     }
 
     private static getCodeMirrorDefaultOptions(): any {
@@ -123,26 +86,6 @@ class InputFormController {
                 }
             }
         };
-    }
-
-    private onFieldValueSelected (field: InputFieldDefinition, select: SelectValueDefinition) {
-        var value = this.scope.object[field.property];
-        switch (field.type) {
-            case InputFieldTypes.SELECT:
-                return select.value == value;
-            case InputFieldTypes.MULTI_SELECT:
-                if (!value) {
-                    return false;
-                }
-                for (var i = 0; i < value.length; i++) {
-                    if (value[i] == select.value) {
-                        return true;
-                    }
-                }
-                return false;
-            default:
-                return false;
-        }
     }
 
     private processField(field: InputFieldDefinition) {
@@ -167,10 +110,11 @@ class InputFormController {
             return;
         }
 
-        _.forEach(dynamicFields, (dynamicField: DynamicInputFieldDefinition) => {
-            var dynamicDefinition: InputFieldDefinition = _.cloneDeep<InputFieldDefinition>(dynamicField.field);
+        _.each(dynamicFields, (dynamicField: DynamicInputFieldDefinition) => {
+            var dynamicDefinition: InputFieldDefinition = _.copy(dynamicField.field);
             dynamicDefinition.property = field.property + "$" + dynamicDefinition.property;
             dynamicDefinition.dynamicSource = dynamicField;
+            dynamicDefinition.reference = null;
             this.addField(dynamicDefinition);
             this.scope.object[dynamicDefinition.property] = dynamicField.value;
         });
@@ -178,23 +122,25 @@ class InputFormController {
 
     private addField(field: InputFieldDefinition) {
 
-        if (field.type === InputFieldTypes.PASSWORD_REPEAT) {
+        if (field.repeat) {
 
-            field = _.cloneDeep<InputFieldDefinition>(field);
-            field.type = InputFieldTypes.PASSWORD;
+            field = angular.copy(field);
+            field.reference = null;
+            field.repeat = false;
 
             this.addSimpleField(field);
 
-            var passwordRepeat = _.cloneDeep<InputFieldDefinition>(field);
-            passwordRepeat.property = field.property + Constants.PASSWORD_REPEAT_SUFFIX;
-            passwordRepeat.inlineWithPrevious = true;
-            passwordRepeat.reference = field.property;
-            passwordRepeat.type = InputFieldTypes.PASSWORD_REPEAT;
-            passwordRepeat.required = false;
+            var repeatField = angular.copy(field);
+            repeatField.property = field.property + Constants.FIELD_REPEAT_SUFFIX;
+            repeatField.inlineWithPrevious = true;
+            repeatField.reference = field.property;
+            repeatField.required = false;
+            repeatField.repeat = true;
 
-            this.addSimpleField(passwordRepeat);
+            this.addSimpleField(repeatField);
 
         } else {
+            field.reference = null;
             this.addSimpleField(field);
         }
     }
@@ -225,6 +171,7 @@ class InputFormController {
                 groupField.children.push(lastField);
                 groupField.children.push(field);
                 groupField.position = lastField.position;
+                groupField.reference = null;
                 fields[fields.length-1] = groupField;
             }
         }
@@ -235,12 +182,36 @@ class InputFormController {
                 this.scope.object[field.property] = null;
                 break;
             case InputFieldTypes.SELECT:
-                if (_.isArray(field.selectValues)) {
-                    var valueDefinitions: SelectValueDefinition[] = <any> field.selectValues; // to hide compilation bug in IntelliJ IDEA
-                    if (valueDefinitions.length > 0) {
-                        this.scope.object[field.property] = valueDefinitions[0].value;
+            case InputFieldTypes.MULTI_SELECT:
+                if (!_.isArray(field.items) && _.isString(field.source)) {
+                    var dataSource = this.configuration.getDataSource(field.source);
+                    if (dataSource) {
+                        field.items = dataSource.getSelectItems(field.source, this.object);
+                    } else {
+                        field.items = {};
                     }
                 }
+                field.itemsArray = [];
+                _.forOwn(field.items, (value: any, key: string) => {
+                    var definition = new SelectValueDefinition();
+                    if (_.isString(value)) {
+                        definition.key = key;
+                        definition.text = value;
+                        definition.isGroup = false;
+                    } else {
+                        definition.text = key;
+                        definition.isGroup = true;
+                        definition.items = [];
+                        _.forOwn(value, (value: any, key: string) => {
+                            var subDefinition = new SelectValueDefinition();
+                            subDefinition.key = key;
+                            subDefinition.text = value;
+                            subDefinition.isGroup = false;
+                            definition.items.push(subDefinition);
+                        })
+                    }
+                    field.itemsArray.push(definition);
+                });
                 break;
             case InputFieldTypes.DATE:
                 field.isOpen = false;
@@ -272,33 +243,56 @@ class InputFormController {
 
     private initializeFields() {
         this.scope.fields = [];
-        _.forEach(this.definition.fields, (field: InputFieldDefinition) => {
+        _.each(this.definition.fields, (field: InputFieldDefinition) => {
             this.processField(field);
         });
     }
 
+    private onCloseDialog() {
+        this.scope.$broadcast(Constants.DIALOG_CLOSE_EVENT);
+    }
+
+    private onOk() {
+        this.onCloseDialog();
+        this.dialogService.hide('ok');
+    }
+
     private onCancel() {
+        this.onCloseDialog();
         this.dialogService.hide('cancel');
+    }
+
+    private validateField(field: InputFieldDefinition, form: ng.IFormController) {
+
+        if (!this.scope.fieldVisible(field) || field.readOnly || (field.readOnlyFunction && field.readOnlyFunction(this.scope.object))) {
+            return;
+        }
+
+        if (field.isGroup) {
+            _.each(field.children, (child: InputFieldDefinition) => {
+                this.validateField(child, form);
+            });
+            return;
+        }
+
+        var formField = form[field.property];
+
+        if (_.isUndefined(formField)) {
+            return;
+        }
+
+        var value = this.scope.object[field.property];
+
+        FormValidator.validate(this.scope.object, value, field, this.scope.isNewObject, this.configuration, (message: string) => {
+            formField.$setDirty();
+            formField.$setValidity(message, false);
+        });
     }
 
     private onSubmit(form: ng.IFormController) {
 
         _.each(this.scope.fields, (field: InputFieldDefinition) => {
-
-            if (!this.scope.fieldVisible(field) || this.scope.readOnly(field)) {
-                return;
-            }
-
-            var formField = form[field.property];
-            if (_.isObject(formField)) {
-                formField.$setDirty();
-            }
-
-            var value = this.scope.object[field.property];
-
-            FormValidator.validate(this.scope.object, value, field, this.scope.isNewObject, this.configuration, (message: string) => {
-                formField.$setValidity(message, false);
-            });
+            this.validateField(field, form);
         });
 
         if (form.$invalid) {
@@ -321,13 +315,13 @@ class InputFormController {
 
         try {
 
-            var changed = _.cloneDeep(this.scope.object);
+            var changed = _.copy(this.scope.object);
 
             _.each(this.scope.fields, (field: InputFieldDefinition) => {
                 if (field.dynamicSource) {
                     delete changed[field.property];
-                } else if (field.type == InputFieldTypes.PASSWORD_REPEAT) {
-                    delete changed[field.property + Constants.PASSWORD_REPEAT_SUFFIX];
+                } else if (field.repeat) {
+                    delete changed[field.property + Constants.FIELD_REPEAT_SUFFIX];
                 }
             });
 
@@ -345,14 +339,14 @@ class InputFormController {
             });
 
             if (this.resolver == null) {
-                this.dialogService.hide();
+                this.onOk();
                 this.defer.resolve(changed);
                 return;
             }
 
             this.resolver(changed).then(() => {
                 this.scope.isApplying = false;
-                this.dialogService.hide();
+                this.onOk();
                 if (this.defer != null) {
                     this.defer.resolve(changed);
                 }
@@ -370,12 +364,9 @@ class InputFormController {
     }
 }
 
-import module = require('modules/WebFormsModule');
-
-module.controller('inputForm', [
+webFormsModule.controller('inputForm', [
     '$scope',
     '$mdDialog',
-    '$sce',
     'webFormsConfiguration',
     'object',
     'definition',
@@ -383,5 +374,3 @@ module.controller('inputForm', [
     'resolver',
     InputFormController
 ]);
-
-export = InputFormController;

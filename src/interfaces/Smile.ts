@@ -4,6 +4,14 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+/**
+ * @file Smile.ts
+ * @author Oleg Gordeev
+ */
+
+/**
+ * @class Smile
+ */
 class Smile {
     code: string;
     id: string;

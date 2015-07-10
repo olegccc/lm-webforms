@@ -1,7 +1,6 @@
-///<reference path="../../typings/webforms/WebFormsService.d.ts" />
+///<reference path="../../release/interfaces/IWebFormsService.ts" />
 
 import NewUser = require('../models/NewUser');
-import InputFieldTypes = require('../../src/datatypes/InputFieldTypes');
 
 interface TestControllerScope extends ng.IScope {
     returnedObject: string;
@@ -12,7 +11,7 @@ interface TestControllerScope extends ng.IScope {
 }
 
 class TestController {
-    constructor(scope: TestControllerScope, webForms: WebFormsService) {
+    constructor(scope: TestControllerScope, webForms: IWebFormsService) {
         scope.returnedObject = '';
         scope.onShowDialog = () => {
             scope.returnedObject = '';
@@ -25,7 +24,21 @@ class TestController {
         };
 
         scope.testType = (type: string) => {
-            webForms.newObject<NewUser>('test/generated_model/' + type, null, null).then((user: NewUser) => {
+
+            var obj = null;
+
+            if (type === 'label') {
+                obj = {
+                    required: "Description1",
+                    not_required: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ac convallis sapien, sit amet congue dui. " +
+                        "Aliquam eu purus vitae orci pharetra maximus. Suspendisse ac libero metus. Cras dignissim sollicitudin hendrerit. " +
+                        "Sed eget dapibus tortor. Suspendisse dignissim, lectus at finibus tincidunt, tortor enim vestibulum nibh, a tincidunt " +
+                        "felis orci et erat. Interdum et malesuada fames ac ante ipsum primis in faucibus. Vestibulum ultrices erat in ultricies " +
+                        "efficitur. Etiam fermentum viverra nunc ut tempor."
+                }
+            }
+
+            webForms.newObject<NewUser>('test/generated_model/' + type, obj, null).then((user: NewUser) => {
                 scope.returnedObject = JSON.stringify(user);
             }, (message: string) => {
                 scope.error = message;
@@ -33,25 +46,23 @@ class TestController {
         };
 
         scope.testedTypes = [
-            InputFieldTypes.DYNAMIC_FIELD_LIST,
-            InputFieldTypes.RICH_TEXT,
-            InputFieldTypes.CODE_TEXT,
-            InputFieldTypes.SELECT,
-            InputFieldTypes.MULTI_SELECT,
-            InputFieldTypes.FILE,
-            InputFieldTypes.FILE_LIST,
-            InputFieldTypes.PASSWORD,
-            InputFieldTypes.PASSWORD_REPEAT,
-            InputFieldTypes.NUMBER,
-            InputFieldTypes.EMAIL,
-            InputFieldTypes.IMAGE,
-            InputFieldTypes.DATE,
-            InputFieldTypes.HIDDEN,
-            InputFieldTypes.TEXT,
-            InputFieldTypes.BOOLEAN,
-            InputFieldTypes.TYPEAHEAD,
-            InputFieldTypes.MULTILINE_TEXT,
-            InputFieldTypes.LABEL
+            'dynamic_field_list',
+            'rich_text',
+            'code_text',
+            'select',
+            'multi_select',
+            'file',
+            'file_list',
+            'password',
+            'number',
+            'email',
+            'image',
+            'date',
+            'text',
+            'boolean',
+            'typeahead',
+            'multiline_text',
+            'label'
         ];
     }
 }

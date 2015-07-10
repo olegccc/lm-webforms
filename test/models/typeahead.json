@@ -1,0 +1,25 @@
+{
+  "title": "Test select",
+  "fields": {
+    "text_before": {
+      "title": "Before",
+      "type": "text"
+    },
+    "required": {
+      "title": "Field1",
+      "type": "typeahead",
+      "source": "items",
+      "required": true
+    },
+    "not_required": {
+      "title": "Field2",
+      "type": "typeahead",
+      "required": false,
+      "source": "items"
+    },
+    "text_after": {
+      "title": "After",
+      "type": "text"
+    }
+  }
+}

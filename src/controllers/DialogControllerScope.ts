@@ -4,9 +4,16 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-///<amd-dependency path="angular" />
-import InputFormControllerScope = require('controllers/InputFormControllerScope');
+/**
+ * @file DialogControllerScope.ts
+ * @author Oleg Gordeev
+ */
 
+/**
+ * Scope definition for DialogController
+ * @interface DialogControllerScope
+ * @see DialogController
+ */
 interface DialogControllerScope extends InputFormControllerScope {
     changesApplied: boolean;
     hasChanges: boolean;
@@ -17,5 +24,3 @@ interface DialogControllerScope extends InputFormControllerScope {
     submitSuccess: string;
     submitError: string;
 }
-
-export = DialogControllerScope;

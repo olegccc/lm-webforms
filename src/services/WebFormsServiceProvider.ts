@@ -4,21 +4,28 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-///<amd-dependency path="angular" />
-
-import module = require('modules/WebFormsModule');
-import WebFormsService = require('services/WebFormsService');
-import WebFormsConfiguration = require('datatypes/WebFormsConfiguration');
+/**
+ * @file WebFormsServiceProvider.ts
+ * @author Oleg Gordeev
+ */
 
 var configuration = new WebFormsConfiguration();
 
-module.value('webFormsConfiguration', configuration);
+webFormsModule.value('webFormsConfiguration', configuration);
 
-class WebFormsServiceProvider implements ng.IServiceProvider {
+/**
+ * @class WebFormsServiceProvider
+ */
+class WebFormsServiceProvider implements ng.IServiceProvider, IWebFormsServiceProvider {
+
+    public getConfiguration(): IWebFormsConfiguration {
+        return configuration;
+    }
+
     public $get = ['$http', '$q', '$cacheFactory', '$mdDialog',
         (httpService: ng.IHttpService, qService: ng.IQService, cacheFactory: ng.ICacheFactoryService, dialogService: angular.material.MDDialogService) => {
             return new WebFormsService(httpService, qService, cacheFactory, dialogService);
         }];
 }
 
-module.provider('webForms', [WebFormsServiceProvider]);
+webFormsModule.provider('webForms', [WebFormsServiceProvider]);

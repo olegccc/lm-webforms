@@ -3,43 +3,43 @@ var require: any = {
         'jquery': '/bower_components/jquery/dist/jquery',
         'lodash': '/bower_components/lodash/lodash',
         'angular': '/bower_components/angular/angular',
-        'angular.animate': '/bower_components/angular-animate/angular-animate',
-        'angular.aria': '/bower_components/angular-aria/angular-aria',
-        'angular.material': '/bower_components/angular-material/angular-material',
-        'angular.messages': '/bower_components/angular-messages/angular-messages',
-        'angular.touch': '/bower_components/angular-touch/angular-touch',
-        'angular.translate': 'bower_components/angular-translate/angular-translate',
+        'angular_animate': '/bower_components/angular-animate/angular-animate',
+        'angular_aria': '/bower_components/angular-aria/angular-aria',
+        'angular_material': '/bower_components/angular-material/angular-material',
+        'angular_messages': '/bower_components/angular-messages/angular-messages',
+        'angular_touch': '/bower_components/angular-touch/angular-touch',
+        'angular_translate': 'bower_components/angular-translate/angular-translate',
         'autolinker': '/bower_components/Autolinker.js/dist/Autolinker',
         'ckeditor': '/bower_components/ckeditor/ckeditor',
         'domready': '/bower_components/domready/ready',
-        'Recaptcha': 'http://www.google.com/recaptcha/api/js/recaptcha_ajax',
+        'recaptcha': 'http://www.google.com/recaptcha/api/js/recaptcha_ajax',
         'codemirror': '/bower_components/codemirror/lib/codemirror',
-        'codemirror.htmlmixed': '/bower_components/codemirror/mode/htmlmixed/htmlmixed',
-        'codemirror.htmlembedded': '/bower_components/codemirror/mode/htmlembedded/htmlembedded',
-        'codemirror.htmlhint': '/bower_components/codemirror/addon/hint/html-hint',
-        'codemirror.xml': '/bower_components/codemirror/mode/xml/xml',
-        'codemirror.javascript': '/bower_components/codemirror/mode/javascript/javascript',
-        'codemirror.css': '/bower_components/codemirror/mode/css/css',
-        'codemirror.multiplex': '/bower_components/codemirror/addon/mode/multiplex',
-        'codemirror.xmlhint': '/bower_components/codemirror/addon/hint/xml-hint',
+        'codemirror_htmlmixed': '/bower_components/codemirror/mode/htmlmixed/htmlmixed',
+        'codemirror_htmlembedded': '/bower_components/codemirror/mode/htmlembedded/htmlembedded',
+        'codemirror_htmlhint': '/bower_components/codemirror/addon/hint/html-hint',
+        'codemirror_xml': '/bower_components/codemirror/mode/xml/xml',
+        'codemirror_javascript': '/bower_components/codemirror/mode/javascript/javascript',
+        'codemirror_css': '/bower_components/codemirror/mode/css/css',
+        'codemirror_multiplex': '/bower_components/codemirror/addon/mode/multiplex',
+        'codemirror_xmlhint': '/bower_components/codemirror/addon/hint/xml-hint',
         'text': '/bower_components/requirejs-text/text'
     },
     map: {
         '*': {
             '../lib/codemirror': 'codemirror',
             '../../lib/codemirror': 'codemirror',
-            '../xml/xml': 'codemirror.xml',
-            '../javascript/javascript': 'codemirror.javascript',
-            '../css/css': 'codemirror.css',
-            '../htmlmixed/htmlmixed': 'codemirror.htmlmixed',
-            '../../addon/mode/multiplex': 'codemirror.multiplex',
-            'xml-hint': 'codemirror.xmlhint'
+            '../xml/xml': 'codemirror_xml',
+            '../javascript/javascript': 'codemirror_javascript',
+            '../css/css': 'codemirror_css',
+            '../htmlmixed/htmlmixed': 'codemirror_htmlmixed',
+            '../../addon/mode/multiplex': 'codemirror_multiplex',
+            'xml-hint': 'codemirror_xmlhint'
         }
     },
     shim: {
         'angular':{
             exports: 'angular',
-            deps: ['jquery', 'text']
+            deps: ['text']
         },
         'jquery': {
             exports: '$'
@@ -47,22 +47,22 @@ var require: any = {
         'lodash': {
             exports: '_'
         },
-        'angular.animate': {
+        'angular_animate': {
             deps: ['angular']
         },
-        'angular.translate': {
+        'angular_translate': {
             deps: ['angular']
         },
-        'angular.messages': {
+        'angular_messages': {
             deps: ['angular']
         },
-        'angular.material': {
-            deps: ['angular', 'angular.animate', 'angular.aria', 'angular.messages']
+        'angular_material': {
+            deps: ['angular', 'angular_animate', 'angular_aria', 'angular_messages']
         },
-        'angular.aria': {
+        'angular_aria': {
             deps: ['angular']
         },
-        'angular.touch': {
+        'angular_touch': {
             deps: ['angular']
         },
         'ckeditor': {

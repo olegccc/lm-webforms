@@ -1,16 +1,20 @@
+/*
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
+
+/**
+ * @file WebFormsService.ts
+ * @author Oleg Gordeev
+ */
+
 /// <reference path="../../typings/requirejs/require.d.ts" />
 
-///<amd-dependency path="angular" />
-///<amd-dependency path="text!views/webForm.html" />
-///<amd-dependency path="text!views/webFormQuestion.html" />
-///<amd-dependency path="text!views/webFormMessage.html" />
-
-var template = require('text!views/webForm.html');
-var questionTemplate = require('text!views/webFormQuestion.html');
-var messageTemplate = require('text!views/webFormMessage.html');
-import InputFieldTypes = require('datatypes/InputFieldTypes');
-
-class WebFormsService {
+/**
+ * @class WebFormsService
+ */
+class WebFormsService implements IWebFormsService {
 
     private httpService: ng.IHttpService;
     private qService: ng.IQService;
@@ -36,7 +40,7 @@ class WebFormsService {
         var defer = this.qService.defer<void>();
 
         this.dialogService.show({
-            template: questionTemplate,
+            template: templates['views/webFormQuestion.jade'],
             locals: {
                 message: message,
                 title: title,
@@ -56,7 +60,7 @@ class WebFormsService {
         var defer = this.qService.defer<void>();
 
         this.dialogService.show({
-            template: messageTemplate,
+            template: templates['views/webFormMessage.jade'],
             locals: {
                 message: message,
                 title: title,
@@ -78,11 +82,11 @@ class WebFormsService {
     }
 
     private static fillRichTextModules(requires: string[]) {
-        requires.push("directives/CkEditorDirective");
+        requires.push("ckeditor");
     }
 
     private static fillCodeTextModules(requires: string[]) {
-        requires.push("directives/CodeMirrorDirective");
+        requires.push("codemirror");
     }
 
     private executeWithDefinitionLoaded<T>(object: T, definition: WebFormDefinition, isNew: boolean, defer: ng.IDeferred<T>, resolver: (object: T) => ng.IPromise<void>) {
@@ -96,28 +100,31 @@ class WebFormsService {
 
         var requires: string[] = [];
 
-        _.forEach<InputFieldDefinition>(definition.fields, (field: InputFieldDefinition) => {
-            switch (field.type) {
-                case InputFieldTypes.DYNAMIC_FIELD_LIST:
-                    hasDynamicFields = true;
-                    break;
-                case InputFieldTypes.RICH_TEXT:
-                    if (!hasTinyMce) {
-                        hasTinyMce = true;
-                        WebFormsService.fillRichTextModules(requires);
-                    }
-                    break;
-                case InputFieldTypes.CODE_TEXT:
-                    if (!hasCodeMirror) {
-                        hasCodeMirror = true;
-                        WebFormsService.fillCodeTextModules(requires);
-                    }
-                    break;
-            }
-        });
+        if (configuration.loadModulesOnDemand) {
+            _.each(definition.fields, (field: InputFieldDefinition) => {
+                switch (field.type) {
+                    case InputFieldTypes.DYNAMIC_FIELD_LIST:
+                        hasDynamicFields = true;
+                        break;
+                    case InputFieldTypes.RICH_TEXT:
+                        if (!hasTinyMce) {
+                            hasTinyMce = true;
+                            WebFormsService.fillRichTextModules(requires);
+                        }
+                        break;
+                    case InputFieldTypes.CODE_TEXT:
+                        if (!hasCodeMirror) {
+                            hasCodeMirror = true;
+                            WebFormsService.fillCodeTextModules(requires);
+                        }
+                        break;
+                }
+            });
+        }
 
         if (hasDynamicFields && object == null) {
             defer.reject("Cannot edit uninitialized object");
+            return;
         }
 
         if (requires.length > 0) {
@@ -132,7 +139,7 @@ class WebFormsService {
     private executeWithDefinitionAndModulesLoaded<T>(object: any, typeDefinition: WebFormDefinition, isNew: boolean, defer: ng.IDeferred<T>, resolver: (object: T) => ng.IPromise<void> = null) {
 
         this.dialogService.show({
-            template: template,
+            template: templates['views/webForm.jade'],
             locals: {
                 object: object,
                 definition: typeDefinition,
@@ -141,10 +148,11 @@ class WebFormsService {
                 isNew: isNew
             },
             controller: 'inputForm'
+        }).then(() => {
+            console.log('ok');
         }).catch(() => {
+            console.log('cancel');
             defer.reject("Cancelled");
         });
     }
 }
-
-export = WebFormsService;

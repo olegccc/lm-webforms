@@ -2,23 +2,26 @@
   "ts": {
     "options": {
       "fast": "never",
-      "module": "amd",
       "target": "es3",
+      "module": "amd",
       "declaration": false,
       "failOnTypeErrors": true,
       "sourceMap": false,
-      "removeComments": true
+      "removeComments": false
     },
     "build": {
       "files":
-      [{
-        "src": [
-          "./src/**/*.ts",
-          "./typings/tsd.d.ts",
-          "!./src/views/*.ts"
-        ],
-        "dest": "./build"
-      }]
+      {
+        "build/lm-webforms.js": [
+          "src/modules/**/*.ts",
+          "src/templates/**/*.ts",
+          "src/datatypes/**/*.ts",
+          "src/interfaces/**/*.ts",
+          "src/services/**/*.ts",
+          "src/**/*.ts",
+          "typings/tsd.d.ts"
+        ]
+      }
     },
     "tests": {
       "files": [
@@ -53,6 +56,15 @@
       }
     }
   },
+  "copy": {
+    "interfaces": {
+      "expand": true,
+      "cwd": "src/interfaces",
+      "src": "*",
+      "dest": "release/interfaces/",
+      "filter": "isFile"
+    }
+  },
   "protractor": {
     "options": {
       "configFile": "./config/protractor.config.js"
@@ -60,55 +72,29 @@
     "default": {
     }
   },
-  "jade": {
-    "default": {
-      "options": {
-        "amd": false,
-        "namespace": false
-      },
-      "files": []
-    }
+  "clean": {
+    "build": ["build"],
+    "post-build": ["src/**/*.js", "!src/bootstrap/*.js"]
   },
-  "requirejs": {
-    "default": {
+  "umd": {
+    "all": {
       "options": {
-        "baseUrl": "./build",
-        "out": "./release/lm-webforms.js",
-        "mainConfigFile": "./build/paths.js",
-        "name": "lm-webforms",
-        "optimize": "none",
-        "paths": {
-          "lodash": "empty:",
-          "autolinker": "empty:",
-          "angular": "empty:",
-          "jquery": "empty:",
-          "angular.animate": "empty:",
-          "angular.translate": "empty:",
-          "angular.material": "empty:",
-          "angular.aria": "empty:",
-          "angular.messages": "empty:",
-          "angular.touch": "empty:"
+        "src": "build/lm-webforms.js",
+        "dest": "release/lm-webforms.js",
+        "deps": {
+          "default": [
+            "angular",
+            "angular_animate",
+            "angular_translate",
+            "angular_messages",
+            "angular_material",
+            "angular_aria",
+            "angular_touch",
+            "autolinker",
+            "recaptcha"
+          ]
         }
       }
     }
-  },
-  "copy": {
-    "bootstrap": {
-      "files": [{
-        "cwd": "./src/bootstrap",
-        "src": "*.js",
-        "dest": "./build/",
-        "expand": true
-      }, {
-        "cwd": "./src/icons",
-        "src": "**",
-        "dest": "./build/icons/",
-        "expand": true
-      }]
-    }
-  },
-  "clean": {
-    "build": ["./build"],
-    "post-build": ["./src/**/*.js", "!./src/bootstrap/*.js"]
   }
 }

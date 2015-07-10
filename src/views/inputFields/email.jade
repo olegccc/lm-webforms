@@ -4,7 +4,10 @@ input(
     name="{{field.property}}"
     ng-model="object[field.property]"
     ng-readonly="readOnly(field)"
+    ng-disabled="fieldDisabled"
     ng-required="field.required"
     ng-minlength="field.minLength"
     ng-maxlength="field.maxLength"
+    validate-equals="{{field.reference}}"
+    reference="{{field.reference === null || object[field.reference]}}"
 )

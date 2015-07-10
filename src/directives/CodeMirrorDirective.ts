@@ -1,18 +1,22 @@
 // Based on https://github.com/angular-ui/ui-codemirror
 // The goal of refactoring is to take advantage of using AMD and TypeScript and integrate it with angular.material
 
-/// <reference path="../../typings/requirejs/require.d.ts" />
-///<amd-dependency path="angular" />
-///<amd-dependency path="text!views/codemirror.html" />
+/**
+ * @file CodeMirrorDirective
+ * @author Oleg Gordeev
+ */
 
-var template = require('text!views/codemirror.html');
-import WebFormsConfiguration = require('datatypes/WebFormsConfiguration');
-
+/**
+ * @interface CodeMirrorDirectiveScope
+ */
 interface CodeMirrorDirectiveScope extends ng.IScope {
     options: any;
-    readonly: boolean;
+    fieldReadonly: boolean;
 }
 
+/**
+ * @class CodeMirrorDirectivePostLink
+ */
 class CodeMirrorDirectivePostLink {
 
     private editor: CodeMirror.CodeMirror;
@@ -20,36 +24,34 @@ class CodeMirrorDirectivePostLink {
     private model: ng.INgModelController;
     private inputContainer: IInputContainer;
 
-    constructor(scope: CodeMirrorDirectiveScope, element: JQuery, iAttrs: any, model: ng.INgModelController, Codemirror: CodeMirror.CodeMirror, container: IInputContainer) {
+    constructor(scope: CodeMirrorDirectiveScope, element: JQuery, model: ng.INgModelController, Codemirror: CodeMirror.CodeMirror, container: IInputContainer) {
 
         this.scope = scope;
         this.model = model;
         this.inputContainer = container;
 
-        if (_.isUndefined(scope.options)) {
+        if (!angular.isObject(scope.options)) {
             scope.options = {};
         }
 
         var newValue = this.model.$viewValue || '';
 
-        scope.options.lineNumbers = true;
-        scope.options.mode = "htmlmixed";
+        scope.options.lineNumbers = scope.options.lineNumbers || true;
+        scope.options.mode = scope.options.mode || "htmlmixed";
         scope.options.inputStyle = "textarea";
         scope.options.value = newValue;
 
         this.editor = this.createEditor(element, scope.options, Codemirror);
 
-        this.configOptionsWatcher(iAttrs.uiCodemirror || iAttrs.uiCodemirrorOpts);
-
+        this.configOptionsWatcher(Codemirror);
         this.configNgModelLink();
-
-        this.configUiRefreshAttribute(iAttrs.uiRefresh);
+        this.editor.setOption('readOnly', scope.fieldReadonly);
 
         // Allow access to the CodeMirror instance through a broadcasted event
         // eg: $broadcast('CodeMirror', function(cm){...});
 
         scope.$on('CodeMirror', (event, callback) => {
-            if (_.isFunction(callback)) {
+            if (angular.isFunction(callback)) {
                 callback(this.editor);
             } else {
                 throw new Error('the CodeMirror event requires a callback function');
@@ -65,16 +67,12 @@ class CodeMirrorDirectivePostLink {
         }, codemirrorOptions);
     }
 
-    private configOptionsWatcher(uiCodemirrorAttr: any) {
+    private configOptionsWatcher(CodeMirror: any) {
 
-        if (!uiCodemirrorAttr) {
-            return;
-        }
-
-        var codemirrorDefaultsKeys = Object.keys(CodeMirror.CodeMirror.defaults);
+        var codemirrorDefaultsKeys = Object.keys(CodeMirror.defaults);
 
         this.scope.$watch('options', (newValues, oldValue) => {
-            if (!_.isObject(newValues)) {
+            if (!angular.isObject(newValues)) {
                 return;
             }
             codemirrorDefaultsKeys.forEach((key) => {
@@ -88,6 +86,13 @@ class CodeMirrorDirectivePostLink {
                 }
             });
         }, true);
+
+        this.scope.$watch('fieldReadonly', (newValue, oldValue) => {
+            if (newValue === oldValue) {
+                return;
+            }
+            this.editor.setOption('readOnly', newValue);
+        });
     }
 
     private updateEditorState(newValue: any) {
@@ -142,32 +147,18 @@ class CodeMirrorDirectivePostLink {
             this.inputContainer.setFocused(false);
         });
     }
-
-    private configUiRefreshAttribute(uiRefreshAttr) {
-        if (!uiRefreshAttr) { return; }
-
-        this.scope.$watch(uiRefreshAttr, (newVal, oldVal) => {
-            // Skip the initial watch firing
-            if (newVal !== oldVal) {
-                this.scope.$evalAsync(() => {
-                    this.editor.refresh();
-                });
-            }
-        });
-    }
 }
 
-import module = require('modules/WebFormsModule');
-
-module.directive('uiCodemirror', ['webFormsConfiguration', (configuration: WebFormsConfiguration) => {
+webFormsModule.directive('uiCodemirror', ['webFormsConfiguration', (configuration: WebFormsConfiguration) => {
         return <ng.IDirective>{
             restrict: 'E',
-            template: template,
+            template: templates['views/codemirror.jade'],
             replace: true,
             require: ['?ngModel', '^?mdInputContainer'],
             scope: {
                 options: '=',
-                readonly: '='
+                fieldReadonly: '=',
+                fieldDisabled: '='
             },
             link: (scope: CodeMirrorDirectiveScope, element: JQuery, attrs, controllers: any[]) => {
                 var requiredModules = ['codemirror'];
@@ -175,7 +166,7 @@ module.directive('uiCodemirror', ['webFormsConfiguration', (configuration: WebFo
                     requiredModules = _.union(requiredModules, configuration.codeMirrorModules);
                 }
                 require(requiredModules, (codemirror) => {
-                    new CodeMirrorDirectivePostLink(scope, element, attrs, controllers[0], codemirror, controllers[1]);
+                    new CodeMirrorDirectivePostLink(scope, element, controllers[0], codemirror, controllers[1]);
                 });
             }
         }}]

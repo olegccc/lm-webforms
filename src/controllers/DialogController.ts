@@ -4,11 +4,17 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-///<amd-dependency path="angular" />
-import InputFormController = require('controllers/InputFormController');
-import DialogControllerScope = require('controllers/DialogControllerScope');
-import WebFormsConfiguration = require('datatypes/WebFormsConfiguration');
+/**
+ * @file DialogController.ts
+ * @author Oleg Gordeev
+ */
 
+/// <reference path="./InputFormController.ts" />
+
+/**
+ * Controller class for dialog page
+ * @class DialogController
+ */
 class DialogController extends InputFormController {
 
     private qService:ng.IQService;
@@ -16,11 +22,10 @@ class DialogController extends InputFormController {
 
     constructor(scope:DialogControllerScope,
                 dialogService:angular.material.MDDialogService,
-                sceService:ng.ISCEService,
                 configuration:WebFormsConfiguration,
                 qService:ng.IQService) {
 
-        super(scope, dialogService, sceService, configuration, scope.configuration.object, scope.definition, null,
+        super(scope, dialogService, configuration, scope.configuration.object, scope.definition, null,
                 changedObject => this.successFunction(changedObject));
 
         this.qService = qService;
@@ -69,16 +74,11 @@ class DialogController extends InputFormController {
     }
 }
 
-import module = require('modules/WebFormsModule');
-
-module.controller("dialog", [
+webFormsModule.controller("dialog", [
     '$scope',
     '$mdDialog',
-    '$sce',
     'webFormsConfiguration',
     'commandProcessor',
     '$q',
     DialogController
 ]);
-
-export = DialogController;

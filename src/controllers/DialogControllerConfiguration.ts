@@ -4,7 +4,14 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-///<amd-dependency path="angular" />
+/**
+ * @file DialogControllerConfiguration.ts
+ * @author Oleg Gordeev
+ */
+
+/**
+ * @interface DialogControllerConfiguration
+ */
 interface DialogControllerConfiguration {
     applyCaption: string;
     object: any;

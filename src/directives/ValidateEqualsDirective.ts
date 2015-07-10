@@ -4,19 +4,33 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-import _ = require('lodash');
+/**
+ * @file ValidateEqualsDirective.ts
+ * @author Oleg Gordeev
+ */
 
+/**
+ * @interface ValidateEqualsAttributes
+ */
 interface ValidateEqualsAttributes extends ng.IAttributes {
     ngModel: any;
     reference: any;
+    validateEquals: boolean;
 }
 
+/**
+ * @class ValidateEqualsLink
+ */
 class ValidateEqualsLink {
 
     private model: ng.INgModelController;
     private attrs: ValidateEqualsAttributes;
 
     constructor(scope: ng.IScope, attrs:ValidateEqualsAttributes, model: ng.INgModelController) {
+
+        if (_.isEmpty(attrs.validateEquals)) {
+            return;
+        }
 
         this.model = model;
         this.attrs = attrs;
@@ -28,14 +42,11 @@ class ValidateEqualsLink {
     private validate() {
         var val1 = this.model.$viewValue;
         var val2 = this.attrs.reference;
-
-        this.model.$setValidity('equals', _.isEqual(val1, val2));
+        this.model.$setValidity(Constants.VALIDATION_ERROR_MATCH, _.isEqual(val1, val2));
     }
 }
 
-import module = require('modules/WebFormsModule');
-
-module.directive('validateEquals', [() => {
+webFormsModule.directive('validateEquals', [() => {
     return <ng.IDirective>{
         restrict: 'A',
         require: '?ngModel',

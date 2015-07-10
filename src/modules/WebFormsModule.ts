@@ -1,15 +1,18 @@
-///<amd-dependency path="angular" />
-///<amd-dependency path="angular.material" />
-///<amd-dependency path="angular.animate" />
-///<amd-dependency path="angular.touch" />
-///<amd-dependency path="angular.translate" />
+/*
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
 
-var module = angular.module('lm-webforms', [
+/**
+ * @file WebFormsModule.ts
+ * @author Oleg Gordeev
+ */
+
+var webFormsModule = angular.module('lm-webforms', [
     'ngMaterial',
     'ngTouch',
     'ngMessages',
     'ngAnimate',
     'pascalprecht.translate'
 ]);
-
-export = module;

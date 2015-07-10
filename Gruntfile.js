@@ -1,6 +1,7 @@
 module.exports = function (grunt) {
 
     var path = require('path');
+    var fs = require('fs');
     var _ = require('lodash');
 
     grunt.loadNpmTasks('grunt-contrib-uglify');
@@ -11,31 +12,28 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-protractor-runner');
     grunt.loadNpmTasks('grunt-contrib-connect');
     grunt.loadNpmTasks('grunt-contrib-requirejs');
+    grunt.loadNpmTasks('grunt-umd');
 
     grunt.initConfig(grunt.file.readJSON('./config/grunt.config.json'));
 
-    grunt.registerTask('wrap-html', function () {
-        var files = grunt.file.expandMapping(['./build/views/**/*.html'], '', {
-            rename: function (base, path) {
-                return path.replace(/\.html$/, '.js');
-            }
-        });
+    grunt.registerTask('wrap-jade', function () {
+
+        var jade = require('jade');
+
+        var files = grunt.file.expand(['src/**/*.jade']);
+
+        var mapping = {};
 
         _.each(files, function (file) {
-            var input = grunt.file.read(file.src);
-            var output = "define(function() {\n  return '";
-            var firstLine = true;
-            _.each(input.match(/[^\r\n]+/g), function (line) {
-                if (firstLine) {
-                    firstLine = false;
-                } else {
-                    output += "' + \n  '";
-                }
-                output += line.replace(/\\/, '\\\\').replace(/'/g, '\\\'');
-            });
-            output += "';\n});";
-            grunt.file.write(file.dest, output);
+            if (file.match(/.*\/_[^\/]/)) {
+                return;
+            }
+            mapping[file.replace('src/', '')] = jade.renderFile(path.resolve(file));
         });
+
+        var body = 'var templates = ' + JSON.stringify(mapping, null, '  ') + ';';
+
+        grunt.file.write('src/templates/templates.ts', body);
     });
 
     grunt.registerTask('prepare-middleware', function () {
@@ -58,7 +56,12 @@ module.exports = function (grunt) {
 
                 if (match && match.length > 1) {
                     var modelName = match[1];
-                    var modelTemplate = JSON.stringify({
+                    var modelTemplate;
+                    var modelPath = './test/models/' + modelName + '.json';
+                    if (fs.existsSync(modelPath)) {
+                        modelTemplate = fs.readFileSync(modelPath);
+                    } else {
+                        modelTemplate = JSON.stringify({
                             "title": "Test " + modelName,
                             "fields": {
                                 "text_before": {
@@ -81,6 +84,7 @@ module.exports = function (grunt) {
                                 }
                             }
                         });
+                    }
                     grunt.log.debug('Model request: ' + modelName);
                     res.end(modelTemplate);
                     return;
@@ -105,18 +109,6 @@ module.exports = function (grunt) {
         grunt.config('connect.options.middleware', handler);
     });
 
-    grunt.registerTask('run-jade', function () {
-
-        var files = grunt.file.expandMapping(['./src/views/**/*.jade', '!./src/views/**/_*.jade'], './build/views/', {
-            rename: function (base, path) {
-                return base + path.replace(/\.jade$/, '.html').replace('./src/views/', '');
-            }
-        });
-
-        grunt.config('jade.default.files', files);
-        grunt.task.run(['jade']);
-    });
-
     grunt.registerTask('addtsd', function (module) {
         var done = this.async();
         grunt.util.spawn({
@@ -130,15 +122,15 @@ module.exports = function (grunt) {
 
     grunt.registerTask('verify', ['prepare-middleware', 'connect:start', 'protractor']);
 
-    grunt.registerTask('ts-build', ['clean:build', 'ts:build', 'clean:post-build']);
+    grunt.registerTask('ts-build', ['clean:build', 'wrap-jade', 'ts:build', 'clean:post-build']);
 
     grunt.registerTask('build', [
         'ts-build',
-        'copy:bootstrap',
-        'run-jade',
-        'requirejs',
+        'umd',
         'uglify',
-        "ts:tests"]);
+        'copy:interfaces',
+        'ts:tests'
+    ]);
 
     grunt.registerTask('view', ['prepare-middleware', 'connect:keepalive']);
 };

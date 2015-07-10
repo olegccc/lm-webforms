@@ -4,8 +4,15 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-///<amd-dependency path="angular" />
+/**
+ * @file InputFormControllerScope.ts
+ * @author Oleg Gordeev
+ */
 
+/**
+ * @interface InputFormControllerScope
+ * @see InputFormController
+ */
 interface InputFormControllerScope extends ng.IScope {
     fields: InputFieldDefinition[];
     title: string;
@@ -18,14 +25,7 @@ interface InputFormControllerScope extends ng.IScope {
     isNewObject: boolean;
     object: any;
     fieldValueSelected: (field: InputFieldDefinition, select: SelectValueDefinition) => boolean;
-    getValue: (field: InputFieldDefinition) => any;
-    readOnly: (field: InputFieldDefinition) => string;
-    getHelpText: (field: InputFieldDefinition) => string;
     fieldVisible: (field: InputFieldDefinition) => boolean;
-    getTypeahead: (field: InputFieldDefinition, searchText: string) => string[];
     submit: (form: ng.IFormController) => void;
     cancel: () => void;
-    showDateTimeField: (event, field: InputFieldDefinition) => void;
 }
-
-export = InputFormControllerScope;

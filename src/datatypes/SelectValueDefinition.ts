@@ -4,7 +4,17 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+/**
+ * @file SelectValueDefinition.ts
+ * @author Oleg Gordeev
+ */
+
+/**
+ * @class SelectValueDefinition
+ */
 class SelectValueDefinition {
     text: string;
-    value: any;
+    key: string;
+    isGroup: boolean;
+    items: Array<SelectValueDefinition>;
 }

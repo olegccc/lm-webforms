@@ -13,7 +13,7 @@
     },
     "password": {
       "title": "Password",
-      "type": "password_repeat",
+      "type": "password",
       "repeat": true,
       "required": true
     },

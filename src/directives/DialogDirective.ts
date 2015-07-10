@@ -4,16 +4,14 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-///<amd-dependency path="angular" />
-///<amd-dependency path="text!views/webDialog.html" />
+/**
+ * @file DialogDirective.ts
+ * @author Oleg Gordeev
+ */
 
-var template = require('text!views/webDialog.html');
-import module = require('modules/WebFormsModule');
-import DialogController = require('controllers/DialogController');
-
-module.directive('lmDialog', [() => {
+webFormsModule.directive('lmDialog', [() => {
     return <ng.IDirective>{
-        template: template,
+        template: templates['views/webDialog.jade'],
         restrict: 'E',
         replace: false,
         scope: {

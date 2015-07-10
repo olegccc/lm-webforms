@@ -4,11 +4,14 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-///<amd-dependency path="angular" />
+/**
+ * @file FriendlyFormattingService.ts
+ * @author Oleg Gordeev
+ */
 
-import Autolinker = require('autolinker');
-import WebFormsConfiguration = require('datatypes/WebFormsConfiguration');
-
+/**
+ * @class FriendlyFormattingService
+ */
 class FriendlyFormattingService {
 
     smilesBase: string;
@@ -89,10 +92,6 @@ class FriendlyFormattingService {
     }
 }
 
-import module = require('modules/WebFormsModule');
-
-module.service('friendlyFormatting', [
+webFormsModule.service('friendlyFormatting', [
     'webFormsConfiguration',
     FriendlyFormattingService]);
-
-export = FriendlyFormattingService;

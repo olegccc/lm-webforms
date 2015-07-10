@@ -4,70 +4,72 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-///<amd-dependency path="angular" />
-import Constants = require('datatypes/Constants')
-import InputFieldTypes = require('datatypes/InputFieldTypes');
-import WebFormsConfiguration = require('datatypes/WebFormsConfiguration');
+/**
+ * @file FormValidator.ts
+ * @author Oleg Gordeev
+ */
 
+/**
+ * Validates input form contents
+ * @class FormValidator
+ */
 class FormValidator {
 
     public static validate(object:any, value:any, field:InputFieldDefinition, isNewObject: boolean, configuration: WebFormsConfiguration, onFieldInvalid:(string) => void):void {
         switch (field.type) {
             case InputFieldTypes.FILE:
                 if (field.required && isNewObject && (value === null || value.file === null || value.file.length === 0)) {
-                    onFieldInvalid('required');
+                    onFieldInvalid(Constants.VALIDATION_ERROR_REQUIRED);
                 }
 
                 if (configuration.maximumFileSize > 0 && value !== null && value.file.length > configuration.maximumFileSize) {
-                    onFieldInvalid('maxlength');
+                    onFieldInvalid(Constants.VALIDATION_ERROR_MAX_LENGTH);
                 }
                 return;
 
             case InputFieldTypes.FILE_LIST:
                 if (field.required && isNewObject && (value === null || value.length === 0)) {
-                    onFieldInvalid('required');
+                    onFieldInvalid(Constants.VALIDATION_ERROR_REQUIRED);
                 }
 
                 if (value !== null) {
                     for (var j = 0; j < value.length; j++) {
                         var file = value[j];
                         if (file.file !== null && file.file.length > configuration.maximumFileSize) {
-                            onFieldInvalid('maxlength');
+                            onFieldInvalid(Constants.VALIDATION_ERROR_MAX_LENGTH);
                             break;
                         }
                     }
                 }
 
                 return;
-            case InputFieldTypes.MULTI_SELECT:
-                return;
         }
 
-        if (typeof (value) === 'undefined' || value === null || value.toString().trim().length === 0) {
+        if (field.repeat) {
+            var repeat = object[field.reference];
+            if (!_.isEqual(repeat, value)) {
+                onFieldInvalid(Constants.VALIDATION_ERROR_MATCH);
+            }
+        }
+
+        if (_.isEmpty(value)) {
             if (field.required) {
-                onFieldInvalid('required');
+                onFieldInvalid(Constants.VALIDATION_ERROR_REQUIRED);
             }
             return;
         }
 
         switch (field.type) {
             case InputFieldTypes.NUMBER:
-                if (_.isNaN(parseFloat(value))) {
-                    onFieldInvalid('number');
+                if (isNaN(parseFloat(value))) {
+                    onFieldInvalid(Constants.VALIDATION_ERROR_NUMBER);
                 }
                 break;
             case InputFieldTypes.EMAIL:
                 if (!_.isString(value) || !value.search(/[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}/)) {
-                    onFieldInvalid('email');
+                    onFieldInvalid(Constants.VALIDATION_ERROR_EMAIL);
                 }
                 break;
-            case InputFieldTypes.PASSWORD_REPEAT:
-                var repeatPassword = object[field.property + Constants.PASSWORD_REPEAT_SUFFIX];
-                if (!_.isString(repeatPassword) || repeatPassword !== value) {
-                    onFieldInvalid('password_match');
-                }
         }
     }
 }
-
-export = FormValidator;

@@ -1,0 +1,33 @@
+{
+  "title": "Test select",
+  "fields": {
+    "text_before": {
+      "title": "Before",
+      "type": "text"
+    },
+    "required": {
+      "title": "Field1",
+      "type": "select",
+      "required": true,
+      "items": {
+        "item1": "Item 1",
+        "item2": "Item 2",
+        "item3": "Item 3",
+        "Group 1": {
+          "subitem1": "Subitem 1",
+          "subitem2": "Subitem 2"
+        }
+      }
+    },
+    "not_required": {
+      "title": "Field2",
+      "type": "select",
+      "required": false,
+      "source": "items"
+    },
+    "text_after": {
+      "title": "After",
+      "type": "text"
+    }
+  }
+}

@@ -4,11 +4,14 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-///<amd-dependency path="angular" />
-///<amd-dependency path="text!views/fileRead.html" />
+/**
+ * @file FileReadDirective.ts
+ * @author Oleg Gordeev
+ */
 
-import WebFormsConfiguration = require('datatypes/WebFormsConfiguration');
-
+/**
+ * @interface FileReadDirectiveScope
+ */
 interface FileReadDirectiveScope extends ng.IScope {
     clear: () => void;
     chooseFile: () => void;
@@ -17,6 +20,9 @@ interface FileReadDirectiveScope extends ng.IScope {
     valueSet: boolean;
 }
 
+/**
+ * @class FileReadDirectiveLink
+ */
 class FileReadDirectiveLink {
 
     private scope: FileReadDirectiveScope;
@@ -32,10 +38,10 @@ class FileReadDirectiveLink {
         this.container = container;
         this.scope.valueSet = _.isObject(this.model.$modelValue);
 
-        var fileElement = element.find('input[type=file]');
+        var fileElement = element.find('input');
 
         scope.chooseFile = () => {
-            fileElement.click();
+            fileElement[0].click();
         };
 
         scope.clear = () => {
@@ -91,12 +97,9 @@ class FileReadDirectiveLink {
     }
 }
 
-import module = require('modules/WebFormsModule');
-var template = require('text!views/fileRead.html');
-
-module.directive('fileRead', ['webFormsConfiguration', (webFormsConfiguration: WebFormsConfiguration) => {
+webFormsModule.directive('fileRead', ['webFormsConfiguration', (webFormsConfiguration: WebFormsConfiguration) => {
     return <ng.IDirective>{
-        template: template,
+        template: templates['views/fileRead.jade'],
         restrict: 'E',
         replace: false,
         require: ['?ngModel', '^?mdInputContainer'],

@@ -4,6 +4,15 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+/**
+ * @file InputFieldTypes.ts
+ * @author Oleg Gordeev
+ */
+
+/**
+ * Defines all handled field types constants
+ * @class InputFieldTypes
+ */
 class InputFieldTypes {
     public static DYNAMIC_FIELD_LIST: string = "dynamic_field_list";
     public static RICH_TEXT: string = "rich_text";
@@ -13,7 +22,6 @@ class InputFieldTypes {
     public static FILE: string = "file";
     public static FILE_LIST: string = "file_list";
     public static PASSWORD: string = "password";
-    public static PASSWORD_REPEAT: string = "password_repeat";
     public static NUMBER: string = "number";
     public static EMAIL: string = "email";
     public static IMAGE: string = "image";
@@ -25,5 +33,3 @@ class InputFieldTypes {
     public static MULTILINE_TEXT: string = "multiline_text";
     public static LABEL: string = "label";
 }
-
-export = InputFieldTypes;

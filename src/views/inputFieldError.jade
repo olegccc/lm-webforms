@@ -1,12 +1,11 @@
 div(ng-messages="form[field.property].$error" ng-show="form[field.property].$dirty")
-    div(ng-message="required") {{ configuration.requiredErrorMessage | translate }}
-    div(ng-message="maxlength") {{ maxLengthMessage }}
-    div(ng-message="minlength") {{ minLengthMessage }}
-    div(ng-message="email") {{ configuration.emailErrorMessage | translate }}
-    div(ng-message="url") {{ configuration.urlErrorMessage | translate }}
-    div(ng-message="pattern") {{ configuration.patternErrorMessage | translate }}
-    div(ng-message="date") {{ configuration.dateErrorMessage | translate }}
-    div(ng-message="time") {{ configuration.timeErrorMessage | translate }}
-    div(ng-message="number") {{ configuration.numberErrorMessage | translate }}
-    div(ng-message="password_match") {{ configuration.passwordErrorMessage | translate }}
-    div(ng-message="equals") {{ configuration.notEqualErrorMessage | translate }}
+    div(ng-message="{{requiredMarker}}") {{ configuration.requiredErrorMessage | translate }}
+    div(ng-message="{{maxLengthMarker}}") {{ maxLengthMessage }}
+    div(ng-message="{{minLengthMarker}}") {{ minLengthMessage }}
+    div(ng-message="{{emailMarker}}") {{ configuration.emailErrorMessage | translate }}
+    div(ng-message="{{urlMarker}}") {{ configuration.urlErrorMessage | translate }}
+    div(ng-message="{{patternMarker}}") {{ configuration.patternErrorMessage | translate }}
+    div(ng-message="{{dateMarker}}") {{ configuration.dateErrorMessage | translate }}
+    div(ng-message="{{timeMarker}}") {{ configuration.timeErrorMessage | translate }}
+    div(ng-message="{{numberMarker}}") {{ configuration.numberErrorMessage | translate }}
+    div(ng-message="{{equalsMarker}}") {{ configuration.notEqualErrorMessage | translate }}

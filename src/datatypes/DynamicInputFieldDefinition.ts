@@ -4,6 +4,14 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+/**
+ * @file DynamicInputFieldDefinition.ts
+ * @author Oleg Gordeev
+ */
+
+/**
+ * @interface DynamicInputFieldDefinition
+ */
 interface DynamicInputFieldDefinition {
     field: InputFieldDefinition;
     value: any;

@@ -1,2 +1,23 @@
-label {{field.title | translate}}
-select(ng-model="object[field.property]" multiple ng-options="item.value as item.text for item in field.selectValues")
+md-select(
+    name="{0}"
+    ng-model="object[field.property]"
+    ng-readonly="readOnly(field) || fieldDisabled"
+    placeholder="{{ field.title | translate }}"
+    ng-disabled="fieldDisabled"
+    ng-required="field.required"
+    validate-equals="{{field.reference}}"
+    reference="{{field.reference === null || object[field.reference]}}"
+    multiple="true"
+)
+    md-optgroup(
+        ng-repeat="group in field.itemsArray | filter: { isGroup: true }"
+        label="{{group.text}}"
+    )
+        md-option(
+            ng-repeat="item in group.items"
+            ng-value="item.key"
+        ) {{ item.text }}
+    md-option(
+        ng-repeat="item in field.itemsArray | filter: { isGroup: false }"
+        value="{{item.key}}"
+    ) {{ item.text }}

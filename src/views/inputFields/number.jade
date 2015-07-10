@@ -1,2 +1,13 @@
 label {{field.title | translate}}
-input(type="number" ng-model="object[field.property]" ng-readonly="readOnly(field)" ng-required="required")
+input(
+    type="number"
+    name="{{field.property}}"
+    ng-model="object[field.property]"
+    ng-readonly="readOnly(field) || fieldDisabled"
+    ng-disabled="fieldDisabled"
+    ng-required="required"
+    ng-minlength="field.minLength"
+    ng-maxlength="field.maxLength"
+    validate-equals="{{field.reference}}"
+    reference="{{field.reference === null || object[field.reference]}}"
+)

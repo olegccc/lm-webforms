@@ -4,14 +4,24 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-class WebFormsConfiguration {
+/**
+ * @file WebFormsConfiguration.ts
+ * @author Oleg Gordeev
+ */
+
+///<reference path="../interfaces/IWebFormsConfiguration.ts" />
+
+/**
+ * @class WebFormsConfiguration
+ */
+class WebFormsConfiguration implements IWebFormsConfiguration {
     constructor() {
         this.codeMirrorModules = [];
         this.smilesBase = null;
         this.smiles = [];
         this.maximumFileSize = 0;
         this.requiredErrorMessage = "This field is mandatory";
-        this.notEqualErrorMessage = "Fields are not equal";
+        this.notEqualErrorMessage = "The fields should be equal";
         this.maxLengthErrorMessage = "This field has to be less than {0} characters long";
         this.minLengthErrorMessage = "This field has to be greater than {0} characters long";
         this.emailErrorMessage = "Wrong e-mail address";
@@ -20,7 +30,17 @@ class WebFormsConfiguration {
         this.numberErrorMessage = "Wrong number";
         this.patternErrorMessage = "The field doesn't match the pattern specified";
         this.urlErrorMessage = "Wrong URL";
-        this.passwordErrorMessage = "Wrong password";
+        this.dataSources = {};
+        this.loadModulesOnDemand = false;
+        this.notFoundMessage = "Not found";
+    }
+
+    public addDataSource(key: string, source: IDataSource) {
+        this.dataSources[key] = source;
+    }
+
+    public getDataSource(key: string): IDataSource {
+        return this.dataSources[key];
     }
 
     public codeMirrorModules: string[];
@@ -35,9 +55,9 @@ class WebFormsConfiguration {
     public dateErrorMessage: string;
     public timeErrorMessage: string;
     public numberErrorMessage: string;
-    public passwordErrorMessage: string;
     public patternErrorMessage: string;
     public urlErrorMessage: string;
+    private dataSources: { [key: string]: IDataSource };
+    public loadModulesOnDemand: boolean;
+    public notFoundMessage: string;
 }
-
-export = WebFormsConfiguration;

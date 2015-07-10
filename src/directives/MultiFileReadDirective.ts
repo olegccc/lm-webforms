@@ -4,12 +4,14 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-///<amd-dependency path="datatypes/FileReadResponse" />
-///<amd-dependency path="angular" />
-///<amd-dependency path="text!views/multiFileRead.html" />
+/**
+ * @file MultiFileReadDirective.ts
+ * @author Oleg Gordeev
+ */
 
-import WebFormsConfiguration = require('datatypes/WebFormsConfiguration');
-
+/**
+ * @class MultiFileReadResponse
+ */
 class MultiFileReadResponse {
     constructor() {
         this.files = [];
@@ -18,6 +20,9 @@ class MultiFileReadResponse {
     files: FileReadResponse[];
 }
 
+/**
+ * @interface MultiFileReadDirectiveScope
+ */
 interface MultiFileReadDirectiveScope extends ng.IScope {
     removeFile: (file: FileReadResponse) => void;
     chooseFile: () => void;
@@ -27,6 +32,9 @@ interface MultiFileReadDirectiveScope extends ng.IScope {
     files: FileReadResponse[];
 }
 
+/**
+ * @class MultiFileReadDirectiveLink
+ */
 class MultiFileReadDirectiveLink {
 
     private scope: MultiFileReadDirectiveScope;
@@ -57,10 +65,10 @@ class MultiFileReadDirectiveLink {
 
         this.scope.files = this.value.files;
 
-        this.fileElement = element.find('input[type=file]');
+        this.fileElement = element.find('input');
 
         scope.chooseFile = () => {
-            this.fileElement.click();
+            this.fileElement[0].click();
         };
 
         scope.removeFile = (file: FileReadResponse) => {
@@ -131,12 +139,9 @@ class MultiFileReadDirectiveLink {
     }
 }
 
-import module = require('modules/WebFormsModule');
-var template = require('text!views/multiFileRead.html');
-
-module.directive('multiFileRead', ['webFormsConfiguration', (webFormsConfiguration: WebFormsConfiguration) => {
+webFormsModule.directive('multiFileRead', ['webFormsConfiguration', (webFormsConfiguration: WebFormsConfiguration) => {
     return <ng.IDirective>{
-        template: template,
+        template: templates['views/multiFileRead.jade'],
         restrict: 'E',
         replace: false,
         require: ['?ngModel', '^?mdInputContainer'],

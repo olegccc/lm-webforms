@@ -4,6 +4,14 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+/**
+ * @file WebFormDefinition.ts
+ * @author Oleg Gordeev
+ */
+
+/**
+ * @interface WebFormDefinition
+ */
 interface WebFormDefinition {
     fields: { [property: string]: InputFieldDefinition };
     title: string;
