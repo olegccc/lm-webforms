@@ -70,3 +70,7 @@ Then we get the following dialog almost for free:
 * Typeahed - simple text with automatic fill
 * Multiline text - simple multiline text with automatic resizing
 * Label - to show text information
+
+# Translation
+
+lm-webforms supports [angular.translate](https://angular-translate.github.io) for all text fields.
