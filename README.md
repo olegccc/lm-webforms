@@ -49,3 +49,22 @@ Suppose we have the following model:
 Then we get the following dialog almost for free:
 
 ![Dialog screenshot](docs/screenshot-dialog.png)
+
+# Supported data types
+
+* Rich text - fully functional rich text editor based on CkEditor
+* Code text - html/javascript/css/etc editor based on CodeMirror
+* Select - combo box with predefined list (can be dynamic)
+* Multi select - combo box with multiple selection from the list (can be dynamic)
+* File - to upload a file
+* File list - to upload a file list
+* Password - to specify a password
+* Number - to specify a numeric value
+* Email - to specify e-mail address
+* Image - to upload an image
+* Date - to specify a date
+* Text - simple text
+* Boolean - to present checkbox
+* Typeahed - simple text with automatic fill
+* Multiline text - simple multiline text with automatic resizing
+* Label - to show text information
