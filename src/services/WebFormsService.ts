@@ -153,9 +153,10 @@ class WebFormsService implements IWebFormsService {
             },
             controller: 'inputForm'
         }).then(() => {
-            console.log('ok');
+            //console.log('ok');
+            defer.resolve();
         }).catch(() => {
-            console.log('cancel');
+            //console.log('cancel');
             defer.reject("Cancelled");
         });
     }

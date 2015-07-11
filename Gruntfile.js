@@ -109,6 +109,11 @@ module.exports = function (grunt) {
         grunt.config('connect.options.middleware', handler);
     });
 
+    grunt.event.once('connect.examples.listening', function(host, port) {
+        var url = 'http://localhost:' + port + '/examples/index.html';
+        require('open')(url);
+    });
+
     grunt.registerTask('addtsd', function (module) {
         var done = this.async();
         grunt.util.spawn({

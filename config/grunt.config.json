@@ -37,6 +37,15 @@
     }
   },
   "uglify": {
+    "options": {
+      "mangle": {
+        "except": [
+          "angular",
+          "autolinker",
+          "recaptcha"
+        ]
+      }
+    },
     "default": {
       "files": {
         "./release/lm-webforms.min.js": "./release/lm-webforms.js"
@@ -51,6 +60,11 @@
     "start": {
     },
     "keepalive": {
+      "options": {
+        "keepalive": true
+      }
+    },
+    "examples": {
       "options": {
         "keepalive": true
       }
@@ -92,6 +106,9 @@
             "angular_touch",
             "autolinker",
             "recaptcha"
+          ],
+          "global": [
+            "angular"
           ]
         }
       }

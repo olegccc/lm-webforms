@@ -1,0 +1,14 @@
+{
+  "title": "New User",
+  "fields": {
+    "name": {
+      "title": "User Name",
+      "type": "text",
+      "required": true
+    },
+    "email": {
+      "title": "User E-mail",
+      "type": "email"
+    }
+  }
+}

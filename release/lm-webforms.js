@@ -10,7 +10,7 @@
     // like Node.
     module.exports = factory(require("angular"),require("angular_animate"),require("angular_translate"),require("angular_messages"),require("angular_material"),require("angular_aria"),require("angular_touch"),require("autolinker"),require("recaptcha"));
   } else {
-    factory(angular,angular_animate,angular_translate,angular_messages,angular_material,angular_aria,angular_touch,autolinker,recaptcha);
+    factory(angular);
   }
 }(this, function (angular, angular_animate, angular_translate, angular_messages, angular_material, angular_aria, angular_touch, autolinker, recaptcha) {
 

@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Example: Minimum files</title>
+    <link href="/bower_components/angular-material/angular-material.css" rel="stylesheet" type="text/css" />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+</head>
+<body ng-app="testApp" ng-controller="testController">
+    <md-button class="md-raised md-primary" ng-click="onShowDialog()" id="button_main">Show Dialog</md-button>
+    <div ng-show="userCreated">
+        <p>User Name: {{userName}}</p>
+        <p>User E-mail: {{userEmail}}</p>
+    </div>
+    <script type="text/javascript" src="/bower_components/angular/angular.js"></script>
+    <script type="text/javascript" src="/bower_components/angular-animate/angular-animate.js"></script>
+    <script type="text/javascript" src="/bower_components/angular-translate/angular-translate.js"></script>
+    <script type="text/javascript" src="/bower_components/angular-messages/angular-messages.js"></script>
+    <script type="text/javascript" src="/bower_components/angular-material/angular-material.js"></script>
+    <script type="text/javascript" src="/bower_components/angular-aria/angular-aria.js"></script>
+    <script type="text/javascript" src="/bower_components/angular-touch/angular-touch.js"></script>
+    <script type="text/javascript" src="/release/lm-webforms.js"></script>
+    <script type="text/javascript" src="app.js"></script>
+</body>
+</html>
