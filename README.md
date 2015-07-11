@@ -4,6 +4,8 @@ If you don't want to worry about any HTML markup but want to edit your existing 
 Just define your model - fields and their types, and get Angular.Material-powered dialogs and web forms ready to edit your models.
 
 It is easy to notice that examples contain only bootstrap HTML markup like script and CSS references.
+
+All code is written completely on TypeScript so you can use it in both JavaScript and TypeScript projects.
  
 # Usage example
 
