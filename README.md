@@ -1,4 +1,4 @@
-# AngularJS web forms and dialogs with material design based on [Angular.material](https://github.com/angular/material)
+# AngularJS web forms and dialogs with material design based on [Angular Material](https://github.com/angular/material)
   
 If you don't want to worry about any HTML markup but want to edit your existing model then this framework is for you.
 Just define your model - fields and their types, and get Angular.Material-powered dialogs and web forms ready to edit your models.
