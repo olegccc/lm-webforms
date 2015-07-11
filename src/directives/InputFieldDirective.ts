@@ -65,6 +65,7 @@ interface InputFieldDirectiveScope extends ng.IScope {
     getTypeahead: (searchText: string) => string[];
     onSearchTextChange: (text: string) => void;
     onSelectedItemChange: (item: string) => void;
+    getCodeMirrorOptions: () => any;
 }
 
 /**
@@ -85,6 +86,9 @@ class InputFieldDirectiveLink {
         this.element = element;
         this.compileService = compileService;
         this.configuration = configuration;
+        this.scope.getCodeMirrorOptions = () => {
+            return {};
+        };
 
         scope.getValue = () => {
             if (scope.field.type === InputFieldTypes.RICH_TEXT && scope.readOnly().length > 0) {

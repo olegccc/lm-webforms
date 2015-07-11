@@ -1,7 +1,7 @@
 style.
     .CodeMirror {
         line-height: normal;
-        height: 200px;
+        height: 200px !important;
     }
     .CodeMirrorInput {
         border-width: 1px !important;
@@ -18,10 +18,10 @@ style.
 label.CodeMirrorLabel {{field.title | translate}}
 link(href="../../bower_components/codemirror/lib/codemirror.css" rel="stylesheet" type="text/css")
 
-ui-codemirror.md-input(
+ui-codemirror(
     ng-model="object[field.property]"
     name="{{field.property}}"
     ng-required="field.required"
     field-readonly="readOnly(field) || fieldDisabled"
-    options="{}"
+    options="getCodeMirrorOptions()"
 )

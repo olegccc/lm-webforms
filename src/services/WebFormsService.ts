@@ -20,12 +20,19 @@ class WebFormsService implements IWebFormsService {
     private qService: ng.IQService;
     private cache: ng.ICacheObject;
     private dialogService: angular.material.MDDialogService;
+    private configuration: WebFormsConfiguration;
 
-    constructor(httpService: ng.IHttpService, qService: ng.IQService, cacheFactory: ng.ICacheFactoryService, dialogService: angular.material.MDDialogService) {
+    constructor(
+            httpService: ng.IHttpService,
+            qService: ng.IQService,
+            cacheFactory: ng.ICacheFactoryService,
+            dialogService: angular.material.MDDialogService,
+            configuration: WebFormsConfiguration) {
         this.httpService = httpService;
         this.qService = qService;
         this.cache = cacheFactory("lm-webforms");
         this.dialogService = dialogService;
+        this.configuration = configuration;
     }
 
     public newObject<T>(typeId: string, initialObject: T = null, resolver: (object: T) => ng.IPromise<void> = null): ng.IPromise<T> {
@@ -85,8 +92,14 @@ class WebFormsService implements IWebFormsService {
         requires.push("ckeditor");
     }
 
-    private static fillCodeTextModules(requires: string[]) {
-        requires.push("codemirror");
+    private fillCodeTextModules(requires: string[]) {
+        if (_.isEmpty(this.configuration.codeMirrorModules)) {
+            requires.push("codemirror");
+        } else {
+            _.each(this.configuration.codeMirrorModules, (module: string) => {
+                requires.push(module);
+            });
+        }
     }
 
     private executeWithDefinitionLoaded<T>(object: T, definition: WebFormDefinition, isNew: boolean, defer: ng.IDeferred<T>, resolver: (object: T) => ng.IPromise<void>) {
@@ -100,7 +113,7 @@ class WebFormsService implements IWebFormsService {
 
         var requires: string[] = [];
 
-        if (configuration.loadModulesOnDemand) {
+        if (this.configuration.loadModulesOnDemand) {
             _.each(definition.fields, (field: InputFieldDefinition) => {
                 switch (field.type) {
                     case InputFieldTypes.DYNAMIC_FIELD_LIST:
@@ -115,7 +128,7 @@ class WebFormsService implements IWebFormsService {
                     case InputFieldTypes.CODE_TEXT:
                         if (!hasCodeMirror) {
                             hasCodeMirror = true;
-                            WebFormsService.fillCodeTextModules(requires);
+                            this.fillCodeTextModules(requires);
                         }
                         break;
                 }

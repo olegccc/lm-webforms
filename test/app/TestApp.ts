@@ -36,7 +36,20 @@ function initializeApp() {
     ]);
 
     appModule.config(['webFormsProvider', (webFormsServiceProvider: IWebFormsServiceProvider) => {
-        webFormsServiceProvider.getConfiguration().addDataSource("items", new TestSelectSource());
+        var configuration: IWebFormsConfiguration = webFormsServiceProvider.getConfiguration();
+        configuration.addDataSource("items", new TestSelectSource());
+        configuration.loadModulesOnDemand = true;
+        configuration.codeMirrorModules = [
+            'codemirror/lib/codemirror',
+            'codemirror/mode/htmlmixed/htmlmixed',
+            'codemirror/mode/htmlembedded/htmlembedded',
+            'codemirror/addon/hint/html-hint',
+            'codemirror/mode/xml/xml',
+            'codemirror/mode/javascript/javascript',
+            'codemirror/mode/css/css',
+            'codemirror/addon/mode/multiplex',
+            'codemirror/addon/hint/xml-hint'
+        ];
     }]);
 
     appModule.controller('test', ['$scope', 'webForms', TestController]);

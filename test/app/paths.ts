@@ -13,33 +13,11 @@ var require: any = {
         'ckeditor': '/bower_components/ckeditor/ckeditor',
         'domready': '/bower_components/domready/ready',
         'recaptcha': 'http://www.google.com/recaptcha/api/js/recaptcha_ajax',
-        'codemirror': '/bower_components/codemirror/lib/codemirror',
-        'codemirror_htmlmixed': '/bower_components/codemirror/mode/htmlmixed/htmlmixed',
-        'codemirror_htmlembedded': '/bower_components/codemirror/mode/htmlembedded/htmlembedded',
-        'codemirror_htmlhint': '/bower_components/codemirror/addon/hint/html-hint',
-        'codemirror_xml': '/bower_components/codemirror/mode/xml/xml',
-        'codemirror_javascript': '/bower_components/codemirror/mode/javascript/javascript',
-        'codemirror_css': '/bower_components/codemirror/mode/css/css',
-        'codemirror_multiplex': '/bower_components/codemirror/addon/mode/multiplex',
-        'codemirror_xmlhint': '/bower_components/codemirror/addon/hint/xml-hint',
-        'text': '/bower_components/requirejs-text/text'
-    },
-    map: {
-        '*': {
-            '../lib/codemirror': 'codemirror',
-            '../../lib/codemirror': 'codemirror',
-            '../xml/xml': 'codemirror_xml',
-            '../javascript/javascript': 'codemirror_javascript',
-            '../css/css': 'codemirror_css',
-            '../htmlmixed/htmlmixed': 'codemirror_htmlmixed',
-            '../../addon/mode/multiplex': 'codemirror_multiplex',
-            'xml-hint': 'codemirror_xmlhint'
-        }
+        'codemirror': '/bower_components/codemirror'
     },
     shim: {
         'angular':{
-            exports: 'angular',
-            deps: ['text']
+            exports: 'angular'
         },
         'jquery': {
             exports: '$'
@@ -68,9 +46,6 @@ var require: any = {
         'ckeditor': {
             deps: ['jquery'],
             exports: 'CKEDITOR'
-        },
-        'codemirror': {
-            deps: ['jquery']
         }
     }
 };

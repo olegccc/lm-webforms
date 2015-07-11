@@ -10,7 +10,7 @@
  * @interface CodeMirrorDirectiveScope
  */
 interface CodeMirrorDirectiveScope extends ng.IScope {
-    options: any;
+    options: () => any;
     fieldReadonly: boolean;
 }
 
@@ -20,51 +20,62 @@ interface CodeMirrorDirectiveScope extends ng.IScope {
 class CodeMirrorDirectivePostLink {
 
     private editor: CodeMirror.CodeMirror;
-    private scope: ng.IScope;
+    private scope: CodeMirrorDirectiveScope;
     private model: ng.INgModelController;
     private inputContainer: IInputContainer;
+    private element: JQuery;
+    private configuration: WebFormsConfiguration;
+    private options: any;
 
-    constructor(scope: CodeMirrorDirectiveScope, element: JQuery, model: ng.INgModelController, Codemirror: CodeMirror.CodeMirror, container: IInputContainer) {
+    constructor(scope: CodeMirrorDirectiveScope, element: JQuery, model: ng.INgModelController, container: IInputContainer, configuration: WebFormsConfiguration) {
 
         this.scope = scope;
         this.model = model;
         this.inputContainer = container;
+        this.element = element;
+        this.configuration = configuration;
 
-        if (!angular.isObject(scope.options)) {
-            scope.options = {};
+        if (_.isFunction(scope.options)) {
+            this.options = scope.options();
+        }
+
+        if (!angular.isObject(this.options)) {
+            this.options = {};
         }
 
         var newValue = this.model.$viewValue || '';
 
-        scope.options.lineNumbers = scope.options.lineNumbers || true;
-        scope.options.mode = scope.options.mode || "htmlmixed";
-        scope.options.inputStyle = "textarea";
-        scope.options.value = newValue;
+        this.options.lineNumbers = true;
+        this.options.mode = this.options.mode || "htmlmixed";
+        this.options.inputStyle = "textarea";
+        this.options.value = newValue;
 
-        this.editor = this.createEditor(element, scope.options, Codemirror);
-
-        this.configOptionsWatcher(Codemirror);
-        this.configNgModelLink();
-        this.editor.setOption('readOnly', scope.fieldReadonly);
-
-        // Allow access to the CodeMirror instance through a broadcasted event
-        // eg: $broadcast('CodeMirror', function(cm){...});
-
-        scope.$on('CodeMirror', (event, callback) => {
-            if (angular.isFunction(callback)) {
-                callback(this.editor);
-            } else {
-                throw new Error('the CodeMirror event requires a callback function');
+        if (configuration.loadModulesOnDemand) {
+            var requiredModules = ['codemirror'];
+            if (configuration.codeMirrorModules && configuration.codeMirrorModules.length) {
+                requiredModules = configuration.codeMirrorModules;
             }
-        });
-
-        this.updateEditorState(newValue);
+            require(requiredModules, (codemirror) => {
+                this.prepareEditor(codemirror);
+            });
+        } else {
+            this.prepareEditor(window["CodeMirror"]);
+        }
     }
 
-    private createEditor(element: JQuery, codemirrorOptions: any, CodeMirror: any): CodeMirror.CodeMirror {
+    private prepareEditor(Codemirror: CodeMirror.CodeMirror) {
+        this.editor = this.createEditor(Codemirror);
+        this.scope.$applyAsync(() => {
+            this.configOptionsWatcher(Codemirror);
+            this.configNgModelLink();
+            this.editor.setOption('readOnly', this.scope.fieldReadonly);
+        });
+    }
+
+    private createEditor(CodeMirror:any):CodeMirror.CodeMirror {
         return new CodeMirror((editorInstance: HTMLElement) => {
-            element.append(editorInstance);
-        }, codemirrorOptions);
+            this.element.append(editorInstance);
+        }, this.options);
     }
 
     private configOptionsWatcher(CodeMirror: any) {
@@ -105,6 +116,7 @@ class CodeMirrorDirectivePostLink {
         if (!this.model) {
             return;
         }
+
         // CodeMirror expects a string, so make sure it gets one.
         // This does not change the model.
         this.model.$formatters.push((value) => {
@@ -156,18 +168,12 @@ webFormsModule.directive('uiCodemirror', ['webFormsConfiguration', (configuratio
             replace: true,
             require: ['?ngModel', '^?mdInputContainer'],
             scope: {
-                options: '=',
+                options: '&',
                 fieldReadonly: '=',
                 fieldDisabled: '='
             },
             link: (scope: CodeMirrorDirectiveScope, element: JQuery, attrs, controllers: any[]) => {
-                var requiredModules = ['codemirror'];
-                if (configuration.codeMirrorModules && configuration.codeMirrorModules.length) {
-                    requiredModules = _.union(requiredModules, configuration.codeMirrorModules);
-                }
-                require(requiredModules, (codemirror) => {
-                    new CodeMirrorDirectivePostLink(scope, element, controllers[0], codemirror, controllers[1]);
-                });
+                new CodeMirrorDirectivePostLink(scope, element, controllers[0], controllers[1], configuration);
             }
         }}]
 );

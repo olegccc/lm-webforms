@@ -12,7 +12,7 @@
     div(ng-repeat="field in fields | orderBy: 'position'" class="{{'field-' + field.type + ' ' + 'field-list'}}")
         input-field(field="field" object="object" form="form" ng-if="fieldVisible(field) && !field.isGroup" field-disabled="isApplying")
         div(ng-if="field.isGroup" layout="row" layout-sm="column")
-            input-field(ng-repeat="child in field.children" field="child" object="object" form="form" ng-if="fieldVisible(child)" flex="" field-disabled="isApplying")
+            input-field(ng-repeat="child in field.children | orderBy: 'position'" field="child" object="object" form="form" ng-if="fieldVisible(child)" flex="" field-disabled="isApplying")
 
     div(ng-if="submitWithCaptcha" captcha="recaptchaPublicKey")
 

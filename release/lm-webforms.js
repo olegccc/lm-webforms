@@ -35,7 +35,7 @@ var templates = {
     "views/fileRead.jade": "<input type=\"file\" style=\"opacity: 0; height: 0; width: 0; display: inline\"/><md-button ng-click=\"chooseFile()\"><md-icon>attach_file</md-icon></md-button><md-button ng-click=\"clear()\" ng-show=\"valueSet\"><md-icon>clear</md-icon></md-button><span>{{comment}}</span><div ng-if=\"showImage\" class=\"file-image\"><canvas style=\"width:150px;height:150px\" ng-show=\"imageLoaded\"></canvas></div>",
     "views/inputFieldError.jade": "<div ng-messages=\"form[field.property].$error\" ng-show=\"form[field.property].$dirty\"><div ng-message=\"{{requiredMarker}}\">{{ configuration.requiredErrorMessage | translate }}</div><div ng-message=\"{{maxLengthMarker}}\">{{ maxLengthMessage }}</div><div ng-message=\"{{minLengthMarker}}\">{{ minLengthMessage }}</div><div ng-message=\"{{emailMarker}}\">{{ configuration.emailErrorMessage | translate }}</div><div ng-message=\"{{urlMarker}}\">{{ configuration.urlErrorMessage | translate }}</div><div ng-message=\"{{patternMarker}}\">{{ configuration.patternErrorMessage | translate }}</div><div ng-message=\"{{dateMarker}}\">{{ configuration.dateErrorMessage | translate }}</div><div ng-message=\"{{timeMarker}}\">{{ configuration.timeErrorMessage | translate }}</div><div ng-message=\"{{numberMarker}}\">{{ configuration.numberErrorMessage | translate }}</div><div ng-message=\"{{equalsMarker}}\">{{ configuration.notEqualErrorMessage | translate }}</div></div>",
     "views/inputFields/checkBox.jade": "<md-checkbox name=\"{{field.property}}\" ng-model=\"object[field.property]\" ng-disabled=\"readOnly(field)\">{{field.title | translate}}</md-checkbox>",
-    "views/inputFields/codeText.jade": "<style>.CodeMirror {\n    line-height: normal;\n    height: 200px;\n}\n.CodeMirrorInput {\n    border-width: 1px !important;\n    border-style: solid;\n    border-radius: 3px;\n}\n.md-input-focused .CodeMirrorInput {\n    border-width: 2px !important;\n}\nmd-input-container:not(.md-input-focused):not(.md-input-has-value) .CodeMirrorLabel {\n    padding-left: 40px;\n}\n</style><label class=\"CodeMirrorLabel\">{{field.title | translate}}</label><link href=\"../../bower_components/codemirror/lib/codemirror.css\" rel=\"stylesheet\" type=\"text/css\"/><ui-codemirror ng-model=\"object[field.property]\" name=\"{{field.property}}\" ng-required=\"field.required\" field-readonly=\"readOnly(field) || fieldDisabled\" options=\"{}\" class=\"md-input\"></ui-codemirror>",
+    "views/inputFields/codeText.jade": "<style>.CodeMirror {\n    line-height: normal;\n    height: 200px !important;\n}\n.CodeMirrorInput {\n    border-width: 1px !important;\n    border-style: solid;\n    border-radius: 3px;\n}\n.md-input-focused .CodeMirrorInput {\n    border-width: 2px !important;\n}\nmd-input-container:not(.md-input-focused):not(.md-input-has-value) .CodeMirrorLabel {\n    padding-left: 40px;\n}\n</style><label class=\"CodeMirrorLabel\">{{field.title | translate}}</label><link href=\"../../bower_components/codemirror/lib/codemirror.css\" rel=\"stylesheet\" type=\"text/css\"/><ui-codemirror ng-model=\"object[field.property]\" name=\"{{field.property}}\" ng-required=\"field.required\" field-readonly=\"readOnly(field) || fieldDisabled\" options=\"getCodeMirrorOptions()\"></ui-codemirror>",
     "views/inputFields/date.jade": "<label>{{field.title | translate}}</label><input type=\"date\" name=\"{{field.property}}\" ng-model=\"object[field.property]\" ng-readonly=\"readonly(field)\" ng-required=\"field.required\"/>",
     "views/inputFields/email.jade": "<label>{{field.title | translate}}</label><input type=\"email\" name=\"{{field.property}}\" ng-model=\"object[field.property]\" ng-readonly=\"readOnly(field)\" ng-disabled=\"fieldDisabled\" ng-required=\"field.required\" ng-minlength=\"field.minLength\" ng-maxlength=\"field.maxLength\" validate-equals=\"{{field.reference}}\" reference=\"{{field.reference === null || object[field.reference]}}\"/>",
     "views/inputFields/file.jade": "<label>{{field.title | translate}}</label><style>md-input-container file-read.md-input {\n    border-width: 1px !important;\n}\nmd-input-container file-read.md-input.ng-invalid.ng-dirty {\n    border-width: 1px;\n    border-style: solid;\n}\nmd-input-container.md-input-focused file-read.md-input {\n    border-width: 1px;\n    border-style: solid;\n}\n</style><file-read ng-model=\"object[field.property]\" style=\"height: auto\" ng-required=\"field.required\" name=\"{{field.property}}\" class=\"md-input\"></file-read>",
@@ -51,8 +51,8 @@ var templates = {
     "views/inputFields/text.jade": "<label>{{field.title | translate}}</label><input type=\"text\" name=\"{{field.property}}\" ng-model=\"object[field.property]\" ng-readonly=\"readOnly(field) || fieldDisabled\" ng-disabled=\"fieldDisabled\" ng-required=\"field.required\" ng-minlength=\"field.minLength\" ng-maxlength=\"field.maxLength\" validate-equals=\"{{field.reference}}\" reference=\"{{field.reference === null || object[field.reference]}}\"/>",
     "views/inputFields/typeahead.jade": "<md-autocomplete md-input-name=\"{{field.property}}\" md-no-cache=\"true\" md-floating-label=\"{{field.title | translate}}\" md-selected-item=\"object[field.property]\" md-search-text=\"searchText\" md-items=\"item in getTypeahead(searchText)\" md-item-text=\"object[field.property]\" md-search-text-change=\"onSearchTextChange(searchText)\" md-selected-item-change=\"onSelectedItemChange()\" ng-readonly=\"readOnly() || fieldDisabled\" ng-disabled=\"fieldDisabled\" ng-required=\"field.required\" ng-minlength=\"field.minLength\" ng-maxlength=\"field.maxLength\"><md-item-template><span md-highlight-text=\"searchText\">{{item}}</span></md-item-template><md-not-found>{{configuration.notFoundMessage}}</md-not-found><input-field-error></input-field-error></md-autocomplete>",
     "views/multiFileRead.jade": "<style>.file-choose-list, .file-choose-list li {\n    margin: 0;\n    padding: 0;\n    list-style-type: none;\n}\n\n.file-choose-list li {\n    display: inline-block;\n}\n\n.file-choose-list li:not(:first-child) {\n    margin-left: 0.5em;\n}\n\n.file-choose-list li:first-child {\n    margin-top: 0.5em;\n}\n\n.file-choose-list li:last-child {\n    margin-bottom: 1em;\n}\n\n.file-choose-list li md-icon {\n    margin-left: 5px;\n    cursor: pointer;\n}\n\n</style><ul class=\"file-choose-list\"><li ng-repeat=\"file in files\"><md-icon>attach_file</md-icon><span>{{file.name}}</span><md-icon ng-click=\"removeFile(file)\" class=\"file-remove\">clear</md-icon></li><li><md-button ng-click=\"chooseFile()\"><md-icon ng-if=\"files.length &gt; 0\">add_circle</md-icon><md-icon ng-if=\"files.length === 0\">attach_file</md-icon></md-button></li></ul><input type=\"file\" style=\"display: none\" multiple=\"multiple\"/>",
-    "views/webDialog.jade": "<div ng-form=\"form\"><div ng-if=\"!changesApplied\"><md-content layout-padding=\"layout-padding\" layout=\"column\"><style>md-input-container.inputfield-file label,\nmd-input-container.inputfield-image label,\nmd-input-container.inputfield-file_list label {\n    flex: none;\n    -webkit-flex: none;\n    transform: none !important;\n}\n</style><div ng-repeat=\"field in fields | orderBy: 'position'\" class=\"{{'field-' + field.type + ' ' + 'field-list'}}\"><input-field field=\"field\" object=\"object\" form=\"form\" ng-if=\"fieldVisible(field) &amp;&amp; !field.isGroup\" field-disabled=\"isApplying\"></input-field><div ng-if=\"field.isGroup\" layout=\"row\" layout-sm=\"column\"><input-field ng-repeat=\"child in field.children\" field=\"child\" object=\"object\" form=\"form\" ng-if=\"fieldVisible(child)\" flex=\"\" field-disabled=\"isApplying\"></input-field></div></div><div ng-if=\"submitWithCaptcha\" captcha=\"recaptchaPublicKey\"></div><div ng-if=\"submitError.length &gt; 0\" class=\"bg-danger dialog-notification\"><span class=\"glyphicon glyphicon-exclamation-sign\"></span><span ng-bind=\"submitError\"></span></div><div ng-if=\"submitSuccess.length &gt; 0\" class=\"bg-success dialog-notification\"><span class=\"glyphicon glyphicon-ok-circle\"></span><span ng-bind=\"submitSuccess\"></span></div></md-content><md-content layout-padding=\"layout-padding\"><md-button ng-click=\"submit(form)\" ng-disabled=\"okDisabled(form)\" class=\"md-raised md-primary\"><span ng-bind=\"applyCaption | translate\"></span><md-progress-circular ng-show=\"isApplying\" md-mode=\"indeterminate\" md-diameter=\"10\"></md-progress-circular></md-button></md-content></div><div ng-if=\"changesApplied\"><div ng-bind=\"submitSuccess\" class=\"bg-success dialog-notification\"></div><md-content layout-padding=\"layout-padding\"><md-button ng-click=\"openForm(form)\" ng-bind=\"'Open Form' | translate\" aria-label=\"Open\" class=\"md-raised\"></md-button></md-content></div></div>",
-    "views/webForm.jade": "<md-dialog ng-form=\"form\" aria-label=\"{{title}}\" flex=\"80\"><md-toolbar><div class=\"md-toolbar-tools\"><h2>{{title}}</h2><span flex=\"flex\"></span><md-button ng-click=\"cancel()\" ng-disabled=\"isApplying\" class=\"md-icon-button\"><md-icon>clear</md-icon></md-button></div></md-toolbar><md-content layout-padding=\"layout-padding\" layout=\"column\"><style>md-input-container.inputfield-file label,\nmd-input-container.inputfield-image label,\nmd-input-container.inputfield-file_list label {\n    flex: none;\n    -webkit-flex: none;\n    transform: none !important;\n}\n</style><div ng-repeat=\"field in fields | orderBy: 'position'\" class=\"{{'field-' + field.type + ' ' + 'field-list'}}\"><input-field field=\"field\" object=\"object\" form=\"form\" ng-if=\"fieldVisible(field) &amp;&amp; !field.isGroup\" field-disabled=\"isApplying\"></input-field><div ng-if=\"field.isGroup\" layout=\"row\" layout-sm=\"column\"><input-field ng-repeat=\"child in field.children\" field=\"child\" object=\"object\" form=\"form\" ng-if=\"fieldVisible(child)\" flex=\"\" field-disabled=\"isApplying\"></input-field></div></div><div ng-if=\"submitWithCaptcha\" captcha=\"recaptchaPublicKey\"></div><div ng-if=\"submitError.length &gt; 0\" class=\"bg-danger dialog-notification\"><span class=\"glyphicon glyphicon-exclamation-sign\"></span><span ng-bind=\"submitError\"></span></div><div ng-if=\"submitSuccess.length &gt; 0\" class=\"bg-success dialog-notification\"><span class=\"glyphicon glyphicon-ok-circle\"></span><span ng-bind=\"submitSuccess\"></span></div></md-content><div class=\"md-actions\"><md-progress-circular ng-show=\"isApplying\" md-mode=\"indeterminate\" md-diameter=\"20\" class=\"md-accent\"></md-progress-circular><md-button ng-click=\"submit(form)\" aria-label=\"OK\" ng-disabled=\"isApplying\" class=\"md-raised md-primary\"><span>{{ 'OK' | translate }}</span></md-button><md-button ng-click=\"cancel()\" ng-disabled=\"isApplying\" class=\"md-raised\">{{ 'Cancel' | translate }}</md-button></div></md-dialog>",
+    "views/webDialog.jade": "<div ng-form=\"form\"><div ng-if=\"!changesApplied\"><md-content layout-padding=\"layout-padding\" layout=\"column\"><style>md-input-container.inputfield-file label,\nmd-input-container.inputfield-image label,\nmd-input-container.inputfield-file_list label {\n    flex: none;\n    -webkit-flex: none;\n    transform: none !important;\n}\n</style><div ng-repeat=\"field in fields | orderBy: 'position'\" class=\"{{'field-' + field.type + ' ' + 'field-list'}}\"><input-field field=\"field\" object=\"object\" form=\"form\" ng-if=\"fieldVisible(field) &amp;&amp; !field.isGroup\" field-disabled=\"isApplying\"></input-field><div ng-if=\"field.isGroup\" layout=\"row\" layout-sm=\"column\"><input-field ng-repeat=\"child in field.children | orderBy: 'position'\" field=\"child\" object=\"object\" form=\"form\" ng-if=\"fieldVisible(child)\" flex=\"\" field-disabled=\"isApplying\"></input-field></div></div><div ng-if=\"submitWithCaptcha\" captcha=\"recaptchaPublicKey\"></div><div ng-if=\"submitError.length &gt; 0\" class=\"bg-danger dialog-notification\"><span class=\"glyphicon glyphicon-exclamation-sign\"></span><span ng-bind=\"submitError\"></span></div><div ng-if=\"submitSuccess.length &gt; 0\" class=\"bg-success dialog-notification\"><span class=\"glyphicon glyphicon-ok-circle\"></span><span ng-bind=\"submitSuccess\"></span></div></md-content><md-content layout-padding=\"layout-padding\"><md-button ng-click=\"submit(form)\" ng-disabled=\"okDisabled(form)\" class=\"md-raised md-primary\"><span ng-bind=\"applyCaption | translate\"></span><md-progress-circular ng-show=\"isApplying\" md-mode=\"indeterminate\" md-diameter=\"10\"></md-progress-circular></md-button></md-content></div><div ng-if=\"changesApplied\"><div ng-bind=\"submitSuccess\" class=\"bg-success dialog-notification\"></div><md-content layout-padding=\"layout-padding\"><md-button ng-click=\"openForm(form)\" ng-bind=\"'Open Form' | translate\" aria-label=\"Open\" class=\"md-raised\"></md-button></md-content></div></div>",
+    "views/webForm.jade": "<md-dialog ng-form=\"form\" aria-label=\"{{title}}\" flex=\"80\"><md-toolbar><div class=\"md-toolbar-tools\"><h2>{{title}}</h2><span flex=\"flex\"></span><md-button ng-click=\"cancel()\" ng-disabled=\"isApplying\" class=\"md-icon-button\"><md-icon>clear</md-icon></md-button></div></md-toolbar><md-content layout-padding=\"layout-padding\" layout=\"column\"><style>md-input-container.inputfield-file label,\nmd-input-container.inputfield-image label,\nmd-input-container.inputfield-file_list label {\n    flex: none;\n    -webkit-flex: none;\n    transform: none !important;\n}\n</style><div ng-repeat=\"field in fields | orderBy: 'position'\" class=\"{{'field-' + field.type + ' ' + 'field-list'}}\"><input-field field=\"field\" object=\"object\" form=\"form\" ng-if=\"fieldVisible(field) &amp;&amp; !field.isGroup\" field-disabled=\"isApplying\"></input-field><div ng-if=\"field.isGroup\" layout=\"row\" layout-sm=\"column\"><input-field ng-repeat=\"child in field.children | orderBy: 'position'\" field=\"child\" object=\"object\" form=\"form\" ng-if=\"fieldVisible(child)\" flex=\"\" field-disabled=\"isApplying\"></input-field></div></div><div ng-if=\"submitWithCaptcha\" captcha=\"recaptchaPublicKey\"></div><div ng-if=\"submitError.length &gt; 0\" class=\"bg-danger dialog-notification\"><span class=\"glyphicon glyphicon-exclamation-sign\"></span><span ng-bind=\"submitError\"></span></div><div ng-if=\"submitSuccess.length &gt; 0\" class=\"bg-success dialog-notification\"><span class=\"glyphicon glyphicon-ok-circle\"></span><span ng-bind=\"submitSuccess\"></span></div></md-content><div class=\"md-actions\"><md-progress-circular ng-show=\"isApplying\" md-mode=\"indeterminate\" md-diameter=\"20\" class=\"md-accent\"></md-progress-circular><md-button ng-click=\"submit(form)\" aria-label=\"OK\" ng-disabled=\"isApplying\" class=\"md-raised md-primary\"><span>{{ 'OK' | translate }}</span></md-button><md-button ng-click=\"cancel()\" ng-disabled=\"isApplying\" class=\"md-raised\">{{ 'Cancel' | translate }}</md-button></div></md-dialog>",
     "views/webFormMessage.jade": "<md-dialog aria-label=\"{{title}}\" class=\"input-form\"><md-dialog-content><md-subheader>{{title}}</md-subheader></md-dialog-content><md-content><p>{{message}}</p></md-content><div class=\"md-actions\"><md-button ng-click=\"close()\" class=\"md-primary\">{{ 'Main.ButtonOk' | translate }}</md-button></div></md-dialog>",
     "views/webFormQuestion.jade": "<div class=\"modal-header\"><h3 class=\"modal-title\">{{title}}</h3></div><div class=\"modal-body\"><p>{{message}}</p></div><div class=\"modal-footer\"><div ng-if=\"submitError.length &gt; 0\" class=\"bg-danger dialog-notification\"><span class=\"glyphicon glyphicon-exclamation-sign\"></span><span ng-bind=\"submitError\"></span></div><md-button ng-click=\"submit()\" class=\"md-raised\"><span>{{ 'Main.ButtonYes' | translate }}</span><md-progress-circular ng-show=\"isApplying\" md-mode=\"indeterminate\"></md-progress-circular></md-button><md-button ng-click=\"cancel()\" class=\"md-raised md-warn\">{{ 'Main.ButtonNo' | translate }}</md-button></div>"
 };
@@ -336,7 +336,8 @@ var FriendlyFormattingService = (function () {
 })();
 webFormsModule.service('friendlyFormatting', [
     'webFormsConfiguration',
-    FriendlyFormattingService]);
+    FriendlyFormattingService
+]);
 /*
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -351,11 +352,12 @@ webFormsModule.service('friendlyFormatting', [
  * @class WebFormsService
  */
 var WebFormsService = (function () {
-    function WebFormsService(httpService, qService, cacheFactory, dialogService) {
+    function WebFormsService(httpService, qService, cacheFactory, dialogService, configuration) {
         this.httpService = httpService;
         this.qService = qService;
         this.cache = cacheFactory("lm-webforms");
         this.dialogService = dialogService;
+        this.configuration = configuration;
     }
     WebFormsService.prototype.newObject = function (typeId, initialObject, resolver) {
         if (initialObject === void 0) { initialObject = null; }
@@ -401,8 +403,7 @@ var WebFormsService = (function () {
         var _this = this;
         if (resolver === void 0) { resolver = null; }
         var defer = this.qService.defer();
-        this.httpService.get(typeId + '.json', { cache: this.cache })
-            .then(function (data) {
+        this.httpService.get(typeId + '.json', { cache: this.cache }).then(function (data) {
             _this.executeWithDefinitionLoaded(object, data.data, isNew, defer, resolver);
         }, function (message) { return defer.reject(message); });
         return defer.promise;
@@ -410,8 +411,15 @@ var WebFormsService = (function () {
     WebFormsService.fillRichTextModules = function (requires) {
         requires.push("ckeditor");
     };
-    WebFormsService.fillCodeTextModules = function (requires) {
-        requires.push("codemirror");
+    WebFormsService.prototype.fillCodeTextModules = function (requires) {
+        if (_.isEmpty(this.configuration.codeMirrorModules)) {
+            requires.push("codemirror");
+        }
+        else {
+            _.each(this.configuration.codeMirrorModules, function (module) {
+                requires.push(module);
+            });
+        }
     };
     WebFormsService.prototype.executeWithDefinitionLoaded = function (object, definition, isNew, defer, resolver) {
         var _this = this;
@@ -422,7 +430,7 @@ var WebFormsService = (function () {
             field.property = property;
         });
         var requires = [];
-        if (configuration.loadModulesOnDemand) {
+        if (this.configuration.loadModulesOnDemand) {
             _.each(definition.fields, function (field) {
                 switch (field.type) {
                     case InputFieldTypes.DYNAMIC_FIELD_LIST:
@@ -437,7 +445,7 @@ var WebFormsService = (function () {
                     case InputFieldTypes.CODE_TEXT:
                         if (!hasCodeMirror) {
                             hasCodeMirror = true;
-                            WebFormsService.fillCodeTextModules(requires);
+                            _this.fillCodeTextModules(requires);
                         }
                         break;
                 }
@@ -486,23 +494,25 @@ var WebFormsService = (function () {
  * @file WebFormsServiceProvider.ts
  * @author Oleg Gordeev
  */
-var configuration = new WebFormsConfiguration();
-webFormsModule.value('webFormsConfiguration', configuration);
 /**
  * @class WebFormsServiceProvider
  */
 var WebFormsServiceProvider = (function () {
     function WebFormsServiceProvider() {
-        this.$get = ['$http', '$q', '$cacheFactory', '$mdDialog',
-            function (httpService, qService, cacheFactory, dialogService) {
-                return new WebFormsService(httpService, qService, cacheFactory, dialogService);
-            }];
+        this.$get = ['$http', '$q', '$cacheFactory', '$mdDialog', function (httpService, qService, cacheFactory, dialogService) {
+            return new WebFormsService(httpService, qService, cacheFactory, dialogService, WebFormsServiceProvider.configuration);
+        }];
     }
     WebFormsServiceProvider.prototype.getConfiguration = function () {
-        return configuration;
+        return WebFormsServiceProvider.configuration;
+    };
+    WebFormsServiceProvider.initialize = function () {
+        WebFormsServiceProvider.configuration = new WebFormsConfiguration();
+        webFormsModule.value('webFormsConfiguration', WebFormsServiceProvider.configuration);
     };
     return WebFormsServiceProvider;
 })();
+WebFormsServiceProvider.initialize();
 webFormsModule.provider('webForms', [WebFormsServiceProvider]);
 /*
  * This Source Code Form is subject to the terms of the Mozilla Public
@@ -950,8 +960,7 @@ var DialogController = (function (_super) {
     DialogController.prototype.successFunction = function (changedObject) {
         var _this = this;
         var deferred = this.qService.defer();
-        this.dialogScope.submit(changedObject)
-            .then(function (data) {
+        this.dialogScope.submit(changedObject).then(function (data) {
             _this.dialogScope.hasChanges = false;
             _this.dialogScope.changesApplied = true;
             _this.dialogScope.submitSuccess = data.message;
@@ -1142,60 +1151,72 @@ var CkEditorDirectiveLink = (function () {
     return CkEditorDirectiveLink;
 })();
 webFormsModule.directive('ckEditor', ['webFormsConfiguration', 'friendlyFormatting', function (configuration, friendlyFormatting) {
-        return {
-            require: ['?ngModel', '^?mdInputContainer'],
-            restrict: 'AE',
-            replace: false,
-            scope: {
-                options: '=',
-                readonly: '='
-            },
-            link: function (scope, element, attrs, controllers) {
-                require(['ckeditor'], function (ckeditor) {
-                    return new CkEditorDirectiveLink(scope, element, controllers[0], controllers[1], configuration, friendlyFormatting, ckeditor);
-                });
-            }
-        };
-    }]);
+    return {
+        require: ['?ngModel', '^?mdInputContainer'],
+        restrict: 'AE',
+        replace: false,
+        scope: {
+            options: '=',
+            readonly: '='
+        },
+        link: function (scope, element, attrs, controllers) {
+            require(['ckeditor'], function (ckeditor) {
+                return new CkEditorDirectiveLink(scope, element, controllers[0], controllers[1], configuration, friendlyFormatting, ckeditor);
+            });
+        }
+    };
+}]);
 // Based on https://github.com/angular-ui/ui-codemirror
 // The goal of refactoring is to take advantage of using AMD and TypeScript and integrate it with angular.material
 /**
  * @class CodeMirrorDirectivePostLink
  */
 var CodeMirrorDirectivePostLink = (function () {
-    function CodeMirrorDirectivePostLink(scope, element, model, Codemirror, container) {
+    function CodeMirrorDirectivePostLink(scope, element, model, container, configuration) {
         var _this = this;
         this.scope = scope;
         this.model = model;
         this.inputContainer = container;
-        if (!angular.isObject(scope.options)) {
-            scope.options = {};
+        this.element = element;
+        this.configuration = configuration;
+        if (_.isFunction(scope.options)) {
+            this.options = scope.options();
+        }
+        if (!angular.isObject(this.options)) {
+            this.options = {};
         }
         var newValue = this.model.$viewValue || '';
-        scope.options.lineNumbers = scope.options.lineNumbers || true;
-        scope.options.mode = scope.options.mode || "htmlmixed";
-        scope.options.inputStyle = "textarea";
-        scope.options.value = newValue;
-        this.editor = this.createEditor(element, scope.options, Codemirror);
-        this.configOptionsWatcher(Codemirror);
-        this.configNgModelLink();
-        this.editor.setOption('readOnly', scope.fieldReadonly);
-        // Allow access to the CodeMirror instance through a broadcasted event
-        // eg: $broadcast('CodeMirror', function(cm){...});
-        scope.$on('CodeMirror', function (event, callback) {
-            if (angular.isFunction(callback)) {
-                callback(_this.editor);
+        this.options.lineNumbers = true;
+        this.options.mode = this.options.mode || "htmlmixed";
+        this.options.inputStyle = "textarea";
+        this.options.value = newValue;
+        if (configuration.loadModulesOnDemand) {
+            var requiredModules = ['codemirror'];
+            if (configuration.codeMirrorModules && configuration.codeMirrorModules.length) {
+                requiredModules = configuration.codeMirrorModules;
             }
-            else {
-                throw new Error('the CodeMirror event requires a callback function');
-            }
-        });
-        this.updateEditorState(newValue);
+            require(requiredModules, function (codemirror) {
+                _this.prepareEditor(codemirror);
+            });
+        }
+        else {
+            this.prepareEditor(window["CodeMirror"]);
+        }
     }
-    CodeMirrorDirectivePostLink.prototype.createEditor = function (element, codemirrorOptions, CodeMirror) {
+    CodeMirrorDirectivePostLink.prototype.prepareEditor = function (Codemirror) {
+        var _this = this;
+        this.editor = this.createEditor(Codemirror);
+        this.scope.$applyAsync(function () {
+            _this.configOptionsWatcher(Codemirror);
+            _this.configNgModelLink();
+            _this.editor.setOption('readOnly', _this.scope.fieldReadonly);
+        });
+    };
+    CodeMirrorDirectivePostLink.prototype.createEditor = function (CodeMirror) {
+        var _this = this;
         return new CodeMirror(function (editorInstance) {
-            element.append(editorInstance);
-        }, codemirrorOptions);
+            _this.element.append(editorInstance);
+        }, this.options);
     };
     CodeMirrorDirectivePostLink.prototype.configOptionsWatcher = function (CodeMirror) {
         var _this = this;
@@ -1270,27 +1291,21 @@ var CodeMirrorDirectivePostLink = (function () {
     return CodeMirrorDirectivePostLink;
 })();
 webFormsModule.directive('uiCodemirror', ['webFormsConfiguration', function (configuration) {
-        return {
-            restrict: 'E',
-            template: templates['views/codemirror.jade'],
-            replace: true,
-            require: ['?ngModel', '^?mdInputContainer'],
-            scope: {
-                options: '=',
-                fieldReadonly: '=',
-                fieldDisabled: '='
-            },
-            link: function (scope, element, attrs, controllers) {
-                var requiredModules = ['codemirror'];
-                if (configuration.codeMirrorModules && configuration.codeMirrorModules.length) {
-                    requiredModules = _.union(requiredModules, configuration.codeMirrorModules);
-                }
-                require(requiredModules, function (codemirror) {
-                    new CodeMirrorDirectivePostLink(scope, element, controllers[0], codemirror, controllers[1]);
-                });
-            }
-        };
-    }]);
+    return {
+        restrict: 'E',
+        template: templates['views/codemirror.jade'],
+        replace: true,
+        require: ['?ngModel', '^?mdInputContainer'],
+        scope: {
+            options: '&',
+            fieldReadonly: '=',
+            fieldDisabled: '='
+        },
+        link: function (scope, element, attrs, controllers) {
+            new CodeMirrorDirectivePostLink(scope, element, controllers[0], controllers[1], configuration);
+        }
+    };
+}]);
 /*
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -1301,16 +1316,16 @@ webFormsModule.directive('uiCodemirror', ['webFormsConfiguration', function (con
  * @author Oleg Gordeev
  */
 webFormsModule.directive('lmDialog', [function () {
-        return {
-            template: templates['views/webDialog.jade'],
-            restrict: 'E',
-            replace: false,
-            scope: {
-                configuration: '='
-            },
-            controller: DialogController
-        };
-    }]);
+    return {
+        template: templates['views/webDialog.jade'],
+        restrict: 'E',
+        replace: false,
+        scope: {
+            configuration: '='
+        },
+        controller: DialogController
+    };
+}]);
 /*
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -1404,19 +1419,19 @@ var FileReadDirectiveLink = (function () {
     return FileReadDirectiveLink;
 })();
 webFormsModule.directive('fileRead', ['webFormsConfiguration', function (webFormsConfiguration) {
-        return {
-            template: templates['views/fileRead.jade'],
-            restrict: 'E',
-            replace: false,
-            require: ['?ngModel', '^?mdInputContainer'],
-            scope: {
-                showImage: '='
-            },
-            link: function (scope, element, attrs, controllers) {
-                new FileReadDirectiveLink(scope, element, webFormsConfiguration, controllers[0], controllers[1]);
-            }
-        };
-    }]);
+    return {
+        template: templates['views/fileRead.jade'],
+        restrict: 'E',
+        replace: false,
+        require: ['?ngModel', '^?mdInputContainer'],
+        scope: {
+            showImage: '='
+        },
+        link: function (scope, element, attrs, controllers) {
+            new FileReadDirectiveLink(scope, element, webFormsConfiguration, controllers[0], controllers[1]);
+        }
+    };
+}]);
 /*
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -1478,6 +1493,9 @@ var InputFieldDirectiveLink = (function () {
         this.element = element;
         this.compileService = compileService;
         this.configuration = configuration;
+        this.scope.getCodeMirrorOptions = function () {
+            return {};
+        };
         scope.getValue = function () {
             if (scope.field.type === InputFieldTypes.RICH_TEXT && scope.readOnly().length > 0) {
                 return sceService.trustAsHtml(scope.object[scope.field.property]);
@@ -1530,8 +1548,7 @@ var InputFieldDirectiveLink = (function () {
             case InputFieldTypes.TYPEAHEAD:
                 break;
             default:
-                content = "<md-input-container class='inputfield-" + this.scope.field.type + "'>" + content +
-                    "<input-field-error></input-field-error></md-input-container>";
+                content = "<md-input-container class='inputfield-" + this.scope.field.type + "'>" + content + "<input-field-error></input-field-error></md-input-container>";
                 break;
         }
         var container = angular.element(this.element);
@@ -1541,22 +1558,21 @@ var InputFieldDirectiveLink = (function () {
     };
     return InputFieldDirectiveLink;
 })();
-webFormsModule.directive('inputField', ['$compile', 'webFormsConfiguration', '$sce',
-    function (compileService, webFormsConfiguration, sceService) {
-        return {
-            restrict: 'EA',
-            require: ['^form'],
-            scope: {
-                field: '=',
-                object: '=',
-                fieldDisabled: '=',
-                form: '='
-            },
-            link: function (scope, element, attrs, controllers) {
-                new InputFieldDirectiveLink(scope, element, compileService, sceService, webFormsConfiguration, controllers[0]);
-            }
-        };
-    }]);
+webFormsModule.directive('inputField', ['$compile', 'webFormsConfiguration', '$sce', function (compileService, webFormsConfiguration, sceService) {
+    return {
+        restrict: 'EA',
+        require: ['^form'],
+        scope: {
+            field: '=',
+            object: '=',
+            fieldDisabled: '=',
+            form: '='
+        },
+        link: function (scope, element, attrs, controllers) {
+            new InputFieldDirectiveLink(scope, element, compileService, sceService, webFormsConfiguration, controllers[0]);
+        }
+    };
+}]);
 /*
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -1590,13 +1606,13 @@ var InputFieldErrorDirectiveController = (function () {
     return InputFieldErrorDirectiveController;
 })();
 webFormsModule.directive('inputFieldError', [function () {
-        return {
-            template: templates['views/inputFieldError.jade'],
-            restrict: 'E',
-            replace: true,
-            controller: ['$scope', '$translate', 'webFormsConfiguration', InputFieldErrorDirectiveController]
-        };
-    }]);
+    return {
+        template: templates['views/inputFieldError.jade'],
+        restrict: 'E',
+        replace: true,
+        controller: ['$scope', '$translate', 'webFormsConfiguration', InputFieldErrorDirectiveController]
+    };
+}]);
 /*
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -1702,17 +1718,17 @@ var MultiFileReadDirectiveLink = (function () {
     return MultiFileReadDirectiveLink;
 })();
 webFormsModule.directive('multiFileRead', ['webFormsConfiguration', function (webFormsConfiguration) {
-        return {
-            template: templates['views/multiFileRead.jade'],
-            restrict: 'E',
-            replace: false,
-            require: ['?ngModel', '^?mdInputContainer'],
-            scope: true,
-            link: function (scope, element, attrs, controllers) {
-                new MultiFileReadDirectiveLink(scope, element, webFormsConfiguration, controllers[0], controllers[1]);
-            }
-        };
-    }]);
+    return {
+        template: templates['views/multiFileRead.jade'],
+        restrict: 'E',
+        replace: false,
+        require: ['?ngModel', '^?mdInputContainer'],
+        scope: true,
+        link: function (scope, element, attrs, controllers) {
+            new MultiFileReadDirectiveLink(scope, element, webFormsConfiguration, controllers[0], controllers[1]);
+        }
+    };
+}]);
 /*
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -1740,14 +1756,14 @@ var ValidateEqualsLink = (function () {
     return ValidateEqualsLink;
 })();
 webFormsModule.directive('validateEquals', [function () {
-        return {
-            restrict: 'A',
-            require: '?ngModel',
-            link: function (scope, element, attrs, model) {
-                new ValidateEqualsLink(scope, attrs, model);
-            }
-        };
-    }]);
+    return {
+        restrict: 'A',
+        require: '?ngModel',
+        link: function (scope, element, attrs, model) {
+            new ValidateEqualsLink(scope, attrs, model);
+        }
+    };
+}]);
 /*
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
