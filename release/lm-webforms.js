@@ -96,11 +96,6 @@ var Constants = (function () {
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
-/*
- * This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
- */
 /**
  * @file InputFieldDefinition.ts
  * @author Oleg Gordeev
@@ -423,9 +418,8 @@ var WebFormsService = (function () {
     };
     WebFormsService.prototype.executeWithDefinitionLoaded = function (object, definition, isNew, defer, resolver) {
         var _this = this;
-        var hasTinyMce = false;
+        var hasRichTextField = false;
         var hasCodeMirror = false;
-        var hasDynamicFields = false;
         _.forOwn(definition.fields, function (field, property) {
             field.property = property;
         });
@@ -433,12 +427,9 @@ var WebFormsService = (function () {
         if (this.configuration.loadModulesOnDemand) {
             _.each(definition.fields, function (field) {
                 switch (field.type) {
-                    case InputFieldTypes.DYNAMIC_FIELD_LIST:
-                        hasDynamicFields = true;
-                        break;
                     case InputFieldTypes.RICH_TEXT:
-                        if (!hasTinyMce) {
-                            hasTinyMce = true;
+                        if (!hasRichTextField) {
+                            hasRichTextField = true;
                             WebFormsService.fillRichTextModules(requires);
                         }
                         break;
@@ -450,10 +441,6 @@ var WebFormsService = (function () {
                         break;
                 }
             });
-        }
-        if (hasDynamicFields && object == null) {
-            defer.reject("Cannot edit uninitialized object");
-            return;
         }
         if (requires.length > 0) {
             require(requires, function () {
@@ -660,17 +647,18 @@ var InputFormController = (function () {
     };
     InputFormController.prototype.processDynamicFields = function (field) {
         var _this = this;
-        var dynamicFields = this.scope.object[field.property];
-        if (!_.isArray(dynamicFields)) {
+        var source = this.configuration.getDataSource(field.source);
+        if (source === null || _.isUndefined(source)) {
             return;
         }
-        _.each(dynamicFields, function (dynamicField) {
-            var dynamicDefinition = _.copy(dynamicField.field);
-            dynamicDefinition.property = field.property + "$" + dynamicDefinition.property;
-            dynamicDefinition.dynamicSource = dynamicField;
-            dynamicDefinition.reference = null;
-            _this.addField(dynamicDefinition);
-            _this.scope.object[dynamicDefinition.property] = dynamicField.value;
+        var dynamicFields = source.getDynamicFields(field.property, this.scope.object);
+        if (!_.isObject(dynamicFields)) {
+            return;
+        }
+        _.forOwn(dynamicFields, function (field, property) {
+            var copy = _.copy(field);
+            copy.property = property;
+            _this.addField(copy);
         });
     };
     InputFormController.prototype.addField = function (field) {
@@ -837,11 +825,6 @@ var InputFormController = (function () {
         if (form.$invalid) {
             return;
         }
-        _.each(this.scope.fields, function (field) {
-            if (field.dynamicSource) {
-                field.dynamicSource.value = _this.scope.object[field.property];
-            }
-        });
         if (this.scope.submitWithCaptcha) {
             this.scope.object["-RecaptchaChallenge-"] = Recaptcha.get_challenge();
             this.scope.object["-RecaptchaResponse-"] = Recaptcha.get_response();
@@ -851,23 +834,8 @@ var InputFormController = (function () {
         try {
             var changed = _.copy(this.scope.object);
             _.each(this.scope.fields, function (field) {
-                if (field.dynamicSource) {
-                    delete changed[field.property];
-                }
-                else if (field.repeat) {
+                if (field.repeat) {
                     delete changed[field.property + Constants.FIELD_REPEAT_SUFFIX];
-                }
-            });
-            _.each(this.definition.fields, function (field) {
-                if (field.type == InputFieldTypes.DYNAMIC_FIELD_LIST) {
-                    var dynamicFields = changed[field.property];
-                    if (dynamicFields != null) {
-                        _.each(dynamicFields, function (dynamicField) {
-                            var property = dynamicField.field.property;
-                            dynamicField.field = {};
-                            dynamicField.field.property = property;
-                        });
-                    }
                 }
             });
             if (this.resolver == null) {

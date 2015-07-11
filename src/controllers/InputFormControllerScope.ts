@@ -14,7 +14,7 @@
  * @see InputFormController
  */
 interface InputFormControllerScope extends ng.IScope {
-    fields: InputFieldDefinition[];
+    fields: Array<InputFieldDefinition>;
     title: string;
     submitError: string;
     isApplying: boolean;

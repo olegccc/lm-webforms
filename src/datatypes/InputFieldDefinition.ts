@@ -21,7 +21,6 @@ class InputFieldDefinition {
     helpText: string;
     required: boolean;
     repeat: boolean;
-    dynamicSource: DynamicInputFieldDefinition;
     defaultValue: string;
     inlineWithPrevious: boolean;
     reference: string;

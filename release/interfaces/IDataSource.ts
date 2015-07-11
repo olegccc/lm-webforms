@@ -15,4 +15,5 @@
 interface IDataSource {
     getSelectItems: (id: string, object: any) => any;
     searchItems: (searchText: string) => string[];
+    getDynamicFields: (id: string, object: any) => any;
 }

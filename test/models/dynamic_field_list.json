@@ -1,0 +1,17 @@
+{
+  "title": "Test dynamic_field_list",
+  "fields": {
+    "text_before": {
+      "title": "Before",
+      "type": "text"
+    },
+    "field1": {
+      "type": "dynamic_field_list",
+      "source": "items"
+    },
+    "text_after": {
+      "title": "After",
+      "type": "text"
+    }
+  }
+}

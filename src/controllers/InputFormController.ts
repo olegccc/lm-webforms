@@ -104,19 +104,21 @@ class InputFormController {
 
     private processDynamicFields(field: InputFieldDefinition) {
 
-        var dynamicFields: DynamicInputFieldDefinition[] = this.scope.object[field.property];
-
-        if (!_.isArray(dynamicFields)) {
+        var source: IDataSource = this.configuration.getDataSource(field.source);
+        if (source === null || _.isUndefined(source)) {
             return;
         }
 
-        _.each(dynamicFields, (dynamicField: DynamicInputFieldDefinition) => {
-            var dynamicDefinition: InputFieldDefinition = _.copy(dynamicField.field);
-            dynamicDefinition.property = field.property + "$" + dynamicDefinition.property;
-            dynamicDefinition.dynamicSource = dynamicField;
-            dynamicDefinition.reference = null;
-            this.addField(dynamicDefinition);
-            this.scope.object[dynamicDefinition.property] = dynamicField.value;
+        var dynamicFields = source.getDynamicFields(field.property, this.scope.object);
+
+        if (!_.isObject(dynamicFields)) {
+            return;
+        }
+
+        _.forOwn(dynamicFields, (field: InputFieldDefinition, property: string) => {
+            var copy = _.copy(field);
+            copy.property = property;
+            this.addField(copy);
         });
     }
 
@@ -299,12 +301,6 @@ class InputFormController {
             return;
         }
 
-        _.each(this.scope.fields, (field: InputFieldDefinition) => {
-            if (field.dynamicSource) {
-                field.dynamicSource.value = this.scope.object[field.property];
-            }
-        });
-
         if (this.scope.submitWithCaptcha) {
             this.scope.object["-RecaptchaChallenge-"] = Recaptcha.get_challenge();
             this.scope.object["-RecaptchaResponse-"] = Recaptcha.get_response();
@@ -318,23 +314,8 @@ class InputFormController {
             var changed = _.copy(this.scope.object);
 
             _.each(this.scope.fields, (field: InputFieldDefinition) => {
-                if (field.dynamicSource) {
-                    delete changed[field.property];
-                } else if (field.repeat) {
+                if (field.repeat) {
                     delete changed[field.property + Constants.FIELD_REPEAT_SUFFIX];
-                }
-            });
-
-            _.each(this.definition.fields, (field: InputFieldDefinition) => {
-                if (field.type == InputFieldTypes.DYNAMIC_FIELD_LIST) {
-                    var dynamicFields: DynamicInputFieldDefinition[] = changed[field.property];
-                    if (dynamicFields != null) {
-                        _.each(dynamicFields, (dynamicField: DynamicInputFieldDefinition) => {
-                            var property = dynamicField.field.property;
-                            dynamicField.field = <any>{};
-                            dynamicField.field.property = property;
-                        });
-                    }
                 }
             });
 

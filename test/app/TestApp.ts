@@ -15,6 +15,19 @@ var searchSet: string[] =
               Wisconsin, Wyoming".split(/, +/g);
 
 class TestSelectSource implements IDataSource {
+    public getDynamicFields(id:string, object:any): any {
+        return {
+            dynamic1: {
+                title: "Dynamic Field 1 (required)",
+                type: "text",
+                required: true
+            },
+            dynamic2: {
+                title: "Dynamic Field 2",
+                type: "email"
+            }
+        }
+    }
 
     public searchItems(searchText: string): string[] {
         return searchSet.filter((state: string) => {

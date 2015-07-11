@@ -103,9 +103,8 @@ class WebFormsService implements IWebFormsService {
     }
 
     private executeWithDefinitionLoaded<T>(object: T, definition: WebFormDefinition, isNew: boolean, defer: ng.IDeferred<T>, resolver: (object: T) => ng.IPromise<void>) {
-        var hasTinyMce = false;
+        var hasRichTextField = false;
         var hasCodeMirror = false;
-        var hasDynamicFields = false;
 
         _.forOwn(definition.fields, (field: InputFieldDefinition, property: string) => {
             field.property = property;
@@ -116,12 +115,9 @@ class WebFormsService implements IWebFormsService {
         if (this.configuration.loadModulesOnDemand) {
             _.each(definition.fields, (field: InputFieldDefinition) => {
                 switch (field.type) {
-                    case InputFieldTypes.DYNAMIC_FIELD_LIST:
-                        hasDynamicFields = true;
-                        break;
                     case InputFieldTypes.RICH_TEXT:
-                        if (!hasTinyMce) {
-                            hasTinyMce = true;
+                        if (!hasRichTextField) {
+                            hasRichTextField = true;
                             WebFormsService.fillRichTextModules(requires);
                         }
                         break;
@@ -133,11 +129,6 @@ class WebFormsService implements IWebFormsService {
                         break;
                 }
             });
-        }
-
-        if (hasDynamicFields && object == null) {
-            defer.reject("Cannot edit uninitialized object");
-            return;
         }
 
         if (requires.length > 0) {
