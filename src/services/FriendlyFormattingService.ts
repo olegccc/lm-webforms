@@ -12,7 +12,7 @@
 /**
  * @class FriendlyFormattingService
  */
-class FriendlyFormattingService {
+class FriendlyFormattingService implements IFriendlyFormattingService {
 
     smilesBase: string;
     smiles: { [code: string]: string } = {};

@@ -64,7 +64,7 @@ class CkEditorOptions {
  */
 class CkEditorDirectiveLink {
 
-    private smileIdToCode: {[id: string]: string} = {};
+    //private smileIdToCode: {[id: string]: string} = {};
     private smileCodeToId: {[code: string]: string} = {};
 
     private configuration: WebFormsConfiguration;
@@ -102,7 +102,7 @@ class CkEditorDirectiveLink {
         model.$render = () => this.render();
     }
 
-    private updateEditorState(newValue: any) {
+    private updateEditorState() {
         this.inputContainer.setHasValue(true);
         this.inputContainer.setInvalid(this.model.$invalid && this.model.$touched);
     }
@@ -115,7 +115,7 @@ class CkEditorDirectiveLink {
         }
 
         this.editor.setData(text);
-        this.updateEditorState(text);
+        this.updateEditorState();
     }
 
     private applyChanges() {
@@ -141,7 +141,7 @@ class CkEditorDirectiveLink {
 
         this.model.$setViewValue(text);
         this.model.$setTouched();
-        this.updateEditorState(text);
+        this.updateEditorState();
     }
 
     private initializeSmiles() {
@@ -155,7 +155,7 @@ class CkEditorDirectiveLink {
 
         _.each(this.configuration.smiles, (smile: Smile) => {
             this.smileCodeToId[smile.code] = smile.id;
-            this.smileIdToCode[smile.id] = smile.code;
+            //this.smileIdToCode[smile.id] = smile.code;
             this.options.smiley_descriptions.push(smile.code);
             this.options.smiley_images.push(smile.id);
         });
