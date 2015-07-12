@@ -2,9 +2,22 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title></title>
+    <title>Example: Minimum files</title>
+    <link href="/bower_components/angular-material/angular-material.css" rel="stylesheet" type="text/css" />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
 </head>
-<body>
-
+<body ng-controller="testController">
+<md-button class="md-raised md-primary" ng-click="onShowDialog()" id="button_main">Show Dialog</md-button>
+<div ng-show="userCreated">
+    <p>User Name: {{userName}}</p>
+    <p>User E-mail: {{userEmail}}</p>
+</div>
+<script type="text/javascript" src="paths.js"></script>
+<script type="text/javascript" src="/bower_components/requirejs/require.js"></script>
+<script type="text/javascript">
+    require(['./app', 'angular', 'angular_material', 'release/lm-webforms'], function(initializeApp) {
+        initializeApp();
+    });
+</script>
 </body>
 </html>

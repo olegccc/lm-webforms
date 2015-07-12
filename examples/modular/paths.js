@@ -1,6 +1,5 @@
-var require: any = {
+var require = {
     paths: {
-        'jquery': '/bower_components/jquery/dist/jquery',
         'lodash': '/bower_components/lodash/lodash',
         'angular': '/bower_components/angular/angular',
         'angular_animate': '/bower_components/angular-animate/angular-animate',
@@ -18,9 +17,6 @@ var require: any = {
     shim: {
         'angular':{
             exports: 'angular'
-        },
-        'jquery': {
-            exports: '$'
         },
         'lodash': {
             exports: '_'

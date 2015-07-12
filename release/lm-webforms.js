@@ -464,9 +464,10 @@ var WebFormsService = (function () {
             },
             controller: 'inputForm'
         }).then(function () {
-            console.log('ok');
+            //console.log('ok');
+            defer.resolve();
         }).catch(function () {
-            console.log('cancel');
+            //console.log('cancel');
             defer.reject("Cancelled");
         });
     };
@@ -1164,19 +1165,20 @@ var CodeMirrorDirectivePostLink = (function () {
                 requiredModules = configuration.codeMirrorModules;
             }
             require(requiredModules, function (codemirror) {
-                _this.prepareEditor(codemirror);
+                _this.prepareEditor(codemirror, newValue);
             });
         }
         else {
-            this.prepareEditor(window["CodeMirror"]);
+            this.prepareEditor(window["CodeMirror"], newValue);
         }
     }
-    CodeMirrorDirectivePostLink.prototype.prepareEditor = function (Codemirror) {
+    CodeMirrorDirectivePostLink.prototype.prepareEditor = function (Codemirror, newValue) {
         var _this = this;
         this.editor = this.createEditor(Codemirror);
         this.scope.$applyAsync(function () {
             _this.configOptionsWatcher(Codemirror);
             _this.configNgModelLink();
+            _this.updateEditorState(newValue);
             _this.editor.setOption('readOnly', _this.scope.fieldReadonly);
         });
     };

@@ -56,18 +56,19 @@ class CodeMirrorDirectivePostLink {
                 requiredModules = configuration.codeMirrorModules;
             }
             require(requiredModules, (codemirror) => {
-                this.prepareEditor(codemirror);
+                this.prepareEditor(codemirror, newValue);
             });
         } else {
-            this.prepareEditor(window["CodeMirror"]);
+            this.prepareEditor(window["CodeMirror"], newValue);
         }
     }
 
-    private prepareEditor(Codemirror: CodeMirror.CodeMirror) {
+    private prepareEditor(Codemirror: CodeMirror.CodeMirror, newValue: any) {
         this.editor = this.createEditor(Codemirror);
         this.scope.$applyAsync(() => {
             this.configOptionsWatcher(Codemirror);
             this.configNgModelLink();
+            this.updateEditorState(newValue);
             this.editor.setOption('readOnly', this.scope.fieldReadonly);
         });
     }

@@ -1,0 +1,22 @@
+{
+  "title": "New User",
+  "fields": {
+    "name": {
+      "title": "User Name",
+      "type": "text",
+      "required": true
+    },
+    "email": {
+      "title": "User E-mail",
+      "type": "email"
+    },
+    "avatar": {
+      "title": "Avatar",
+      "type": "image"
+    },
+    "description": {
+      "title": "Description",
+      "type": "rich_text"
+    }
+  }
+}
