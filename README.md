@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/olegccc/lm-webforms.svg?branch=master)](https://travis-ci.org/olegccc/lm-webforms)
+
 # AngularJS web forms and dialogs with material design based on [Angular Material](https://material.angularjs.org)
   
 If you don't want to worry about any HTML markup but want to edit your existing model then this framework is for you.
