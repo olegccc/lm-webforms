@@ -125,7 +125,11 @@ module.exports = function (grunt) {
         });
     });
 
-    grunt.registerTask('verify', ['prepare-middleware', 'connect:start', 'protractor']);
+    grunt.registerTask('verify', function(browser) {
+        browser = browser || "firefox";
+        grunt.config('protractor.options.args.browser', browser);
+        grunt.task.run(['prepare-middleware', 'connect:start', 'protractor']);
+    });
 
     grunt.registerTask('ts-build', ['clean:build', 'wrap-jade', 'ts:build', 'clean:post-build']);
 

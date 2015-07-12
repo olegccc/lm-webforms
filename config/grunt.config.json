@@ -81,7 +81,13 @@
   },
   "protractor": {
     "options": {
-      "configFile": "./config/protractor.config.js"
+      "configFile": "./config/protractor.config.js",
+      "args": {
+        "specs": ["build/test/specs/**/*Spec.js"],
+        "seleniumAddress": "http://localhost:4444/wd/hub",
+        "framework": "jasmine2",
+        "browser": "firefox"
+      }
     },
     "default": {
     }

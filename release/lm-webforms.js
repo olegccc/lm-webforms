@@ -256,6 +256,11 @@ var WebFormsConfiguration = (function () {
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
+/*
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
 /**
  * @file FriendlyFormattingService.ts
  * @author Oleg Gordeev
@@ -1051,7 +1056,7 @@ var CkEditorOptions = (function () {
 var CkEditorDirectiveLink = (function () {
     function CkEditorDirectiveLink(scope, element, model, inputContainer, configuration, friendlyFormatting, ckeditor) {
         var _this = this;
-        this.smileIdToCode = {};
+        //private smileIdToCode: {[id: string]: string} = {};
         this.smileCodeToId = {};
         this.configuration = configuration;
         this.options = new CkEditorOptions();
@@ -1068,7 +1073,7 @@ var CkEditorDirectiveLink = (function () {
         this.editor.on('blur', function () { return _this.inputContainer.setFocused(false); });
         model.$render = function () { return _this.render(); };
     }
-    CkEditorDirectiveLink.prototype.updateEditorState = function (newValue) {
+    CkEditorDirectiveLink.prototype.updateEditorState = function () {
         this.inputContainer.setHasValue(true);
         this.inputContainer.setInvalid(this.model.$invalid && this.model.$touched);
     };
@@ -1078,7 +1083,7 @@ var CkEditorDirectiveLink = (function () {
             text = this.friendlyFormatting.smilesToImg(text);
         }
         this.editor.setData(text);
-        this.updateEditorState(text);
+        this.updateEditorState();
     };
     CkEditorDirectiveLink.prototype.applyChanges = function () {
         var _this = this;
@@ -1100,7 +1105,7 @@ var CkEditorDirectiveLink = (function () {
         }
         this.model.$setViewValue(text);
         this.model.$setTouched();
-        this.updateEditorState(text);
+        this.updateEditorState();
     };
     CkEditorDirectiveLink.prototype.initializeSmiles = function () {
         var _this = this;
@@ -1112,7 +1117,7 @@ var CkEditorDirectiveLink = (function () {
         this.options.smiley_images = [];
         _.each(this.configuration.smiles, function (smile) {
             _this.smileCodeToId[smile.code] = smile.id;
-            _this.smileIdToCode[smile.id] = smile.code;
+            //this.smileIdToCode[smile.id] = smile.code;
             _this.options.smiley_descriptions.push(smile.code);
             _this.options.smiley_images.push(smile.id);
         });
