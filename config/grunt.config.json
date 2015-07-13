@@ -86,7 +86,8 @@
         "specs": ["build/test/specs/**/*Spec.js"],
         "seleniumAddress": "http://localhost:4444/wd/hub",
         "framework": "jasmine2",
-        "browser": "firefox"
+        "browser": "firefox",
+        "verbose": true
       }
     },
     "default": {

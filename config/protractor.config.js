@@ -1,2 +1,3 @@
 exports.config = {
+    verbose: true
 };

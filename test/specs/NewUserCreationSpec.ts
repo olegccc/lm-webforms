@@ -30,12 +30,13 @@ describe('When we enter new user fields and submit the dialog', () => {
             passwordRepeat.sendKeys(userPassword);
             var email = element(by.css('md-content [name=email]'));
             email.sendKeys(userEmail);
-            var birthday = element(by.css('md-content [name=birthday]'));
-            birthday.sendKeys(userBirthday);
             var okButton = element(by.css('.md-actions button.md-primary'));
             okButton.click();
 
-            element(by.id('returned-object')).getText().then((text: string) => {
+            var returnedObject = element(by.id('returned-object'));
+            browser.wait(protractor.until.elementTextMatches(returnedObject, /.+/), 50000);
+
+            returnedObject.getText().then((text: string) => {
                 var newUser = JSON.parse(text);
                 expect(newUser.name).toBe(userName);
                 expect(newUser.email).toBe(userEmail);
