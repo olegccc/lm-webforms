@@ -18,7 +18,15 @@ describe('When we enter new user fields and submit the dialog', () => {
         var userPassword = 'pwd';
         var userEmail:string = 'user@email.com';
 
+        browser.wait(function() {
+            var el = element(by.css('md-content [name=name]'));
+            return el.isDisplayed().then(function(displayed) {
+                return displayed;
+            });
+        }, 10000);
+
         var name = element(by.css('md-content [name=name]'));
+
         browser.wait(protractor.until.elementIsVisible(name), 10000);
         name.sendKeys(userName);
         var password = element(by.css('md-content [name=password]'));
