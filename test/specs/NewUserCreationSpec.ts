@@ -18,6 +18,10 @@ describe('When we enter new user fields and submit the dialog', () => {
         var userPassword = 'pwd';
         var userEmail:string = 'user@email.com';
 
+        browser.wait(() => {
+            return browser.isElementPresent(by.css('md-content [name=name]'));
+        }, 10000);
+
         browser.wait(function() {
             var el = element(by.css('md-content [name=name]'));
             return el.isDisplayed().then(function(displayed) {
