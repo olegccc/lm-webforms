@@ -10,4 +10,4 @@ before_script:
 - nohup bash -c "./node_modules/grunt-protractor-runner/node_modules/protractor/bin/webdriver-manager start 2>&1 &"
 script:
 - grunt build
-- grunt verify:phantomjs
+- grunt verify:firefox
