@@ -96,29 +96,5 @@
   "clean": {
     "build": ["build"],
     "post-build": ["src/**/*.js", "!src/bootstrap/*.js"]
-  },
-  "umd": {
-    "all": {
-      "options": {
-        "src": "build/lm-webforms.js",
-        "dest": "release/lm-webforms.js",
-        "deps": {
-          "default": [
-            "angular",
-            "angular_animate",
-            "angular_translate",
-            "angular_messages",
-            "angular_material",
-            "angular_aria",
-            "angular_touch",
-            "autolinker",
-            "recaptcha"
-          ],
-          "global": [
-            "angular"
-          ]
-        }
-      }
-    }
   }
 }

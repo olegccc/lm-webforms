@@ -33,6 +33,7 @@ class WebFormsConfiguration implements IWebFormsConfiguration {
         this.dataSources = {};
         this.loadModulesOnDemand = false;
         this.notFoundMessage = "Not found";
+        this.recaptchaKey = "";
     }
 
     public addDataSource(key: string, source: IDataSource) {
@@ -60,4 +61,5 @@ class WebFormsConfiguration implements IWebFormsConfiguration {
     private dataSources: { [key: string]: IDataSource };
     public loadModulesOnDemand: boolean;
     public notFoundMessage: string;
+    public recaptchaKey: string;
 }

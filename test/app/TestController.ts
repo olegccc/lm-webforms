@@ -1,6 +1,7 @@
 ///<reference path="../../release/interfaces/IWebFormsService.ts" />
 
 import NewUser = require('../models/NewUser');
+import NewRecaptcha = require('../models/NewRecaptcha');
 
 interface TestControllerScope extends ng.IScope {
     returnedObject: string;
@@ -8,16 +9,29 @@ interface TestControllerScope extends ng.IScope {
     onShowDialog: () => void;
     testedTypes: Array<string>;
     testType: (type: string) => void;
+    testRecaptcha: () => void;
 }
 
 class TestController {
     constructor(scope: TestControllerScope, webForms: IWebFormsService) {
+
         scope.returnedObject = '';
+
         scope.onShowDialog = () => {
             scope.returnedObject = '';
             scope.error = '';
             webForms.newObject<NewUser>('test/models/NewUser', null, null).then((user: NewUser) => {
                 scope.returnedObject = JSON.stringify(user);
+            }, (message: string) => {
+                scope.error = message;
+            });
+        };
+
+        scope.testRecaptcha = () => {
+            scope.returnedObject = '';
+            scope.error = '';
+            webForms.newObject<NewRecaptcha>('test/models/recaptcha', null, null).then((data: NewRecaptcha) => {
+                scope.returnedObject = JSON.stringify(data);
             }, (message: string) => {
                 scope.error = message;
             });

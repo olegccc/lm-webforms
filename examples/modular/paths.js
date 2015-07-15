@@ -2,12 +2,12 @@ var require = {
     paths: {
         'lodash': '/bower_components/lodash/lodash',
         'angular': '/bower_components/angular/angular',
-        'angular_animate': '/bower_components/angular-animate/angular-animate',
-        'angular_aria': '/bower_components/angular-aria/angular-aria',
-        'angular_material': '/bower_components/angular-material/angular-material',
-        'angular_messages': '/bower_components/angular-messages/angular-messages',
-        'angular_touch': '/bower_components/angular-touch/angular-touch',
-        'angular_translate': 'bower_components/angular-translate/angular-translate',
+        'angular.animate': '/bower_components/angular-animate/angular-animate',
+        'angular.aria': '/bower_components/angular-aria/angular-aria',
+        'angular.material': '/bower_components/angular-material/angular-material',
+        'angular.messages': '/bower_components/angular-messages/angular-messages',
+        'angular.touch': '/bower_components/angular-touch/angular-touch',
+        'angular.translate': 'bower_components/angular-translate/angular-translate',
         'autolinker': '/bower_components/Autolinker.js/dist/Autolinker',
         'ckeditor': '/bower_components/ckeditor/ckeditor',
         'domready': '/bower_components/domready/ready',
@@ -15,32 +15,35 @@ var require = {
         'codemirror': '/bower_components/codemirror'
     },
     shim: {
-        'angular':{
+        'angular': {
             exports: 'angular'
         },
         'lodash': {
             exports: '_'
         },
-        'angular_animate': {
+        'angular.animate': {
             deps: ['angular']
         },
-        'angular_translate': {
+        'angular.translate': {
             deps: ['angular']
         },
-        'angular_messages': {
+        'angular.messages': {
             deps: ['angular']
         },
-        'angular_material': {
-            deps: ['angular', 'angular_animate', 'angular_aria', 'angular_messages']
+        'angular.material': {
+            deps: ['angular', 'angular.animate', 'angular.aria', 'angular.messages']
         },
-        'angular_aria': {
+        'angular.aria': {
             deps: ['angular']
         },
-        'angular_touch': {
+        'angular.touch': {
             deps: ['angular']
         },
         'ckeditor': {
             exports: 'CKEDITOR'
+        },
+        'recaptcha': {
+            exports: 'Recaptcha'
         }
     }
 };

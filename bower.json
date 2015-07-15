@@ -32,7 +32,6 @@
     "angularjs": "~1.4.1",
     "codemirror": "~5.4.0",
     "ckeditor": "~4.4.7",
-    "lodash": "~3.9.3",
     "jquery": "~2.1.4",
     "Autolinker.js": "~0.18.1",
     "domready": "~1.0.8",

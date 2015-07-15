@@ -1,0 +1,10 @@
+{
+  "title": "Test Recaptcha",
+  "useCaptcha": true,
+  "fields": {
+    "text": {
+      "title": "Text",
+      "type": "text"
+    }
+  }
+}

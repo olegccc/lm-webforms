@@ -63,6 +63,7 @@ function initializeApp() {
             'codemirror/addon/mode/multiplex',
             'codemirror/addon/hint/xml-hint'
         ];
+        configuration.recaptchaKey = "6Ldk7tsSAAAAAFklS-UCufpP4rKEADPrrjUYTI7z";
     }]);
 
     appModule.controller('test', ['$scope', 'webForms', TestController]);

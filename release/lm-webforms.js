@@ -1,19 +1,9 @@
-(function (root, factory) {
-  if (typeof define === 'function' && define.amd) {
-    // AMD. Register as an anonymous module unless amdModuleId is set
-    define(["angular","angular_animate","angular_translate","angular_messages","angular_material","angular_aria","angular_touch","autolinker","recaptcha"], function (a0,b1,c2,d3,e4,f5,g6,h7,i8) {
-      return (factory(a0,b1,c2,d3,e4,f5,g6,h7,i8));
-    });
-  } else if (typeof exports === 'object') {
-    // Node. Does not work with strict CommonJS, but
-    // only CommonJS-like environments that support module.exports,
-    // like Node.
-    module.exports = factory(require("angular"),require("angular_animate"),require("angular_translate"),require("angular_messages"),require("angular_material"),require("angular_aria"),require("angular_touch"),require("autolinker"),require("recaptcha"));
-  } else {
-    factory(angular);
-  }
-}(this, function (angular, angular_animate, angular_translate, angular_messages, angular_material, angular_aria, angular_touch, autolinker, recaptcha) {
+(function() {
 
+    function webFormsFactory(
+    angular,
+    Autolinker,
+    Recaptcha) {
 /*
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -51,8 +41,8 @@ var templates = {
     "views/inputFields/text.jade": "<label>{{field.title | translate}}</label><input type=\"text\" name=\"{{field.property}}\" ng-model=\"object[field.property]\" ng-readonly=\"readOnly(field) || fieldDisabled\" ng-disabled=\"fieldDisabled\" ng-required=\"field.required\" ng-minlength=\"field.minLength\" ng-maxlength=\"field.maxLength\" validate-equals=\"{{field.reference}}\" reference=\"{{field.reference === null || object[field.reference]}}\"/>",
     "views/inputFields/typeahead.jade": "<md-autocomplete md-input-name=\"{{field.property}}\" md-no-cache=\"true\" md-floating-label=\"{{field.title | translate}}\" md-selected-item=\"object[field.property]\" md-search-text=\"searchText\" md-items=\"item in getTypeahead(searchText)\" md-item-text=\"object[field.property]\" md-search-text-change=\"onSearchTextChange(searchText)\" md-selected-item-change=\"onSelectedItemChange()\" ng-readonly=\"readOnly() || fieldDisabled\" ng-disabled=\"fieldDisabled\" ng-required=\"field.required\" ng-minlength=\"field.minLength\" ng-maxlength=\"field.maxLength\"><md-item-template><span md-highlight-text=\"searchText\">{{item}}</span></md-item-template><md-not-found>{{configuration.notFoundMessage}}</md-not-found><input-field-error></input-field-error></md-autocomplete>",
     "views/multiFileRead.jade": "<style>.file-choose-list, .file-choose-list li {\n    margin: 0;\n    padding: 0;\n    list-style-type: none;\n}\n\n.file-choose-list li {\n    display: inline-block;\n}\n\n.file-choose-list li:not(:first-child) {\n    margin-left: 0.5em;\n}\n\n.file-choose-list li:first-child {\n    margin-top: 0.5em;\n}\n\n.file-choose-list li:last-child {\n    margin-bottom: 1em;\n}\n\n.file-choose-list li md-icon {\n    margin-left: 5px;\n    cursor: pointer;\n}\n\n</style><ul class=\"file-choose-list\"><li ng-repeat=\"file in files\"><md-icon>attach_file</md-icon><span>{{file.name}}</span><md-icon ng-click=\"removeFile(file)\" class=\"file-remove\">clear</md-icon></li><li><md-button ng-click=\"chooseFile()\"><md-icon ng-if=\"files.length &gt; 0\">add_circle</md-icon><md-icon ng-if=\"files.length === 0\">attach_file</md-icon></md-button></li></ul><input type=\"file\" style=\"display: none\" multiple=\"multiple\"/>",
-    "views/webDialog.jade": "<div ng-form=\"form\"><div ng-if=\"!changesApplied\"><md-content layout-padding=\"layout-padding\" layout=\"column\"><style>md-input-container.inputfield-file label,\nmd-input-container.inputfield-image label,\nmd-input-container.inputfield-file_list label {\n    flex: none;\n    -webkit-flex: none;\n    transform: none !important;\n}\n</style><div ng-repeat=\"field in fields | orderBy: 'position'\" class=\"{{'field-' + field.type + ' ' + 'field-list'}}\"><input-field field=\"field\" object=\"object\" form=\"form\" ng-if=\"fieldVisible(field) &amp;&amp; !field.isGroup\" field-disabled=\"isApplying\"></input-field><div ng-if=\"field.isGroup\" layout=\"row\" layout-sm=\"column\"><input-field ng-repeat=\"child in field.children | orderBy: 'position'\" field=\"child\" object=\"object\" form=\"form\" ng-if=\"fieldVisible(child)\" flex=\"\" field-disabled=\"isApplying\"></input-field></div></div><div ng-if=\"submitWithCaptcha\" captcha=\"recaptchaPublicKey\"></div><div ng-if=\"submitError.length &gt; 0\" class=\"bg-danger dialog-notification\"><span class=\"glyphicon glyphicon-exclamation-sign\"></span><span ng-bind=\"submitError\"></span></div><div ng-if=\"submitSuccess.length &gt; 0\" class=\"bg-success dialog-notification\"><span class=\"glyphicon glyphicon-ok-circle\"></span><span ng-bind=\"submitSuccess\"></span></div></md-content><md-content layout-padding=\"layout-padding\"><md-button ng-click=\"submit(form)\" ng-disabled=\"okDisabled(form)\" class=\"md-raised md-primary\"><span ng-bind=\"applyCaption | translate\"></span><md-progress-circular ng-show=\"isApplying\" md-mode=\"indeterminate\" md-diameter=\"10\"></md-progress-circular></md-button></md-content></div><div ng-if=\"changesApplied\"><div ng-bind=\"submitSuccess\" class=\"bg-success dialog-notification\"></div><md-content layout-padding=\"layout-padding\"><md-button ng-click=\"openForm(form)\" ng-bind=\"'Open Form' | translate\" aria-label=\"Open\" class=\"md-raised\"></md-button></md-content></div></div>",
-    "views/webForm.jade": "<md-dialog ng-form=\"form\" aria-label=\"{{title}}\" flex=\"80\"><md-toolbar><div class=\"md-toolbar-tools\"><h2>{{title}}</h2><span flex=\"flex\"></span><md-button ng-click=\"cancel()\" ng-disabled=\"isApplying\" class=\"md-icon-button\"><md-icon>clear</md-icon></md-button></div></md-toolbar><md-content layout-padding=\"layout-padding\" layout=\"column\"><style>md-input-container.inputfield-file label,\nmd-input-container.inputfield-image label,\nmd-input-container.inputfield-file_list label {\n    flex: none;\n    -webkit-flex: none;\n    transform: none !important;\n}\n</style><div ng-repeat=\"field in fields | orderBy: 'position'\" class=\"{{'field-' + field.type + ' ' + 'field-list'}}\"><input-field field=\"field\" object=\"object\" form=\"form\" ng-if=\"fieldVisible(field) &amp;&amp; !field.isGroup\" field-disabled=\"isApplying\"></input-field><div ng-if=\"field.isGroup\" layout=\"row\" layout-sm=\"column\"><input-field ng-repeat=\"child in field.children | orderBy: 'position'\" field=\"child\" object=\"object\" form=\"form\" ng-if=\"fieldVisible(child)\" flex=\"\" field-disabled=\"isApplying\"></input-field></div></div><div ng-if=\"submitWithCaptcha\" captcha=\"recaptchaPublicKey\"></div><div ng-if=\"submitError.length &gt; 0\" class=\"bg-danger dialog-notification\"><span class=\"glyphicon glyphicon-exclamation-sign\"></span><span ng-bind=\"submitError\"></span></div><div ng-if=\"submitSuccess.length &gt; 0\" class=\"bg-success dialog-notification\"><span class=\"glyphicon glyphicon-ok-circle\"></span><span ng-bind=\"submitSuccess\"></span></div></md-content><div class=\"md-actions\"><md-progress-circular ng-show=\"isApplying\" md-mode=\"indeterminate\" md-diameter=\"20\" class=\"md-accent\"></md-progress-circular><md-button ng-click=\"submit(form)\" aria-label=\"OK\" ng-disabled=\"isApplying\" class=\"md-raised md-primary\"><span>{{ 'OK' | translate }}</span></md-button><md-button ng-click=\"cancel()\" ng-disabled=\"isApplying\" class=\"md-raised\">{{ 'Cancel' | translate }}</md-button></div></md-dialog>",
+    "views/webDialog.jade": "<div ng-form=\"form\"><div ng-if=\"!changesApplied\"><md-content layout-padding=\"layout-padding\" layout=\"column\"><style>md-input-container.inputfield-file label,\nmd-input-container.inputfield-image label,\nmd-input-container.inputfield-file_list label {\n    flex: none;\n    -webkit-flex: none;\n    transform: none !important;\n}\n</style><div ng-repeat=\"field in fields | orderBy: 'position'\" class=\"{{'field-' + field.type + ' ' + 'field-list'}}\"><input-field field=\"field\" object=\"object\" form=\"form\" ng-if=\"fieldVisible(field) &amp;&amp; !field.isGroup\" field-disabled=\"isApplying\"></input-field><div ng-if=\"field.isGroup\" layout=\"row\" layout-sm=\"column\"><input-field ng-repeat=\"child in field.children | orderBy: 'position'\" field=\"child\" object=\"object\" form=\"form\" ng-if=\"fieldVisible(child)\" flex=\"\" field-disabled=\"isApplying\"></input-field></div></div><div ng-if=\"submitWithCaptcha\" captcha=\"captcha\"></div><div ng-if=\"submitError.length &gt; 0\" class=\"bg-danger dialog-notification\"><span class=\"glyphicon glyphicon-exclamation-sign\"></span><span ng-bind=\"submitError\"></span></div><div ng-if=\"submitSuccess.length &gt; 0\" class=\"bg-success dialog-notification\"><span class=\"glyphicon glyphicon-ok-circle\"></span><span ng-bind=\"submitSuccess\"></span></div></md-content><md-content layout-padding=\"layout-padding\"><md-button ng-click=\"submit(form)\" ng-disabled=\"okDisabled(form)\" class=\"md-raised md-primary\"><span ng-bind=\"applyCaption | translate\"></span><md-progress-circular ng-show=\"isApplying\" md-mode=\"indeterminate\" md-diameter=\"10\"></md-progress-circular></md-button></md-content></div><div ng-if=\"changesApplied\"><div ng-bind=\"submitSuccess\" class=\"bg-success dialog-notification\"></div><md-content layout-padding=\"layout-padding\"><md-button ng-click=\"openForm(form)\" ng-bind=\"'Open Form' | translate\" aria-label=\"Open\" class=\"md-raised\"></md-button></md-content></div></div>",
+    "views/webForm.jade": "<md-dialog ng-form=\"form\" aria-label=\"{{title}}\" flex=\"80\"><md-toolbar><div class=\"md-toolbar-tools\"><h2>{{title}}</h2><span flex=\"flex\"></span><md-button ng-click=\"cancel()\" ng-disabled=\"isApplying\" class=\"md-icon-button\"><md-icon>clear</md-icon></md-button></div></md-toolbar><md-content layout-padding=\"layout-padding\" layout=\"column\"><style>md-input-container.inputfield-file label,\nmd-input-container.inputfield-image label,\nmd-input-container.inputfield-file_list label {\n    flex: none;\n    -webkit-flex: none;\n    transform: none !important;\n}\n</style><div ng-repeat=\"field in fields | orderBy: 'position'\" class=\"{{'field-' + field.type + ' ' + 'field-list'}}\"><input-field field=\"field\" object=\"object\" form=\"form\" ng-if=\"fieldVisible(field) &amp;&amp; !field.isGroup\" field-disabled=\"isApplying\"></input-field><div ng-if=\"field.isGroup\" layout=\"row\" layout-sm=\"column\"><input-field ng-repeat=\"child in field.children | orderBy: 'position'\" field=\"child\" object=\"object\" form=\"form\" ng-if=\"fieldVisible(child)\" flex=\"\" field-disabled=\"isApplying\"></input-field></div></div><div ng-if=\"submitWithCaptcha\" captcha=\"captcha\"></div><div ng-if=\"submitError.length &gt; 0\" class=\"bg-danger dialog-notification\"><span class=\"glyphicon glyphicon-exclamation-sign\"></span><span ng-bind=\"submitError\"></span></div><div ng-if=\"submitSuccess.length &gt; 0\" class=\"bg-success dialog-notification\"><span class=\"glyphicon glyphicon-ok-circle\"></span><span ng-bind=\"submitSuccess\"></span></div></md-content><div class=\"md-actions\"><md-progress-circular ng-show=\"isApplying\" md-mode=\"indeterminate\" md-diameter=\"20\" class=\"md-accent\"></md-progress-circular><md-button ng-click=\"submit(form)\" aria-label=\"OK\" ng-disabled=\"isApplying\" class=\"md-raised md-primary\"><span>{{ 'OK' | translate }}</span></md-button><md-button ng-click=\"cancel()\" ng-disabled=\"isApplying\" class=\"md-raised\">{{ 'Cancel' | translate }}</md-button></div></md-dialog>",
     "views/webFormMessage.jade": "<md-dialog aria-label=\"{{title}}\" class=\"input-form\"><md-dialog-content><md-subheader>{{title}}</md-subheader></md-dialog-content><md-content><p>{{message}}</p></md-content><div class=\"md-actions\"><md-button ng-click=\"close()\" class=\"md-primary\">{{ 'Main.ButtonOk' | translate }}</md-button></div></md-dialog>",
     "views/webFormQuestion.jade": "<div class=\"modal-header\"><h3 class=\"modal-title\">{{title}}</h3></div><div class=\"modal-body\"><p>{{message}}</p></div><div class=\"modal-footer\"><div ng-if=\"submitError.length &gt; 0\" class=\"bg-danger dialog-notification\"><span class=\"glyphicon glyphicon-exclamation-sign\"></span><span ng-bind=\"submitError\"></span></div><md-button ng-click=\"submit()\" class=\"md-raised\"><span>{{ 'Main.ButtonYes' | translate }}</span><md-progress-circular ng-show=\"isApplying\" md-mode=\"indeterminate\"></md-progress-circular></md-button><md-button ng-click=\"cancel()\" class=\"md-raised md-warn\">{{ 'Main.ButtonNo' | translate }}</md-button></div>"
 };
@@ -227,6 +217,7 @@ var WebFormsConfiguration = (function () {
         this.dataSources = {};
         this.loadModulesOnDemand = false;
         this.notFoundMessage = "Not found";
+        this.recaptchaKey = "";
     }
     WebFormsConfiguration.prototype.addDataSource = function (key, source) {
         this.dataSources[key] = source;
@@ -1037,6 +1028,23 @@ webFormsModule.controller('inputFormQuestion', [
     'resolver',
     InputFormQuestionController
 ]);
+var CaptchaDirectiveLink = (function () {
+    function CaptchaDirectiveLink(scope, element, configuration) {
+        Recaptcha.create(configuration.recaptchaKey, element[0], {
+            theme: "clean"
+        });
+    }
+    return CaptchaDirectiveLink;
+})();
+webFormsModule.directive("captcha", ['webFormsConfiguration', function (configuration) {
+    return {
+        restrict: 'A',
+        scope: {},
+        link: function (scope, element) {
+            new CaptchaDirectiveLink(scope, element, configuration);
+        }
+    };
+}]);
 /*
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -1908,6 +1916,40 @@ var _ = (function () {
     };
     return _;
 })();
+    }
 
+    if (typeof define === 'function' && define.amd) {
+        // AMD
+        define([
+            "angular",
+            "angular.animate",
+            "angular.translate",
+            "angular.messages",
+            "angular.material",
+            "angular.aria",
+            "angular.touch",
+            "autolinker",
+            "recaptcha"],
+            function (ng,ng_animate,ng_translate,ng_messages,ng_material,ng_aria,ng_touch,autolinker,recaptcha) {
+                webFormsFactory(ng, autolinker, recaptcha);
+            }
+        );
+    } else if (typeof exports === 'object') {
+        // CommonJS
+        var ng = require("angular");
+        require("angular.animate");
+        require("angular.translate");
+        require("angular.messages");
+        require("angular.material");
+        require("angular.aria");
+        require("angular.touch");
+        var autolinker = require("autolinker");
+        var recaptcha = require("recaptcha");
 
-}));
+        module.exports = webFormsFactory(ng, autolinker, recaptcha);
+    } else {
+        // Regular
+        webFormsFactory(angular, Autolinker, Recaptcha);
+    }
+
+})();

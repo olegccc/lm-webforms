@@ -14,7 +14,7 @@
         div(ng-if="field.isGroup" layout="row" layout-sm="column")
             input-field(ng-repeat="child in field.children | orderBy: 'position'" field="child" object="object" form="form" ng-if="fieldVisible(child)" flex="" field-disabled="isApplying")
 
-    div(ng-if="submitWithCaptcha" captcha="recaptchaPublicKey")
+    div(ng-if="submitWithCaptcha" captcha)
 
     .bg-danger.dialog-notification(ng-if="submitError.length > 0")
         span.glyphicon.glyphicon-exclamation-sign

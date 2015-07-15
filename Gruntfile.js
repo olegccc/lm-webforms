@@ -12,7 +12,6 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-protractor-runner');
     grunt.loadNpmTasks('grunt-contrib-connect');
     grunt.loadNpmTasks('grunt-contrib-requirejs');
-    grunt.loadNpmTasks('grunt-umd');
 
     grunt.initConfig(grunt.file.readJSON('./config/grunt.config.json'));
 
@@ -131,11 +130,18 @@ module.exports = function (grunt) {
         grunt.task.run(['prepare-middleware', 'connect:start', 'protractor']);
     });
 
+    grunt.registerTask('wrap-module', function() {
+        var module = grunt.file.read('build/lm-webforms.js');
+        var header = grunt.file.read('config/template/header.js');
+        var footer = grunt.file.read('config/template/footer.js');
+        grunt.file.write('release/lm-webforms.js', header + module + footer);
+    });
+
     grunt.registerTask('ts-build', ['clean:build', 'wrap-jade', 'ts:build', 'clean:post-build']);
 
     grunt.registerTask('build', [
         'ts-build',
-        'umd',
+        'wrap-module',
         'uglify',
         'copy:interfaces',
         'ts:tests'

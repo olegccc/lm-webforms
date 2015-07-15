@@ -34,4 +34,5 @@ interface IWebFormsConfiguration {
     urlErrorMessage: string;
     loadModulesOnDemand: boolean;
     notFoundMessage: string;
+    recaptchaKey: string;
 }

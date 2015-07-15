@@ -12,10 +12,12 @@ html(lang='en')
             div(ng-repeat="type in testedTypes")
                 md-button.md-raised.md-primary(ng-click="testType(type)" ng-attr-id="{{ 'button_' + type }}") Test {{type}}
 
+            md-button.md-raised.md-primary(ng-click="testRecaptcha()") Test Recaptcha
+
             script(type="text/javascript", src="/build/test/app/paths.js")
             script(type="text/javascript", src="/bower_components/requirejs/require.js")
 
             script(type="text/javascript").
-                require(['build/test/app/TestApp', 'angular', 'angular_material', 'release/lm-webforms'], function(initializeApp) {
+                require(['build/test/app/TestApp', 'angular', 'angular.material', 'release/lm-webforms'], function(initializeApp) {
                     initializeApp();
                 });

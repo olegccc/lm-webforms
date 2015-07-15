@@ -32,7 +32,6 @@
     "grunt-protractor-runner": "^2.0.0",
     "grunt-ts": "^4.1.2",
     "grunt-tsd": "^0.1.0",
-    "grunt-umd": "^2.3.3",
     "jade": "^1.11.0",
     "lodash": "^3.9.3",
     "open": "0.0.5"
