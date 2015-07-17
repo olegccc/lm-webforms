@@ -1,4 +1,5 @@
 [![Build Status](https://travis-ci.org/olegccc/lm-webforms.svg?branch=master)](https://travis-ci.org/olegccc/lm-webforms)
+[![npm version](https://badge.fury.io/js/lm-webforms.svg)](http://badge.fury.io/js/lm-webforms)
 
 # AngularJS web forms and dialogs with material design based on [Angular Material](https://material.angularjs.org)
   
