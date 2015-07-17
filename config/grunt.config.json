@@ -96,5 +96,31 @@
   "clean": {
     "build": ["build"],
     "post-build": ["src/**/*.js", "!src/bootstrap/*.js"]
+  },
+  "wrap-jade": {
+    "default": {
+      "files": [
+        { "src": ["**/*.jade", "!**/_*.jade"], "cwd": "src", "expand": true}
+      ],
+      "output": "src/templates/templates.ts"
+    }
+  },
+  "wrap-module": {
+    "default": {
+      "files": [
+        { "src": "build/lm-webforms.js", "dest": "release/lm-webforms.js" }
+      ],
+      "modules": {
+        "angular": "angular",
+        "angular.animate": "",
+        "angular.translate": "",
+        "angular.messages": "",
+        "angular.material": "",
+        "angular.aria": "",
+        "angular.touch": "",
+        "autolinker": "Autolinker",
+        "recaptcha": "Recaptcha"
+      }
+    }
   }
 }

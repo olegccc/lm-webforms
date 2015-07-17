@@ -20,7 +20,7 @@ class TestController {
         scope.onShowDialog = () => {
             scope.returnedObject = '';
             scope.error = '';
-            webForms.newObject<NewUser>('test/models/NewUser', null, null).then((user: NewUser) => {
+            webForms.newObject<NewUser>('/test/models/NewUser', null, null).then((user: NewUser) => {
                 scope.returnedObject = JSON.stringify(user);
             }, (message: string) => {
                 scope.error = message;
@@ -30,7 +30,7 @@ class TestController {
         scope.testRecaptcha = () => {
             scope.returnedObject = '';
             scope.error = '';
-            webForms.newObject<NewRecaptcha>('test/models/recaptcha', null, null).then((data: NewRecaptcha) => {
+            webForms.newObject<NewRecaptcha>('/test/models/recaptcha', null, null).then((data: NewRecaptcha) => {
                 scope.returnedObject = JSON.stringify(data);
             }, (message: string) => {
                 scope.error = message;
@@ -52,7 +52,7 @@ class TestController {
                 }
             }
 
-            webForms.newObject<NewUser>('test/generated_model/' + type, obj, null).then((user: NewUser) => {
+            webForms.newObject<NewUser>('/test/generated_model/' + type, obj, null).then((user: NewUser) => {
                 scope.returnedObject = JSON.stringify(user);
             }, (message: string) => {
                 scope.error = message;

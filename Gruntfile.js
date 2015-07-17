@@ -2,139 +2,24 @@ module.exports = function (grunt) {
 
     var path = require('path');
     var fs = require('fs');
-    var _ = require('lodash');
 
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-ts');
-    grunt.loadNpmTasks('grunt-contrib-jade');
     grunt.loadNpmTasks('grunt-contrib-copy');
     grunt.loadNpmTasks('grunt-contrib-clean');
     grunt.loadNpmTasks('grunt-protractor-runner');
-    grunt.loadNpmTasks('grunt-contrib-connect');
-    grunt.loadNpmTasks('grunt-contrib-requirejs');
 
-    grunt.initConfig(grunt.file.readJSON('./config/grunt.config.json'));
+    grunt.config.init(grunt.file.readJSON('./config/grunt.config.json'));
 
-    grunt.registerTask('wrap-jade', function () {
+    grunt.task.loadTasks('grunt-tasks');
 
-        var jade = require('jade');
-
-        var files = grunt.file.expand(['src/**/*.jade']);
-
-        var mapping = {};
-
-        _.each(files, function (file) {
-            if (file.match(/.*\/_[^\/]/)) {
-                return;
-            }
-            mapping[file.replace('src/', '')] = jade.renderFile(path.resolve(file));
-        });
-
-        var body = 'var templates = ' + JSON.stringify(mapping, null, '  ') + ';';
-
-        grunt.file.write('src/templates/templates.ts', body);
-    });
-
-    grunt.registerTask('prepare-middleware', function () {
-        var jade = require('jade');
-        var jadeOptions = {};
-        var template = jade.compile(grunt.file.read('./test/views/index.jade'), jadeOptions);
-
-        var handler = function (connect, options, middlewares) {
-
-            var pathChecker = /^\/test\/?$/;
-
-            middlewares.unshift(function (req, res, next) {
-
-                if (req.url === '/favicon.ico') {
-                    res.end();
-                    return;
-                }
-
-                var match = req.url.match(/\/test\/generated_model\/(.+).json/);
-
-                if (match && match.length > 1) {
-                    var modelName = match[1];
-                    var modelTemplate;
-                    var modelPath = './test/models/' + modelName + '.json';
-                    if (fs.existsSync(modelPath)) {
-                        modelTemplate = fs.readFileSync(modelPath);
-                    } else {
-                        modelTemplate = JSON.stringify({
-                            "title": "Test " + modelName,
-                            "fields": {
-                                "text_before": {
-                                    "title": "Before",
-                                    "type": "text"
-                                },
-                                "required": {
-                                    "title": "Field1",
-                                    "type": modelName,
-                                    "required": true
-                                },
-                                "not_required": {
-                                    "title": "Field2",
-                                    "type": modelName,
-                                    "required": false
-                                },
-                                "text_after": {
-                                    "title": "After",
-                                    "type": "text"
-                                }
-                            }
-                        });
-                    }
-                    grunt.log.debug('Model request: ' + modelName);
-                    res.end(modelTemplate);
-                    return;
-                }
-
-                grunt.log.debug('Url: ' + req.url);
-
-                match = pathChecker.exec(req.url);
-                if (match && match.length > 0) {
-                    var path = match[1];
-                    var query = match.length > 1 ? match[2] : "";
-                    var html = template({path: path, query: query});
-                    res.end(html);
-                } else {
-                    return next();
-                }
-            });
-
-            return middlewares;
-        };
-
-        grunt.config('connect.options.middleware', handler);
-    });
+    var configureMiddleware = require('./grunt-modules/configureMiddleware');
+    var modelHandler = require('./grunt-modules/modelHandler')(grunt);
+    configureMiddleware(grunt, 'connect', modelHandler, 'test/views/index.jade');
 
     grunt.event.once('connect.examples.listening', function(host, port) {
         var url = 'http://localhost:' + port + '/examples/index.html';
         require('open')(url);
-    });
-
-    grunt.registerTask('addtsd', function (module) {
-        var done = this.async();
-        grunt.util.spawn({
-            cmd: 'tsd',
-            args: ['install', module, '--save', '--config', './config/tsd.config.json']
-        }, function (error, result) {
-            grunt.log.debug(result.stdout);
-            done();
-        });
-    });
-
-    grunt.registerTask('verify', function(browser) {
-        browser = browser || "firefox";
-        grunt.config('protractor.options.args.browser', browser);
-        grunt.task.run(['prepare-middleware', 'connect:start', 'protractor']);
-    });
-
-    grunt.registerTask('wrap-module', function() {
-        var module = grunt.file.read('build/lm-webforms.js');
-        var header = grunt.file.read('config/template/header.js');
-        var footer = grunt.file.read('config/template/footer.js');
-        grunt.file.write('release/lm-webforms.js', header + module + footer);
     });
 
     grunt.registerTask('ts-build', ['clean:build', 'wrap-jade', 'ts:build', 'clean:post-build']);
@@ -147,5 +32,5 @@ module.exports = function (grunt) {
         'ts:tests'
     ]);
 
-    grunt.registerTask('view', ['prepare-middleware', 'connect:keepalive']);
+    grunt.registerTask('view', ['connect:keepalive']);
 };
