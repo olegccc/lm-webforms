@@ -41,8 +41,8 @@
       "mangle": {
         "except": [
           "angular",
-          "autolinker",
-          "recaptcha"
+          "Autolinker",
+          "Recaptcha"
         ]
       }
     },

@@ -1,6 +1,6 @@
 {
   "name": "lm-webforms",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Web forms for AngularJS based on Angular.Material",
   "main": "release/lm-webforms.js",
   "homepage": "https://github.com/olegccc/lm-webforms",
@@ -23,7 +23,8 @@
   "files": [
     "release",
     "examples",
-    "docs"
+    "docs",
+    "bower.json"
   ],
   "author": "olegccc",
   "license": "MPL-2.0",

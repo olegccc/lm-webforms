@@ -1,7 +1,7 @@
 {
   "name": "lm-webforms",
   "main": "release/lm-webforms.js",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "authors": [
     "olegccc"
   ],
@@ -18,6 +18,10 @@
     "**/.*",
     "node_modules",
     "bower_components",
+    "grunt-modules",
+    "grunt-tasks",
+    "docs",
+    "README.md",
     "test",
     "build",
     "config",
