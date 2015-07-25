@@ -10,7 +10,7 @@ module.exports = function (grunt) {
             "function (<%= moduleVariables %>) { <%= functionName %>(<%= requiredVariables %>); }); } " +
             "else if (typeof exports === 'object') { <%= namedCjsModules %><%= unnamedCjsModules %> " +
             "module.exports = <%= functionName %>(<%= requiredVariables %>); } else " +
-            " { <%= functionName %>(<%= globalVariables %>); } })();";
+            " { <%= functionName %>(<%= globalWindowVariables %>); } })();";
 
         var headerTemplate = "(function() { function <%= functionName %>(<%= globalVariables %>) {";
 
@@ -21,6 +21,7 @@ module.exports = function (grunt) {
         var globalVariables = [];
         var namedCjsModules = [];
         var unnamedCjsModules = [];
+        var globalWindowVariables = [];
 
         var _this = this;
 
@@ -34,6 +35,7 @@ module.exports = function (grunt) {
             } else {
                 requiredVariables.push(generatedVariable);
                 globalVariables.push(variable);
+                globalWindowVariables.push('window[\'' + variable + '\']');
                 namedCjsModules.push('var ' + generatedVariable + ' = require(\'' + module + '\');')
             }
             variables.push(generatedVariable);
@@ -44,6 +46,7 @@ module.exports = function (grunt) {
         options.namedCjsModules = namedCjsModules.join("");
         options.unnamedCjsModules = unnamedCjsModules.join("");
         options.globalVariables = globalVariables.join(",");
+        options.globalWindowVariables = globalWindowVariables.join(",");
 
         var header = grunt.template.process(headerTemplate, { data: options });
         var footer = grunt.template.process(footerTemplate, { data: options });
