@@ -1,6 +1,6 @@
 {
   "name": "lm-webforms",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "description": "Web forms for AngularJS based on Angular.Material",
   "main": "release/lm-webforms.js",
   "homepage": "https://github.com/olegccc/lm-webforms",
