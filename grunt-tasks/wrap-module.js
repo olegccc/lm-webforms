@@ -10,14 +10,15 @@ module.exports = function (grunt) {
             "function (<%= moduleVariables %>) { <%= functionName %>(<%= requiredVariables %>); }); } " +
             "else if (typeof exports === 'object') { <%= namedCjsModules %><%= unnamedCjsModules %> " +
             "module.exports = <%= functionName %>(<%= requiredVariables %>); } else " +
-            " { <%= functionName %>(<%= requiredVariables %>); } })();";
+            " { <%= functionName %>(<%= globalVariables %>); } })();";
 
-        var headerTemplate = "(function() { function <%= functionName %>(<%= requiredVariables %>) {";
+        var headerTemplate = "(function() { function <%= functionName %>(<%= globalVariables %>) {";
 
         var keys = Object.keys(this.data.modules);
         var variables = [];
         var unnamedIndex = 0;
         var requiredVariables = [];
+        var globalVariables = [];
         var namedCjsModules = [];
         var unnamedCjsModules = [];
 
@@ -27,20 +28,22 @@ module.exports = function (grunt) {
 
         keys.forEach(function(module) {
             var variable = _this.data.modules[module];
+            var generatedVariable = "$_v" + (unnamedIndex++);
             if (variable.length === 0) {
-                variable = "$_v" + (unnamedIndex++);
                 unnamedCjsModules.push('require(\'' + module + '\');');
             } else {
-                requiredVariables.push(variable);
-                namedCjsModules.push('var ' + variable + ' = require(\'' + module + '\');')
+                requiredVariables.push(generatedVariable);
+                globalVariables.push(variable);
+                namedCjsModules.push('var ' + generatedVariable + ' = require(\'' + module + '\');')
             }
-            variables.push(variable);
+            variables.push(generatedVariable);
         });
 
         options.moduleVariables = variables.join(",");
         options.requiredVariables = requiredVariables.join(",");
         options.namedCjsModules = namedCjsModules.join("");
         options.unnamedCjsModules = unnamedCjsModules.join("");
+        options.globalVariables = globalVariables.join(",");
 
         var header = grunt.template.process(headerTemplate, { data: options });
         var footer = grunt.template.process(footerTemplate, { data: options });
